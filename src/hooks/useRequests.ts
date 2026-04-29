@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
+import { DEV_BYPASS, MOCK_REQUESTS } from '../lib/dev-mock'
 import type { Request } from '../types'
 
 export function useRequests() {
-  const [requests, setRequests] = useState<Request[]>([])
-  const [loading, setLoading] = useState(true)
+  const [requests, setRequests] = useState<Request[]>(DEV_BYPASS ? MOCK_REQUESTS : [])
+  const [loading, setLoading] = useState(!DEV_BYPASS)
 
   const fetchRequests = useCallback(async () => {
     const { data } = await supabase
@@ -24,6 +25,8 @@ export function useRequests() {
   }, [])
 
   useEffect(() => {
+    if (DEV_BYPASS) return
+
     fetchRequests()
 
     // Prune expired every 30s
