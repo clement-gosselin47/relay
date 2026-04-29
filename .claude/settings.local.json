@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(tar -xzf /tmp/supabase.tar.gz -C /tmp)",
+      "Bash(mv /tmp/supabase __TRACKED_VAR__/.local/bin/supabase)",
+      "Bash(mkdir -p __TRACKED_VAR__/.local/bin)",
+      "Bash(echo 'export PATH=$HOME/.local/bin:$PATH')",
+      "Bash(export PATH=\"$HOME/.local/bin:$PATH\")"
+    ]
+  }
+}

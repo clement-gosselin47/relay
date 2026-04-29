@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;500;600;700;800&family=Geologica:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+/* ── Relay Design Tokens ── */
+:root {
+  --yellow:      #F6F5AE;
+  --yellow-deep: #EDEC7A;
+  --ink:         #181713;
+  --ink70:       rgba(24,23,19,0.70);
+  --ink55:       rgba(24,23,19,0.55);
+  --ink35:       rgba(24,23,19,0.35);
+  --bone:        #F0EEE9;
+  --paper:       #FAFAF7;
+  --line:        rgba(24,23,19,0.12);
+  --line-soft:   rgba(24,23,19,0.06);
+
+  --font-display: 'Montserrat Alternates', system-ui, sans-serif;
+  --font-body:    'Geologica', system-ui, sans-serif;
+
+  --radius-sm:  12px;
+  --radius-md:  18px;
+  --radius-lg:  24px;
+  --radius-xl:  32px;
+  --radius-full: 9999px;
+}
+
+/* ── Base reset ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bone);
+  font-family: var(--font-body);
+  font-weight: 300;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+#root {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Body text always light */
+body, input, textarea, button, span, div, p, a, li, label {
+  font-weight: 300;
+}
+
+/* ── Animations ── */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.08); }
+}
+
+@keyframes slide-up {
+  from { transform: translateY(12px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+@keyframes fade-out {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(0.96); }
+}
