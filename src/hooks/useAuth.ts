@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import type { User } from '@supabase/supabase-js'
 import { supabase } from '../lib/supabase'
+import { DEV_BYPASS, MOCK_PROFILE } from '../lib/dev-mock'
 import type { Profile } from '../types'
 
 interface AuthState {
@@ -42,10 +43,18 @@ async function fetchOrCreateProfile(user: User): Promise<Profile | null> {
   return (created as Profile) ?? null
 }
 
+const DEV_USER = { id: MOCK_PROFILE.id } as User
+
 export function useAuth() {
-  const [state, setState] = useState<AuthState>({ user: null, profile: null, loading: true })
+  const [state, setState] = useState<AuthState>(
+    DEV_BYPASS
+      ? { user: DEV_USER, profile: MOCK_PROFILE, loading: false }
+      : { user: null, profile: null, loading: true }
+  )
 
   useEffect(() => {
+    if (DEV_BYPASS) return
+
     // Timeout safety — never stuck on splash more than 6s
     const timeout = setTimeout(() => {
       setState(s => s.loading ? { ...s, loading: false } : s)
