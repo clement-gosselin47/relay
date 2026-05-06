@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react'
 import { Home, User, MessageSquare, MapPin, Zap, ArrowRight, Search } from 'lucide-react'
+import { ProfileScreen } from './ProfileScreen'
 import { RelayLogo } from '../components/ui/RelayLogo'
 import { Avatar } from '../components/ui/Avatar'
 import { Toggle } from '../components/ui/Toggle'
@@ -141,7 +142,15 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
               fontFamily: "'Montserrat Alternates', sans-serif",
               fontWeight: 600, fontSize: 13,
             }}>
-              {profile.available ? '🟢 Disponible' : '⚫ Hors-ligne'}
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                <span style={{
+                  width: 8, height: 8, borderRadius: '50%',
+                  background: profile.available ? '#3a8a4a' : 'rgba(24,23,19,0.4)',
+                  boxShadow: profile.available ? '0 0 0 3px rgba(58,138,74,0.18)' : 'none',
+                  flexShrink: 0,
+                }} />
+                {profile.available ? 'Disponible' : 'Hors-ligne'}
+              </span>
             </span>
             <Toggle on={profile.available} onChange={async v => {
               onUpdate({ available: v })
@@ -185,7 +194,17 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
         </div>
       </div>
 
-      {/* ── MAIN FEED ────────────────────────── */}
+      {/* ── MAIN CONTENT ────────────────────────── */}
+      {screen === 'profile' ? (
+        <div style={{ flex: 1, overflow: 'hidden' }}>
+          <ProfileScreen
+            profile={profile}
+            onUpdate={onUpdate}
+            onSignOut={onSignOut}
+            isDesktop
+          />
+        </div>
+      ) : (
       <div style={{ flex: 1, overflowY: 'auto', padding: '32px 28px' }}>
         {/* Search + filters */}
         <div style={{ marginBottom: 24 }}>
@@ -265,6 +284,7 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
           </div>
         )}
       </div>
+      )}
 
       {/* ── RIGHT COLUMN ─────────────────────── */}
       <div style={{
