@@ -1,20 +1,23 @@
 import { useState } from 'react'
 import { X } from 'lucide-react'
 import { supabase } from '../lib/supabase'
+import { DEV_BYPASS } from '../lib/dev-mock'
 import { CATEGORY } from '../lib/tokens'
 import { expiresAt } from '../lib/utils'
 import { Toggle } from '../components/ui/Toggle'
+import type { Profile, Request } from '../types'
 
 const FILIERES = ['Design', 'Dev', 'Marketing', 'Audio', 'Création', '3D', 'Toutes']
 const DURATIONS = [5, 10, 15, 30, 60]
 
 interface CreateScreenProps {
   userId: string
+  profile: Profile
   onClose: () => void
-  onSuccess: () => void
+  onSuccess: (r: Request) => void
 }
 
-export function CreateScreen({ userId, onClose, onSuccess }: CreateScreenProps) {
+export function CreateScreen({ userId, profile, onClose, onSuccess }: CreateScreenProps) {
   const [title, setTitle]       = useState('')
   const [cat, setCat]           = useState<string | null>(null)
   const [filieres, setFilieres] = useState<string[]>([])
@@ -34,7 +37,9 @@ export function CreateScreen({ userId, onClose, onSuccess }: CreateScreenProps) 
     if (!isReady || loading) return
     setLoading(true)
 
-    const { error } = await supabase.from('requests').insert({
+    const now = new Date().toISOString()
+    const newRequest: Request = {
+      id:              DEV_BYPASS ? `req-${Date.now()}` : '',
       author_id:       userId,
       title:           title.trim(),
       description:     desc.trim() || null,
@@ -45,10 +50,37 @@ export function CreateScreen({ userId, onClose, onSuccess }: CreateScreenProps) 
       duration_min:    urgent ? duration : null,
       expires_at:      urgent ? expiresAt(duration) : null,
       status:          'active',
-    })
+      created_at:      now,
+      author:          profile,
+    }
+
+    if (DEV_BYPASS) {
+      setLoading(false)
+      onSuccess(newRequest)
+      return
+    }
+
+    const { data, error } = await supabase
+      .from('requests')
+      .insert({
+        author_id:       userId,
+        title:           newRequest.title,
+        description:     newRequest.description,
+        category:        newRequest.category,
+        target_filieres: newRequest.target_filieres,
+        location:        newRequest.location,
+        urgent:          newRequest.urgent,
+        duration_min:    newRequest.duration_min,
+        expires_at:      newRequest.expires_at,
+        status:          'active',
+      })
+      .select('id')
+      .single()
 
     setLoading(false)
-    if (!error) { onSuccess() }
+    if (!error && data) {
+      onSuccess({ ...newRequest, id: data.id })
+    }
   }
 
   return (
@@ -96,7 +128,7 @@ export function CreateScreen({ userId, onClose, onSuccess }: CreateScreenProps) 
           <textarea
             value={title}
             onChange={e => setTitle(e.target.value)}
-            placeholder="Ex : Câble HDMI pour une soutenance dans 10 min"
+            placeholder=""
             rows={2}
             maxLength={120}
             style={{
@@ -124,7 +156,6 @@ export function CreateScreen({ userId, onClose, onSuccess }: CreateScreenProps) 
                   transition: 'all .15s',
                 }}
               >
-                <span style={{ fontSize: 24 }}>{def.emoji}</span>
                 <span style={{
                   fontFamily: "'Montserrat Alternates', sans-serif",
                   fontWeight: 600, fontSize: 11,
@@ -197,7 +228,7 @@ export function CreateScreen({ userId, onClose, onSuccess }: CreateScreenProps) 
                   fontWeight: 600, fontSize: 15,
                   color: '#181713',
                 }}>
-                  Demande flash ⚡
+                  Demande flash
                 </div>
                 <div style={{ fontSize: 13, color: 'rgba(24,23,19,0.6)', marginTop: 2 }}>
                   Apparaît en priorité avec un timer

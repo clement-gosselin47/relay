@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import './index.css'
 import { useAuth } from './hooks/useAuth'
 import { useMediaQuery } from './hooks/useMediaQuery'
+import { useRequests } from './hooks/useRequests'
 import { AuthModal } from './components/auth/AuthModal'
 import { BottomBar } from './components/layout/BottomBar'
 import { Toast } from './components/ui/Toast'
@@ -16,6 +17,7 @@ type MobileScreen = 'home' | 'profile'
 export default function App() {
   const { user, profile, loading, signIn, signOut, updateProfile } = useAuth()
   const isDesktop = useMediaQuery('(min-width: 1024px)')
+  const { requests, loading: reqLoading, addRequest } = useRequests()
   const [mobileScreen, setMobileScreen] = useState<MobileScreen>('home')
   const [showCreate, setShowCreate]     = useState(false)
   const [successToast, setSuccessToast] = useState(false)
@@ -53,6 +55,8 @@ export default function App() {
           <HomeScreen
             userId={user.id}
             userName={profile.name}
+            requests={requests}
+            loading={reqLoading}
           />
         )}
         {mobileScreen === 'profile' && (
@@ -68,8 +72,10 @@ export default function App() {
       {showCreate && (
         <CreateScreen
           userId={user.id}
+          profile={profile}
           onClose={() => setShowCreate(false)}
-          onSuccess={() => {
+          onSuccess={(newRequest) => {
+            addRequest(newRequest)
             setShowCreate(false)
             setMobileScreen('home')
             setSuccessToast(true)

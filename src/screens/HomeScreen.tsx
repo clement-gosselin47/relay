@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react'
 import { Bell, MapPin, Zap, ArrowRight } from 'lucide-react'
-import { useRequests } from '../hooks/useRequests'
 import { Avatar } from '../components/ui/Avatar'
 import { CategoryTile } from '../components/ui/CategoryTile'
 import { Toast } from '../components/ui/Toast'
@@ -12,13 +11,14 @@ import type { Request } from '../types'
 interface HomeScreenProps {
   userId: string
   userName: string
+  requests: Request[]
+  loading: boolean
   onShowNotif?: () => void
 }
 
 interface ToastState { msg: string; type: 'success' | 'info' | 'error' }
 
-export function HomeScreen({ userId, userName, onShowNotif }: HomeScreenProps) {
-  const { requests, loading } = useRequests()
+export function HomeScreen({ userId, userName, requests, loading, onShowNotif }: HomeScreenProps) {
   const [toast, setToast] = useState<ToastState | null>(null)
   const [helping, setHelping] = useState<Set<string>>(new Set())
 
