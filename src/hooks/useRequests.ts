@@ -63,5 +63,9 @@ export function useRequests() {
     }
   }, [fetchRequests, pruneExpired])
 
-  return { requests, loading }
+  function addRequest(r: Request) {
+    setRequests(prev => [r, ...prev])
+  }
+
+  return { requests, loading, addRequest }
 }
