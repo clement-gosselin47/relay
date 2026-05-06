@@ -1,17 +1,15 @@
 import { useState, useCallback } from 'react'
-import { Home, User, Bell, MapPin, Zap, ArrowRight, Search } from 'lucide-react'
+import { Home, User, MessageSquare, MapPin, Zap, ArrowRight, Search } from 'lucide-react'
 import { RelayLogo } from '../components/ui/RelayLogo'
 import { Avatar } from '../components/ui/Avatar'
-import { CategoryTile } from '../components/ui/CategoryTile'
 import { Toggle } from '../components/ui/Toggle'
 import { Toast } from '../components/ui/Toast'
 import { useRequests } from '../hooks/useRequests'
 import { supabase } from '../lib/supabase'
-import { CATEGORY } from '../lib/tokens'
 import { timeAgo, minutesLeft } from '../lib/utils'
 import type { Profile, Request } from '../types'
 
-type Screen = 'home' | 'create' | 'profile'
+type Screen = 'home' | 'messages' | 'profile'
 interface ToastState { msg: string; type: 'success' | 'info' | 'error' }
 
 interface DesktopScreenProps {
@@ -25,7 +23,6 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
   const [showCreate, setShowCreate] = useState(false)
   const [toast, setToast]     = useState<ToastState | null>(null)
   const [search, setSearch]   = useState('')
-  const [filterCat, setFilterCat] = useState<string | null>(null)
   const [helping, setHelping] = useState<Set<string>>(new Set())
   const { requests, loading } = useRequests()
 
@@ -50,7 +47,6 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
   const filtered = requests.filter(r => {
     const now = new Date()
     if (r.expires_at && new Date(r.expires_at) < now) return false
-    if (filterCat && r.category !== filterCat) return false
     if (search && !r.title.toLowerCase().includes(search.toLowerCase())) return false
     return true
   })
@@ -119,10 +115,10 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
             onClick={() => { setScreen('home'); setShowCreate(false) }}
           />
           <SideNavItem
-            icon={<Bell size={18} strokeWidth={1.7} />}
-            label="Notifications"
-            active={false}
-            onClick={() => {}}
+            icon={<MessageSquare size={18} strokeWidth={screen === 'messages' ? 2.2 : 1.7} />}
+            label="Messages"
+            active={screen === 'messages'}
+            onClick={() => { setScreen('messages'); setShowCreate(false) }}
           />
           <SideNavItem
             icon={<User size={18} strokeWidth={screen === 'profile' ? 2.2 : 1.7} />}
@@ -231,18 +227,6 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
             </div>
           </div>
 
-          {/* Category filters */}
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            <FilterChip label="Tout" active={filterCat === null} onClick={() => setFilterCat(null)} />
-            {Object.entries(CATEGORY).map(([k, def]) => (
-              <FilterChip
-                key={k}
-                label={`${def.emoji} ${def.label}`}
-                active={filterCat === k}
-                onClick={() => setFilterCat(filterCat === k ? null : k)}
-              />
-            ))}
-          </div>
         </div>
 
         {/* Grid */}
@@ -337,7 +321,7 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
               padding: '10px 0',
               borderBottom: '1px solid rgba(24,23,19,0.06)',
             }}>
-              <CategoryTile cat={r.category} size={32} />
+              <Avatar name={r.author?.name ?? '?'} size={32} />
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{
                   fontSize: 12.5, fontWeight: 500,
@@ -393,7 +377,6 @@ function DesktopCard({ r, variant, isHelping, onHelp }: {
   r: Request; variant: 'yellow' | 'white'; isHelping: boolean; onHelp: () => void
 }) {
   const yellow = variant === 'yellow'
-  const cat = CATEGORY[r.category] ?? CATEGORY.autre
   const mins = r.expires_at ? minutesLeft(r.expires_at) : null
 
   return (
@@ -403,17 +386,8 @@ function DesktopCard({ r, variant, isHelping, onHelp }: {
       borderRadius: 24, padding: '20px',
       animation: 'slide-up .3s ease',
     }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-        <CategoryTile cat={r.category} size={38} filled={!yellow} />
-        <span style={{
-          fontFamily: "'Montserrat Alternates', sans-serif",
-          fontWeight: 600, fontSize: 11.5,
-          letterSpacing: 0.3, textTransform: 'uppercase',
-        }}>
-          {cat.label}
-        </span>
-        <span style={{ flex: 1 }} />
-        {r.urgent && mins !== null && mins > 0 && (
+      {r.urgent && mins !== null && mins > 0 && (
+        <div style={{ marginBottom: 12 }}>
           <span style={{
             display: 'inline-flex', alignItems: 'center', gap: 4,
             fontFamily: "'Montserrat Alternates', sans-serif",
@@ -422,8 +396,8 @@ function DesktopCard({ r, variant, isHelping, onHelp }: {
           }}>
             <Zap size={11} strokeWidth={2} /> {mins} min
           </span>
-        )}
-      </div>
+        </div>
+      )}
 
       <div style={{
         fontFamily: "'Montserrat Alternates', sans-serif",
@@ -497,24 +471,6 @@ function SideNavItem({ icon, label, active, onClick }: {
   )
 }
 
-function FilterChip({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
-  return (
-    <button
-      onClick={onClick}
-      style={{
-        padding: '7px 13px', borderRadius: 999,
-        background: active ? '#181713' : '#FAFAF7',
-        border: `1.5px solid ${active ? '#181713' : 'rgba(24,23,19,0.12)'}`,
-        color: active ? '#F6F5AE' : '#181713',
-        fontFamily: "'Montserrat Alternates', sans-serif",
-        fontWeight: 600, fontSize: 12,
-        cursor: 'pointer', transition: 'all .15s',
-      }}
-    >
-      {label}
-    </button>
-  )
-}
 
 function StatRow({ label, value }: { label: string; value: string }) {
   return (

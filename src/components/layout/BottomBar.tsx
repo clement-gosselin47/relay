@@ -1,7 +1,7 @@
-import { Home, User } from 'lucide-react'
+import { Home, User, MessageSquare } from 'lucide-react'
 import { RelayLogo } from '../ui/RelayLogo'
 
-type Screen = 'home' | 'profile'
+type Screen = 'home' | 'messages' | 'profile'
 
 interface BottomBarProps {
   active: Screen
@@ -31,6 +31,14 @@ export function BottomBar({ active, onNavigate, onCreate }: BottomBarProps) {
           active={active === 'home'}
           label="Accueil"
           icon={<Home size={22} strokeWidth={active === 'home' ? 2.2 : 1.7} />}
+        />
+
+        {/* Messages */}
+        <NavItem
+          onClick={() => onNavigate('messages')}
+          active={active === 'messages'}
+          label="Messages"
+          icon={<MessageSquare size={22} strokeWidth={active === 'messages' ? 2.2 : 1.7} />}
         />
 
         {/* FAB — Create */}

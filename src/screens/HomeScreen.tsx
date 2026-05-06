@@ -1,9 +1,7 @@
 import { useState, useCallback } from 'react'
-import { Bell, MapPin, Zap, ArrowRight } from 'lucide-react'
+import { MapPin, Zap, ArrowRight } from 'lucide-react'
 import { Avatar } from '../components/ui/Avatar'
-import { CategoryTile } from '../components/ui/CategoryTile'
 import { Toast } from '../components/ui/Toast'
-import { CATEGORY } from '../lib/tokens'
 import { timeAgo, minutesLeft } from '../lib/utils'
 import { supabase } from '../lib/supabase'
 import type { Request } from '../types'
@@ -13,12 +11,11 @@ interface HomeScreenProps {
   userName: string
   requests: Request[]
   loading: boolean
-  onShowNotif?: () => void
 }
 
 interface ToastState { msg: string; type: 'success' | 'info' | 'error' }
 
-export function HomeScreen({ userId, userName, requests, loading, onShowNotif }: HomeScreenProps) {
+export function HomeScreen({ userId, userName, requests, loading }: HomeScreenProps) {
   const [toast, setToast] = useState<ToastState | null>(null)
   const [helping, setHelping] = useState<Set<string>>(new Set())
 
@@ -83,25 +80,6 @@ export function HomeScreen({ userId, userName, requests, loading, onShowNotif }:
             Live · Ynov Lyon
           </div>
 
-          {/* Bell */}
-          <button
-            onClick={onShowNotif}
-            style={{
-              width: 40, height: 40, borderRadius: '50%',
-              background: '#181713', color: '#F6F5AE',
-              border: 'none', cursor: 'pointer',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              position: 'relative',
-            }}
-          >
-            <Bell size={17} strokeWidth={1.8} color="#F6F5AE" />
-            <span style={{
-              position: 'absolute', top: 9, right: 10,
-              width: 7, height: 7, borderRadius: '50%',
-              background: '#F6F5AE',
-              border: '1.5px solid #181713',
-            }} />
-          </button>
         </div>
 
         {/* Title */}
@@ -174,7 +152,6 @@ function RequestCard({
   onHelp: () => void
 }) {
   const yellow = variant === 'yellow'
-  const cat = CATEGORY[r.category] ?? CATEGORY.autre
   const mins = r.expires_at ? minutesLeft(r.expires_at) : null
 
   return (
@@ -184,19 +161,9 @@ function RequestCard({
       borderRadius: 24, padding: '18px 18px 16px',
       animation: 'slide-up .3s ease',
     }}>
-      {/* Category + urgency */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
-        <CategoryTile cat={r.category} size={36} filled={!yellow} />
-        <span style={{
-          fontFamily: "'Montserrat Alternates', sans-serif",
-          fontWeight: 600, fontSize: 12,
-          letterSpacing: 0.3, textTransform: 'uppercase',
-          color: '#181713',
-        }}>
-          {cat.label}
-        </span>
-        <span style={{ flex: 1 }} />
-        {r.urgent && mins !== null && mins > 0 && (
+      {/* Urgency badge */}
+      {r.urgent && mins !== null && mins > 0 && (
+        <div style={{ marginBottom: 10 }}>
           <span style={{
             display: 'inline-flex', alignItems: 'center', gap: 4,
             fontFamily: "'Montserrat Alternates', sans-serif",
@@ -207,8 +174,8 @@ function RequestCard({
           }}>
             <Zap size={11} strokeWidth={2} /> {mins} min
           </span>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Title */}
       <div style={{
