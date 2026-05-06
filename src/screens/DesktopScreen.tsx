@@ -241,10 +241,10 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
               fontFamily: "'Montserrat Alternates', sans-serif",
               fontWeight: 700, fontSize: 24, letterSpacing: -0.5, marginBottom: 8,
             }}>
-              {search || filterCat ? 'Aucun résultat' : 'Le campus est calme'}
+              {search ? 'Aucun résultat' : 'Le campus est calme'}
             </div>
             <div style={{ fontSize: 14, color: 'rgba(24,23,19,0.5)' }}>
-              {search || filterCat ? 'Essaie un autre filtre.' : 'Sois le premier à lancer une demande.'}
+              {search ? 'Essaie un autre terme.' : 'Sois le premier à lancer une demande.'}
             </div>
           </div>
         ) : (
