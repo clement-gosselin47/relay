@@ -8,7 +8,7 @@ import { Toggle } from '../components/ui/Toggle'
 import type { Profile, Request } from '../types'
 
 const FILIERES = ['Design', 'Dev', 'Marketing', 'Audio', 'Création', '3D', 'Toutes']
-const DURATIONS = [5, 10, 15, 30, 60]
+const DURATIONS = [5, 10, 15]
 
 interface CreateScreenProps {
   userId: string
@@ -293,7 +293,7 @@ export function CreateScreen({ userId, profile, onClose, onSuccess }: CreateScre
             transition: 'all .2s',
           }}
         >
-          {loading ? 'Publication…' : 'Lancer la demande ✋'}
+          {loading ? 'Publication…' : 'Lancer la demande'}
         </button>
       </div>
     </div>
