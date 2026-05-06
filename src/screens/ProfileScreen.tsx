@@ -12,9 +12,10 @@ interface ProfileScreenProps {
   profile: Profile
   onUpdate: (updates: Partial<Profile>) => void
   onSignOut: () => void
+  isDesktop?: boolean
 }
 
-export function ProfileScreen({ profile, onUpdate, onSignOut }: ProfileScreenProps) {
+export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false }: ProfileScreenProps) {
   const { history, stats, toggleAvailable, updateCampusRadius, updateSkills } = useProfile(profile.id)
   const [pushEnabled, setPushEnabled] = useState(false)
   const [addingSkill, setAddingSkill] = useState(false)
@@ -63,7 +64,7 @@ export function ProfileScreen({ profile, onUpdate, onSignOut }: ProfileScreenPro
     }}>
       {/* Header */}
       <div style={{
-        padding: '56px 20px 14px',
+        padding: isDesktop ? '32px 28px 14px' : '56px 20px 14px',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         flexShrink: 0,
       }}>
@@ -89,7 +90,7 @@ export function ProfileScreen({ profile, onUpdate, onSignOut }: ProfileScreenPro
 
       <div style={{
         flex: 1, overflowY: 'auto',
-        padding: '6px 20px 110px',
+        padding: isDesktop ? '6px 28px 40px' : '6px 20px 110px',
         WebkitOverflowScrolling: 'touch',
       }}>
         {/* Identity card */}

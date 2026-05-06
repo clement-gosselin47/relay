@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react'
 import { Home, User, MessageSquare, MapPin, Zap, ArrowRight, Search } from 'lucide-react'
+import { ProfileScreen } from './ProfileScreen'
 import { RelayLogo } from '../components/ui/RelayLogo'
 import { Avatar } from '../components/ui/Avatar'
 import { Toggle } from '../components/ui/Toggle'
@@ -185,7 +186,17 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
         </div>
       </div>
 
-      {/* ── MAIN FEED ────────────────────────── */}
+      {/* ── MAIN CONTENT ────────────────────────── */}
+      {screen === 'profile' ? (
+        <div style={{ flex: 1, overflow: 'hidden' }}>
+          <ProfileScreen
+            profile={profile}
+            onUpdate={onUpdate}
+            onSignOut={onSignOut}
+            isDesktop
+          />
+        </div>
+      ) : (
       <div style={{ flex: 1, overflowY: 'auto', padding: '32px 28px' }}>
         {/* Search + filters */}
         <div style={{ marginBottom: 24 }}>
@@ -265,6 +276,7 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
           </div>
         )}
       </div>
+      )}
 
       {/* ── RIGHT COLUMN ─────────────────────── */}
       <div style={{
