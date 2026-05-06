@@ -209,43 +209,45 @@ function ThreadView({ conv, onBack }: { conv: Conversation; onBack: () => void }
       display: 'flex', flexDirection: 'column',
       fontFamily: "'Geologica', sans-serif",
     }}>
-      {/* Thread header */}
+      {/* Bouton retour discret */}
+      <button
+        onClick={onBack}
+        style={{
+          position: 'absolute', top: 52, left: 20, zIndex: 10,
+          width: 36, height: 36, borderRadius: '50%',
+          background: 'rgba(24,23,19,0.08)',
+          border: 'none', cursor: 'pointer',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}
+      >
+        <ArrowLeft size={16} strokeWidth={2} color="#181713" />
+      </button>
+
+      {/* Avatar fixe en haut — identique au desktop */}
       <div style={{
-        background: '#F6F5AE',
-        padding: '52px 18px 18px',
-        borderRadius: '0 0 24px 24px',
-        display: 'flex', alignItems: 'center', gap: 12,
         flexShrink: 0,
+        display: 'flex', flexDirection: 'column', alignItems: 'center',
+        gap: 8, padding: '52px 0 16px',
       }}>
-        <button
-          onClick={onBack}
-          style={{
-            width: 36, height: 36, borderRadius: '50%',
-            background: '#181713', color: '#F6F5AE',
-            border: 'none', cursor: 'pointer',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            flexShrink: 0,
-          }}
-        >
-          <ArrowLeft size={16} strokeWidth={2} />
-        </button>
-        <Avatar name={conv.name} size={36} />
-        <div>
+        <Avatar name={conv.name} size={64} />
+        <div style={{ textAlign: 'center' }}>
           <div style={{
             fontFamily: "'Montserrat Alternates', sans-serif",
-            fontWeight: 700, fontSize: 16, color: '#181713',
+            fontWeight: 700, fontSize: 16, color: '#181713', letterSpacing: -0.3,
           }}>
             {conv.name}
           </div>
-          <div style={{ fontSize: 11.5, color: 'rgba(24,23,19,0.55)' }}>{conv.filiere}</div>
+          <div style={{ fontSize: 12, color: 'rgba(24,23,19,0.45)', marginTop: 2, fontWeight: 300 }}>
+            {conv.filiere}
+          </div>
         </div>
       </div>
 
-      {/* Messages */}
+      {/* Messages ancrés en bas */}
       <div style={{
         flex: 1, overflowY: 'auto',
-        padding: '20px 16px',
-        display: 'flex', flexDirection: 'column', gap: 8,
+        padding: '8px 20px 16px',
+        display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', gap: 8,
         WebkitOverflowScrolling: 'touch',
       }}>
         {messages.map(m => (
