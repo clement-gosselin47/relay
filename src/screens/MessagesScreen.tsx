@@ -383,22 +383,28 @@ function DesktopThread({ conv }: { conv: Conversation }) {
       flex: 1, display: 'flex', flexDirection: 'column',
       background: '#F0EEE9', overflow: 'hidden',
     }}>
-      {/* Thread header */}
+      {/* Thread header — avatar centré */}
       <div style={{
-        padding: '20px 28px',
+        padding: '32px 28px 20px',
         borderBottom: '1px solid rgba(24,23,19,0.08)',
-        display: 'flex', alignItems: 'center', gap: 12,
-        background: '#FAFAF7', flexShrink: 0,
+        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
+        background: '#F0EEE9', flexShrink: 0,
       }}>
-        <Avatar name={conv.name} size={38} />
-        <div>
+        <Avatar name={conv.name} size={64} />
+        <div style={{ textAlign: 'center' }}>
           <div style={{
             fontFamily: "'Montserrat Alternates', sans-serif",
-            fontWeight: 700, fontSize: 15, color: '#181713',
+            fontWeight: 700, fontSize: 17, color: '#181713',
+            letterSpacing: -0.3,
           }}>
             {conv.name}
           </div>
-          <div style={{ fontSize: 12, color: 'rgba(24,23,19,0.5)' }}>{conv.filiere}</div>
+          <div style={{
+            fontSize: 12.5, color: 'rgba(24,23,19,0.5)',
+            marginTop: 3, fontWeight: 300,
+          }}>
+            {conv.filiere}
+          </div>
         </div>
       </div>
 
