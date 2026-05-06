@@ -430,9 +430,10 @@ function MessageBubble({ message: m }: { message: Message }) {
     <div style={{
       display: 'flex',
       justifyContent: isMe ? 'flex-end' : 'flex-start',
+      paddingLeft: isMe ? 56 : 0,
+      paddingRight: isMe ? 0 : 56,
     }}>
       <div style={{
-        maxWidth: '72%',
         background: isMe ? '#181713' : '#FAFAF7',
         color: isMe ? '#F6F5AE' : '#181713',
         border: isMe ? 'none' : '1px solid rgba(24,23,19,0.10)',
@@ -469,7 +470,7 @@ function InputBar({
   return (
     <div style={{
       padding: desktop ? '16px 28px' : '12px 16px',
-      paddingBottom: desktop ? '16px' : 'calc(12px + env(safe-area-inset-bottom, 0px))',
+      paddingBottom: desktop ? '16px' : 'calc(90px + env(safe-area-inset-bottom, 0px))',
       borderTop: '1px solid rgba(24,23,19,0.08)',
       background: '#FAFAF7',
       display: 'flex', alignItems: 'center', gap: 10,
