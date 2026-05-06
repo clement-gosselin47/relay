@@ -427,13 +427,11 @@ function DesktopThread({ conv }: { conv: Conversation }) {
 function MessageBubble({ message: m }: { message: Message }) {
   const isMe = m.from === 'me'
   return (
-    <div style={{
-      display: 'flex',
-      justifyContent: isMe ? 'flex-end' : 'flex-start',
-      paddingLeft: isMe ? 56 : 0,
-      paddingRight: isMe ? 0 : 56,
-    }}>
+    <div style={{ display: 'flex' }}>
       <div style={{
+        maxWidth: 'calc(100% - 56px)',
+        marginLeft: isMe ? 'auto' : 0,
+        marginRight: isMe ? 0 : 'auto',
         background: isMe ? '#181713' : '#FAFAF7',
         color: isMe ? '#F6F5AE' : '#181713',
         border: isMe ? 'none' : '1px solid rgba(24,23,19,0.10)',
