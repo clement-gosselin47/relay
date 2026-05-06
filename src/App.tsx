@@ -10,6 +10,7 @@ import { HomeScreen } from './screens/HomeScreen'
 import { CreateScreen } from './screens/CreateScreen'
 import { ProfileScreen } from './screens/ProfileScreen'
 import { DesktopScreen } from './screens/DesktopScreen'
+import { MessagesScreen } from './screens/MessagesScreen'
 import { RelayLogo } from './components/ui/RelayLogo'
 
 type MobileScreen = 'home' | 'messages' | 'profile'
@@ -60,7 +61,7 @@ export default function App() {
           />
         )}
         {mobileScreen === 'messages' && (
-          <MessagesPlaceholder />
+          <MessagesScreen />
         )}
         {mobileScreen === 'profile' && (
           <ProfileScreen
@@ -105,26 +106,6 @@ export default function App() {
   )
 }
 
-function MessagesPlaceholder() {
-  return (
-    <div style={{
-      height: '100%', display: 'flex',
-      flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-      background: '#F0EEE9', gap: 12, padding: 24,
-    }}>
-      <div style={{ fontSize: 52 }}>💬</div>
-      <div style={{
-        fontFamily: "'Montserrat Alternates', sans-serif",
-        fontWeight: 700, fontSize: 22, letterSpacing: -0.5, color: '#181713',
-      }}>
-        Messages
-      </div>
-      <div style={{ fontSize: 14, color: 'rgba(24,23,19,0.55)', textAlign: 'center', lineHeight: 1.5, maxWidth: 260 }}>
-        Tes conversations avec les aidants apparaîtront ici.
-      </div>
-    </div>
-  )
-}
 
 function SplashScreen() {
   return (

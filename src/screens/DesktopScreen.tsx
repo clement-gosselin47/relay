@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react'
 import { Home, User, MessageSquare, MapPin, Zap, ArrowRight, Search } from 'lucide-react'
+import { MessagesDesktop } from './MessagesScreen'
 import { RelayLogo } from '../components/ui/RelayLogo'
 import { Avatar } from '../components/ui/Avatar'
 import { Toggle } from '../components/ui/Toggle'
@@ -185,8 +186,11 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
         </div>
       </div>
 
+      {/* ── MESSAGES ─────────────────────────── */}
+      {screen === 'messages' && <MessagesDesktop />}
+
       {/* ── MAIN FEED ────────────────────────── */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '32px 28px' }}>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '32px 28px', display: screen === 'messages' ? 'none' : undefined }}>
         {/* Search + filters */}
         <div style={{ marginBottom: 24 }}>
           <div style={{
@@ -270,7 +274,7 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
       <div style={{
         width: 300, flexShrink: 0,
         padding: '32px 20px',
-        display: 'flex', flexDirection: 'column', gap: 16,
+        display: screen === 'messages' ? 'none' : 'flex', flexDirection: 'column', gap: 16,
         overflowY: 'auto',
         borderLeft: '1px solid rgba(24,23,19,0.08)',
       }}>
