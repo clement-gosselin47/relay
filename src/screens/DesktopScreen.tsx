@@ -377,6 +377,7 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
       {showCreate && (
         <CreateOverlay
           userId={profile.id}
+          profile={profile}
           onClose={() => setShowCreate(false)}
           onSuccess={() => { setShowCreate(false); showToast('Demande publiée !') }}
         />
@@ -532,8 +533,8 @@ function StatRow({ label, value }: { label: string; value: string }) {
 // ── Inline Create overlay for desktop ────────────────────────
 import { CreateScreen } from './CreateScreen'
 
-function CreateOverlay({ userId, onClose, onSuccess }: {
-  userId: string; onClose: () => void; onSuccess: () => void
+function CreateOverlay({ userId, profile, onClose, onSuccess }: {
+  userId: string; profile: Profile; onClose: () => void; onSuccess: () => void
 }) {
   return (
     <div style={{
@@ -549,7 +550,7 @@ function CreateOverlay({ userId, onClose, onSuccess }: {
         overflow: 'hidden', position: 'relative',
         boxShadow: '0 24px 80px rgba(0,0,0,0.3)',
       }}>
-        <CreateScreen userId={userId} onClose={onClose} onSuccess={onSuccess} />
+        <CreateScreen userId={userId} profile={profile} onClose={onClose} onSuccess={onSuccess} />
       </div>
     </div>
   )
