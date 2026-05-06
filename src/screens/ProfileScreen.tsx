@@ -1,11 +1,24 @@
 import { useState } from 'react'
-import { Check, Plus, X, Pencil, LogOut } from 'lucide-react'
+import { Check, Plus, X, ArrowLeft, ChevronDown, LogOut } from 'lucide-react'
 import { Avatar } from '../components/ui/Avatar'
 import { CategoryTile } from '../components/ui/CategoryTile'
 import { Toggle } from '../components/ui/Toggle'
 import { useProfile } from '../hooks/useProfile'
 import { timeAgo } from '../lib/utils'
 import type { Profile } from '../types'
+
+const FILIERES = [
+  'Dev Web',
+  'Dev Logiciel',
+  'Design UX / UI',
+  'Cybersécurité',
+  'Intelligence Artificielle',
+  'Réseaux & Systèmes',
+  'Marketing Digital',
+  'Créa / Communication',
+  'Management',
+  'Jeux Vidéo',
+]
 
 interface ProfileScreenProps {
   profile: Profile
@@ -16,11 +29,7 @@ interface ProfileScreenProps {
 
 export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false }: ProfileScreenProps) {
   const { history, stats, toggleAvailable, updateCampusRadius, updateSkills, updateProfileInfo } = useProfile(profile.id)
-
-  const [editing, setEditing]     = useState(false)
-  const [editName, setEditName]   = useState(profile.name)
-  const [editFiliere, setEditFiliere] = useState(profile.filiere)
-  const [saving, setSaving]       = useState(false)
+  const [showSettings, setShowSettings] = useState(false)
 
   const [addingSkill, setAddingSkill] = useState(false)
   const [newSkill, setNewSkill]       = useState('')
@@ -52,30 +61,26 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
     await updateSkills(profile, skills)
   }
 
-  function handleStartEdit() {
-    setEditName(profile.name)
-    setEditFiliere(profile.filiere)
-    setEditing(true)
-  }
-
-  function handleCancelEdit() {
-    setEditing(false)
-  }
-
-  async function handleSaveEdit() {
-    if (!editName.trim()) return
-    setSaving(true)
-    await updateProfileInfo(profile, editName.trim(), editFiliere.trim())
-    onUpdate({ name: editName.trim(), filiere: editFiliere.trim() })
-    setSaving(false)
-    setEditing(false)
-  }
-
   const RADII = [
     { key: 'building', label: 'Bât. voisins' },
     { key: 'campus',   label: 'Tout le campus' },
     { key: 'promo',    label: 'Ma promo' },
   ]
+
+  if (showSettings) {
+    return (
+      <AccountSettings
+        profile={profile}
+        onUpdate={onUpdate}
+        onBack={() => setShowSettings(false)}
+        onSignOut={onSignOut}
+        onUpdateSkills={async (skills) => { onUpdate({ skills }); await updateSkills(profile, skills) }}
+        onSaveInfo={async (name, filiere) => { await updateProfileInfo(profile, name, filiere); onUpdate({ name, filiere }) }}
+        isDesktop={isDesktop}
+        px={px}
+      />
+    )
+  }
 
   return (
     <div style={{
@@ -96,18 +101,17 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
           Profil
         </div>
         <button
-          onClick={onSignOut}
+          onClick={() => setShowSettings(true)}
           style={{
-            height: 40, borderRadius: 999,
+            height: 38, borderRadius: 999,
             background: '#FAFAF7', border: '1px solid rgba(24,23,19,0.12)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+            display: 'flex', alignItems: 'center', gap: 6,
             cursor: 'pointer', padding: '0 14px',
+            fontSize: 13, color: 'rgba(24,23,19,0.65)',
             fontFamily: "'Geologica', sans-serif",
-            fontSize: 12, color: 'rgba(24,23,19,0.6)',
           }}
         >
-          <LogOut size={14} strokeWidth={1.7} />
-          Déconnexion
+          Modifier
         </button>
       </div>
 
@@ -120,181 +124,39 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
         {/* ── Hero ── */}
         <div style={{
           background: '#FAFAF7', border: '1px solid rgba(24,23,19,0.12)',
-          borderRadius: 28, padding: '32px 20px 24px',
-          display: 'flex', flexDirection: 'column', alignItems: 'center',
-          textAlign: 'center', marginBottom: 12,
-          position: 'relative',
+          borderRadius: 28, padding: '28px 24px',
+          display: 'flex', alignItems: 'center', gap: 20,
+          marginBottom: 12,
         }}>
-          <div style={{ position: 'relative', marginBottom: 16 }}>
-            <Avatar name={profile.name} size={96} ring />
-          </div>
+          <Avatar name={profile.name} size={isDesktop ? 88 : 76} ring />
 
-          <div style={{
-            fontFamily: "'Montserrat Alternates', sans-serif",
-            fontWeight: 700, fontSize: 28, letterSpacing: -0.6, lineHeight: 1.1,
-            marginBottom: 6,
-          }}>
-            {profile.name}
-          </div>
-
-          <div style={{ fontSize: 13, color: 'rgba(24,23,19,0.5)', marginBottom: 10 }}>
-            {profile.email}
-          </div>
-
-          {profile.filiere && (
+          <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{
-              display: 'inline-flex', alignItems: 'center',
-              background: '#F6F5AE', padding: '5px 14px', borderRadius: 999,
               fontFamily: "'Montserrat Alternates', sans-serif",
-              fontWeight: 600, fontSize: 12, letterSpacing: 0.2,
-              marginBottom: 20,
+              fontWeight: 700, fontSize: isDesktop ? 32 : 26,
+              letterSpacing: -0.7, lineHeight: 1.1,
+              marginBottom: 6,
             }}>
-              {profile.filiere}
+              {profile.name}
             </div>
-          )}
 
-          <button
-            onClick={handleStartEdit}
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: 6,
-              padding: '9px 18px', borderRadius: 999,
-              background: 'transparent', border: '1.5px solid rgba(24,23,19,0.18)',
-              cursor: 'pointer', fontFamily: "'Geologica', sans-serif",
-              fontSize: 13, fontWeight: 500, color: 'rgba(24,23,19,0.7)',
-              transition: 'all .15s',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = '#181713'; e.currentTarget.style.color = '#181713' }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(24,23,19,0.18)'; e.currentTarget.style.color = 'rgba(24,23,19,0.7)' }}
-          >
-            <Pencil size={13} strokeWidth={2} />
-            Modifier le profil
-          </button>
+            {profile.filiere && (
+              <div style={{
+                display: 'inline-flex', alignItems: 'center',
+                background: '#F6F5AE', padding: '4px 12px', borderRadius: 999,
+                fontFamily: "'Montserrat Alternates', sans-serif",
+                fontWeight: 600, fontSize: 12, letterSpacing: 0.2,
+                marginBottom: 8,
+              }}>
+                {profile.filiere}
+              </div>
+            )}
+
+            <div style={{ fontSize: 13, color: 'rgba(24,23,19,0.5)' }}>
+              {profile.email}
+            </div>
+          </div>
         </div>
-
-        {/* ── Inline edit form ── */}
-        {editing && (
-          <div style={{
-            background: '#FAFAF7', border: '1.5px solid #181713',
-            borderRadius: 24, padding: '22px 20px',
-            marginBottom: 12,
-          }}>
-            <div style={{
-              fontFamily: "'Montserrat Alternates', sans-serif",
-              fontWeight: 600, fontSize: 13, letterSpacing: 0.2,
-              marginBottom: 16, color: '#181713',
-            }}>
-              Modifier les informations
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 20 }}>
-              <div>
-                <label style={{
-                  display: 'block', fontSize: 11,
-                  fontFamily: "'Montserrat Alternates', sans-serif",
-                  fontWeight: 600, letterSpacing: 0.4,
-                  textTransform: 'uppercase', color: 'rgba(24,23,19,0.5)',
-                  marginBottom: 6,
-                }}>
-                  Nom
-                </label>
-                <input
-                  autoFocus
-                  value={editName}
-                  onChange={e => setEditName(e.target.value)}
-                  onKeyDown={e => { if (e.key === 'Enter') handleSaveEdit(); if (e.key === 'Escape') handleCancelEdit() }}
-                  style={{
-                    width: '100%', padding: '11px 14px',
-                    borderRadius: 12, border: '1.5px solid rgba(24,23,19,0.2)',
-                    fontFamily: "'Geologica', sans-serif",
-                    fontSize: 14, color: '#181713', background: '#F0EEE9',
-                    outline: 'none', boxSizing: 'border-box',
-                    transition: 'border-color .15s',
-                  }}
-                  onFocus={e => { e.currentTarget.style.borderColor = '#181713' }}
-                  onBlur={e => { e.currentTarget.style.borderColor = 'rgba(24,23,19,0.2)' }}
-                />
-              </div>
-
-              <div>
-                <label style={{
-                  display: 'block', fontSize: 11,
-                  fontFamily: "'Montserrat Alternates', sans-serif",
-                  fontWeight: 600, letterSpacing: 0.4,
-                  textTransform: 'uppercase', color: 'rgba(24,23,19,0.5)',
-                  marginBottom: 6,
-                }}>
-                  Filière
-                </label>
-                <input
-                  value={editFiliere}
-                  onChange={e => setEditFiliere(e.target.value)}
-                  onKeyDown={e => { if (e.key === 'Enter') handleSaveEdit(); if (e.key === 'Escape') handleCancelEdit() }}
-                  placeholder="Ex : Dev Web"
-                  style={{
-                    width: '100%', padding: '11px 14px',
-                    borderRadius: 12, border: '1.5px solid rgba(24,23,19,0.2)',
-                    fontFamily: "'Geologica', sans-serif",
-                    fontSize: 14, color: '#181713', background: '#F0EEE9',
-                    outline: 'none', boxSizing: 'border-box',
-                    transition: 'border-color .15s',
-                  }}
-                  onFocus={e => { e.currentTarget.style.borderColor = '#181713' }}
-                  onBlur={e => { e.currentTarget.style.borderColor = 'rgba(24,23,19,0.2)' }}
-                />
-              </div>
-
-              <div>
-                <label style={{
-                  display: 'block', fontSize: 11,
-                  fontFamily: "'Montserrat Alternates', sans-serif",
-                  fontWeight: 600, letterSpacing: 0.4,
-                  textTransform: 'uppercase', color: 'rgba(24,23,19,0.5)',
-                  marginBottom: 6,
-                }}>
-                  Email
-                </label>
-                <div style={{
-                  padding: '11px 14px', borderRadius: 12,
-                  border: '1.5px solid rgba(24,23,19,0.08)',
-                  background: 'rgba(24,23,19,0.04)',
-                  fontSize: 14, color: 'rgba(24,23,19,0.4)',
-                  fontFamily: "'Geologica', sans-serif",
-                }}>
-                  {profile.email}
-                </div>
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', gap: 8 }}>
-              <button
-                onClick={handleSaveEdit}
-                disabled={saving || !editName.trim()}
-                style={{
-                  flex: 1, padding: '11px 16px', borderRadius: 12,
-                  background: saving || !editName.trim() ? 'rgba(24,23,19,0.12)' : '#181713',
-                  color: saving || !editName.trim() ? 'rgba(24,23,19,0.35)' : '#F6F5AE',
-                  border: 'none', cursor: saving || !editName.trim() ? 'default' : 'pointer',
-                  fontFamily: "'Montserrat Alternates', sans-serif",
-                  fontWeight: 600, fontSize: 13,
-                  transition: 'all .15s',
-                }}
-              >
-                {saving ? 'Sauvegarde…' : 'Sauvegarder'}
-              </button>
-              <button
-                onClick={handleCancelEdit}
-                style={{
-                  padding: '11px 16px', borderRadius: 12,
-                  background: 'transparent', border: '1.5px solid rgba(24,23,19,0.15)',
-                  cursor: 'pointer', fontFamily: "'Geologica', sans-serif",
-                  fontSize: 13, color: 'rgba(24,23,19,0.6)',
-                }}
-              >
-                Annuler
-              </button>
-            </div>
-          </div>
-        )}
 
         {/* ── Disponibilité ── */}
         <div style={{
@@ -378,7 +240,7 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
         {/* ── Compétences ── */}
         <div style={{
           background: '#FAFAF7', border: '1px solid rgba(24,23,19,0.12)',
-          borderRadius: 24, padding: '18px 18px',
+          borderRadius: 24, padding: '18px',
           marginBottom: 12,
         }}>
           <SectionTitle>Compétences</SectionTitle>
@@ -393,10 +255,7 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
                 {s}
                 <button
                   onClick={() => handleRemoveSkill(s)}
-                  style={{
-                    background: 'none', border: 'none', cursor: 'pointer',
-                    padding: 0, display: 'flex', color: 'rgba(24,23,19,0.4)',
-                  }}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex', color: 'rgba(24,23,19,0.4)' }}
                   aria-label={`Retirer ${s}`}
                 >
                   <X size={12} strokeWidth={2.5} />
@@ -430,8 +289,7 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
                   padding: '8px 13px', borderRadius: 999,
                   background: 'transparent', border: '1px dashed rgba(24,23,19,0.3)',
                   fontSize: 13, fontWeight: 500, color: 'rgba(24,23,19,0.6)',
-                  cursor: 'pointer',
-                  display: 'inline-flex', alignItems: 'center', gap: 4,
+                  cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 4,
                 }}
               >
                 <Plus size={13} strokeWidth={2.2} /> Ajouter
@@ -486,6 +344,305 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
         </div>
 
       </div>
+    </div>
+  )
+}
+
+// ── Page paramètres compte ────────────────────────────────────
+
+interface AccountSettingsProps {
+  profile: Profile
+  onUpdate: (updates: Partial<Profile>) => void
+  onBack: () => void
+  onSignOut: () => void
+  onUpdateSkills: (skills: string[]) => Promise<void>
+  onSaveInfo: (name: string, filiere: string) => Promise<void>
+  isDesktop: boolean
+  px: string
+}
+
+function AccountSettings({ profile, onBack, onSignOut, onUpdateSkills, onSaveInfo, isDesktop, px }: AccountSettingsProps) {
+  const [name, setName]       = useState(profile.name)
+  const [filiere, setFiliere] = useState(profile.filiere)
+  const [skills, setSkills]   = useState<string[]>(profile.skills)
+  const [newSkill, setNewSkill]       = useState('')
+  const [addingSkill, setAddingSkill] = useState(false)
+  const [saving, setSaving]   = useState(false)
+  const [saved, setSaved]     = useState(false)
+
+  async function handleSave() {
+    if (!name.trim()) return
+    setSaving(true)
+    await onSaveInfo(name.trim(), filiere)
+    await onUpdateSkills(skills)
+    setSaving(false)
+    setSaved(true)
+    setTimeout(() => setSaved(false), 2000)
+  }
+
+  function addSkill() {
+    if (!newSkill.trim() || skills.includes(newSkill.trim())) return
+    setSkills(prev => [...prev, newSkill.trim()])
+    setNewSkill('')
+    setAddingSkill(false)
+  }
+
+  function removeSkill(s: string) {
+    setSkills(prev => prev.filter(x => x !== s))
+  }
+
+  return (
+    <div style={{
+      background: '#F0EEE9', height: '100%',
+      display: 'flex', flexDirection: 'column',
+      fontFamily: "'Geologica', sans-serif", color: '#181713',
+    }}>
+      {/* Header */}
+      <div style={{
+        padding: isDesktop ? `32px ${px} 14px` : `56px ${px} 14px`,
+        display: 'flex', alignItems: 'center', gap: 12,
+        flexShrink: 0,
+      }}>
+        <button
+          onClick={onBack}
+          style={{
+            width: 38, height: 38, borderRadius: '50%',
+            background: '#FAFAF7', border: '1px solid rgba(24,23,19,0.12)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            cursor: 'pointer', flexShrink: 0,
+          }}
+          aria-label="Retour"
+        >
+          <ArrowLeft size={16} strokeWidth={2} />
+        </button>
+        <div style={{
+          fontFamily: "'Montserrat Alternates', sans-serif",
+          fontWeight: 700, fontSize: 22, letterSpacing: -0.4,
+        }}>
+          Paramètres
+        </div>
+      </div>
+
+      <div style={{
+        flex: 1, overflowY: 'auto',
+        padding: isDesktop ? `6px ${px} 40px` : `6px ${px} 110px`,
+        WebkitOverflowScrolling: 'touch',
+      }}>
+
+        {/* ── Identité ── */}
+        <SettingsSection label="Identité">
+          <SettingsField label="Nom">
+            <input
+              value={name}
+              onChange={e => setName(e.target.value)}
+              style={inputStyle}
+              onFocus={e => { e.currentTarget.style.borderColor = '#181713' }}
+              onBlur={e => { e.currentTarget.style.borderColor = 'rgba(24,23,19,0.15)' }}
+            />
+          </SettingsField>
+
+          <SettingsField label="Email" hint="Non modifiable">
+            <div style={readonlyStyle}>{profile.email}</div>
+          </SettingsField>
+        </SettingsSection>
+
+        {/* ── Filière ── */}
+        <SettingsSection label="Filière">
+          <div style={{ position: 'relative' }}>
+            <select
+              value={filiere}
+              onChange={e => setFiliere(e.target.value)}
+              style={{
+                ...inputStyle,
+                appearance: 'none',
+                WebkitAppearance: 'none',
+                paddingRight: 40,
+                cursor: 'pointer',
+              }}
+              onFocus={e => { e.currentTarget.style.borderColor = '#181713' }}
+              onBlur={e => { e.currentTarget.style.borderColor = 'rgba(24,23,19,0.15)' }}
+            >
+              <option value="">Choisir une filière</option>
+              {FILIERES.map(f => (
+                <option key={f} value={f}>{f}</option>
+              ))}
+            </select>
+            <ChevronDown
+              size={16} strokeWidth={1.8}
+              style={{
+                position: 'absolute', right: 14, top: '50%',
+                transform: 'translateY(-50%)',
+                color: 'rgba(24,23,19,0.45)', pointerEvents: 'none',
+              }}
+            />
+          </div>
+        </SettingsSection>
+
+        {/* ── Compétences ── */}
+        <SettingsSection label="Compétences">
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            {skills.map(s => (
+              <span key={s} style={{
+                padding: '8px 12px', borderRadius: 999,
+                background: '#F0EEE9', border: '1px solid rgba(24,23,19,0.12)',
+                fontSize: 13, fontWeight: 500,
+                display: 'inline-flex', alignItems: 'center', gap: 6,
+              }}>
+                {s}
+                <button
+                  onClick={() => removeSkill(s)}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex', color: 'rgba(24,23,19,0.4)' }}
+                  aria-label={`Retirer ${s}`}
+                >
+                  <X size={12} strokeWidth={2.5} />
+                </button>
+              </span>
+            ))}
+            {addingSkill ? (
+              <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                <input
+                  autoFocus
+                  value={newSkill}
+                  onChange={e => setNewSkill(e.target.value)}
+                  onKeyDown={e => { if (e.key === 'Enter') addSkill(); if (e.key === 'Escape') setAddingSkill(false) }}
+                  placeholder="Ex : Figma"
+                  style={{
+                    padding: '7px 12px', borderRadius: 999,
+                    border: '1.5px solid #181713',
+                    fontFamily: "'Geologica', sans-serif",
+                    fontSize: 13, background: '#F0EEE9',
+                    outline: 'none', width: 120,
+                  }}
+                />
+                <button onClick={addSkill} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+                  <Check size={18} strokeWidth={2.2} color="#181713" />
+                </button>
+                <button onClick={() => setAddingSkill(false)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+                  <X size={16} strokeWidth={2} color="rgba(24,23,19,0.4)" />
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => setAddingSkill(true)}
+                style={{
+                  padding: '8px 13px', borderRadius: 999,
+                  background: 'transparent', border: '1px dashed rgba(24,23,19,0.3)',
+                  fontSize: 13, fontWeight: 500, color: 'rgba(24,23,19,0.6)',
+                  cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 4,
+                }}
+              >
+                <Plus size={13} strokeWidth={2.2} /> Ajouter
+              </button>
+            )}
+          </div>
+        </SettingsSection>
+
+        {/* ── Sauvegarder ── */}
+        <button
+          onClick={handleSave}
+          disabled={saving || !name.trim()}
+          style={{
+            width: '100%', padding: '14px',
+            background: saved ? '#3a8a4a' : (saving || !name.trim() ? 'rgba(24,23,19,0.1)' : '#181713'),
+            color: saved ? '#fff' : (saving || !name.trim() ? 'rgba(24,23,19,0.3)' : '#F6F5AE'),
+            border: 'none', borderRadius: 16,
+            cursor: saving || !name.trim() ? 'default' : 'pointer',
+            fontFamily: "'Montserrat Alternates', sans-serif",
+            fontWeight: 700, fontSize: 15,
+            transition: 'all .2s',
+            marginBottom: 32,
+          }}
+        >
+          {saved ? 'Sauvegardé' : saving ? 'Sauvegarde…' : 'Sauvegarder'}
+        </button>
+
+        {/* ── Déconnexion ── */}
+        <SettingsSection label="Compte">
+          <button
+            onClick={onSignOut}
+            style={{
+              width: '100%', padding: '14px 16px',
+              background: 'transparent',
+              border: '1.5px solid rgba(24,23,19,0.15)',
+              borderRadius: 14, cursor: 'pointer',
+              display: 'flex', alignItems: 'center', gap: 10,
+              fontFamily: "'Geologica', sans-serif",
+              fontSize: 14, color: '#c0392b',
+              transition: 'background .15s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(192,57,43,0.06)' }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}
+          >
+            <LogOut size={16} strokeWidth={1.8} />
+            Se déconnecter
+          </button>
+        </SettingsSection>
+
+      </div>
+    </div>
+  )
+}
+
+// ── Helpers ───────────────────────────────────────────────────
+
+const inputStyle: React.CSSProperties = {
+  width: '100%', padding: '12px 14px',
+  borderRadius: 12, border: '1.5px solid rgba(24,23,19,0.15)',
+  fontFamily: "'Geologica', sans-serif",
+  fontSize: 14, color: '#181713', background: '#FAFAF7',
+  outline: 'none', boxSizing: 'border-box',
+  transition: 'border-color .15s',
+}
+
+const readonlyStyle: React.CSSProperties = {
+  padding: '12px 14px', borderRadius: 12,
+  border: '1.5px solid rgba(24,23,19,0.08)',
+  background: 'rgba(24,23,19,0.04)',
+  fontSize: 14, color: 'rgba(24,23,19,0.4)',
+  fontFamily: "'Geologica', sans-serif",
+}
+
+function SettingsSection({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div style={{ marginBottom: 28 }}>
+      <div style={{
+        fontFamily: "'Montserrat Alternates', sans-serif",
+        fontWeight: 600, fontSize: 11,
+        letterSpacing: 0.5, textTransform: 'uppercase',
+        color: 'rgba(24,23,19,0.45)', marginBottom: 12,
+      }}>
+        {label}
+      </div>
+      <div style={{
+        background: '#FAFAF7', borderRadius: 18,
+        border: '1px solid rgba(24,23,19,0.08)',
+        padding: '16px',
+        display: 'flex', flexDirection: 'column', gap: 14,
+      }}>
+        {children}
+      </div>
+    </div>
+  )
+}
+
+function SettingsField({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <div style={{
+        display: 'flex', alignItems: 'baseline', gap: 6,
+        marginBottom: 6,
+      }}>
+        <span style={{
+          fontSize: 12, fontWeight: 500, color: 'rgba(24,23,19,0.55)',
+          fontFamily: "'Geologica', sans-serif",
+        }}>
+          {label}
+        </span>
+        {hint && (
+          <span style={{ fontSize: 11, color: 'rgba(24,23,19,0.35)' }}>{hint}</span>
+        )}
+      </div>
+      {children}
     </div>
   )
 }
