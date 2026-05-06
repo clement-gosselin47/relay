@@ -58,5 +58,9 @@ export function useProfile(userId: string | undefined) {
     await supabase.from('profiles').update({ skills }).eq('id', profile.id)
   }
 
-  return { history, stats, toggleAvailable, updateCampusRadius, updateSkills }
+  async function updateProfileInfo(profile: Profile, name: string, filiere: string) {
+    await supabase.from('profiles').update({ name, filiere }).eq('id', profile.id)
+  }
+
+  return { history, stats, toggleAvailable, updateCampusRadius, updateSkills, updateProfileInfo }
 }

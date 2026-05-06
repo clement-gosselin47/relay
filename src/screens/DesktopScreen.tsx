@@ -142,7 +142,15 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
               fontFamily: "'Montserrat Alternates', sans-serif",
               fontWeight: 600, fontSize: 13,
             }}>
-              {profile.available ? '🟢 Disponible' : '⚫ Hors-ligne'}
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                <span style={{
+                  width: 8, height: 8, borderRadius: '50%',
+                  background: profile.available ? '#3a8a4a' : 'rgba(24,23,19,0.4)',
+                  boxShadow: profile.available ? '0 0 0 3px rgba(58,138,74,0.18)' : 'none',
+                  flexShrink: 0,
+                }} />
+                {profile.available ? 'Disponible' : 'Hors-ligne'}
+              </span>
             </span>
             <Toggle on={profile.available} onChange={async v => {
               onUpdate({ available: v })
