@@ -383,31 +383,32 @@ function DesktopThread({ conv }: { conv: Conversation }) {
       flex: 1, display: 'flex', flexDirection: 'column',
       background: '#F0EEE9', overflow: 'hidden',
     }}>
+      {/* Avatar fixe en haut */}
+      <div style={{
+        flexShrink: 0,
+        display: 'flex', flexDirection: 'column', alignItems: 'center',
+        gap: 8, padding: '28px 0 16px',
+      }}>
+        <Avatar name={conv.name} size={64} />
+        <div style={{ textAlign: 'center' }}>
+          <div style={{
+            fontFamily: "'Montserrat Alternates', sans-serif",
+            fontWeight: 700, fontSize: 16, color: '#181713', letterSpacing: -0.3,
+          }}>
+            {conv.name}
+          </div>
+          <div style={{ fontSize: 12, color: 'rgba(24,23,19,0.45)', marginTop: 2, fontWeight: 300 }}>
+            {conv.filiere}
+          </div>
+        </div>
+      </div>
+
       {/* Messages */}
       <div style={{
         flex: 1, overflowY: 'auto',
-        padding: '28px 28px 16px',
+        padding: '8px 28px 16px',
         display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', gap: 8,
       }}>
-        {/* Avatar flottant en tête de conversation */}
-        <div style={{
-          display: 'flex', flexDirection: 'column', alignItems: 'center',
-          gap: 8, paddingBottom: 24,
-        }}>
-          <Avatar name={conv.name} size={64} />
-          <div style={{ textAlign: 'center' }}>
-            <div style={{
-              fontFamily: "'Montserrat Alternates', sans-serif",
-              fontWeight: 700, fontSize: 16, color: '#181713', letterSpacing: -0.3,
-            }}>
-              {conv.name}
-            </div>
-            <div style={{ fontSize: 12, color: 'rgba(24,23,19,0.45)', marginTop: 2, fontWeight: 300 }}>
-              {conv.filiere}
-            </div>
-          </div>
-        </div>
-
         {messages.map(m => (
           <MessageBubble key={m.id} message={m} />
         ))}
