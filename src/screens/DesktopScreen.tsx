@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { Home, User, MessageSquare, MapPin, Zap, ArrowRight, Search, Sun, Moon } from 'lucide-react'
+import { Home, User, MessageSquare, MapPin, Zap, ArrowRight, Search } from 'lucide-react'
 import { useTheme } from '../context/ThemeContext'
 import { ProfileScreen } from './ProfileScreen'
 import { Avatar } from '../components/ui/Avatar'
@@ -20,7 +20,7 @@ interface DesktopScreenProps {
 }
 
 export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenProps) {
-  const { theme, toggle: toggleTheme } = useTheme()
+  const { theme } = useTheme()
   const [screen, setScreen]   = useState<Screen>('home')
   const [showCreate, setShowCreate] = useState(false)
   const [toast, setToast]     = useState<ToastState | null>(null)
