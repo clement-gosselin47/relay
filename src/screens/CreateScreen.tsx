@@ -19,7 +19,7 @@ interface CreateScreenProps {
 
 export function CreateScreen({ userId, profile, onClose, onSuccess }: CreateScreenProps) {
   const [title, setTitle]       = useState('')
-  const [cat, setCat]           = useState<string | null>(null)
+  const [cats, setCats]         = useState<string[]>([])
   const [filieres, setFilieres] = useState<string[]>([])
   const [desc, setDesc]         = useState('')
   const [location, setLocation] = useState('')
@@ -27,7 +27,11 @@ export function CreateScreen({ userId, profile, onClose, onSuccess }: CreateScre
   const [duration, setDuration] = useState(15)
   const [loading, setLoading]   = useState(false)
 
-  const isReady = title.trim() && cat && location.trim()
+  const isReady = title.trim() && cats.length > 0 && location.trim()
+
+  function toggleCat(key: string) {
+    setCats(prev => prev.includes(key) ? prev.filter(x => x !== key) : [...prev, key])
+  }
 
   function toggleFiliere(f: string) {
     setFilieres(prev => prev.includes(f) ? prev.filter(x => x !== f) : [...prev, f])
@@ -43,7 +47,7 @@ export function CreateScreen({ userId, profile, onClose, onSuccess }: CreateScre
       author_id:       userId,
       title:           title.trim(),
       description:     desc.trim() || null,
-      category:        cat!,
+      categories:      cats,
       target_filieres: filieres,
       location:        location.trim(),
       urgent,
@@ -66,7 +70,7 @@ export function CreateScreen({ userId, profile, onClose, onSuccess }: CreateScre
         author_id:       userId,
         title:           newRequest.title,
         description:     newRequest.description,
-        category:        newRequest.category,
+        categories:      newRequest.categories,
         target_filieres: newRequest.target_filieres,
         location:        newRequest.location,
         urgent:          newRequest.urgent,
@@ -139,37 +143,44 @@ export function CreateScreen({ userId, profile, onClose, onSuccess }: CreateScre
           />
         </FormSection>
 
-        {/* 2 — Catégorie */}
-        <FormSection num={2} label="Catégorie">
+        {/* 2 — Catégories (multi) */}
+        <FormSection num={2} label="Catégories">
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 8 }}>
-            {Object.entries(CATEGORY).map(([key, def]) => (
-              <button
-                key={key}
-                onClick={() => setCat(cat === key ? null : key)}
-                style={{
-                  padding: '14px 8px',
-                  borderRadius: 16,
-                  background: cat === key ? 'var(--ink)' : 'var(--paper)',
-                  border: `1.5px solid ${cat === key ? 'var(--ink)' : `rgba(var(--ink-rgb),0.12)`}`,
-                  cursor: 'pointer',
-                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
-                  transition: 'all .15s',
-                }}
-              >
-                <span style={{
-                  fontFamily: "'Montserrat Alternates', sans-serif",
-                  fontWeight: 600, fontSize: 11,
-                  color: cat === key ? 'var(--yellow)' : 'var(--ink)',
-                }}>
-                  {def.label}
-                </span>
-              </button>
-            ))}
+            {Object.entries(CATEGORY).map(([key, def]) => {
+              const active = cats.includes(key)
+              return (
+                <button
+                  key={key}
+                  onClick={() => toggleCat(key)}
+                  style={{
+                    padding: '14px 8px',
+                    borderRadius: 16,
+                    background: active ? 'var(--ink)' : 'var(--paper)',
+                    border: `1.5px solid ${active ? 'var(--ink)' : `rgba(var(--ink-rgb),0.12)`}`,
+                    cursor: 'pointer',
+                    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
+                    transition: 'all .15s',
+                  }}
+                >
+                  <span style={{
+                    fontFamily: "'Montserrat Alternates', sans-serif",
+                    fontWeight: 600, fontSize: 11,
+                    color: active ? 'var(--yellow)' : 'var(--ink)',
+                  }}>
+                    {def.label}
+                  </span>
+                </button>
+              )
+            })}
           </div>
         </FormSection>
 
         {/* 3 — Filières */}
-        <FormSection num={3} label="Filières ciblées (optionnel)">
+        <FormSection
+          num={3}
+          label="Filières ciblées (optionnel)"
+          hint="Quelle filière peut t'aider ? Les étudiants de ces filières verront ta demande en priorité."
+        >
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
             {FILIERES.map(f => (
               <button
@@ -300,20 +311,21 @@ export function CreateScreen({ userId, profile, onClose, onSuccess }: CreateScre
   )
 }
 
-function FormSection({ num, label, children }: {
+function FormSection({ num, label, hint, children }: {
   num: number
   label: string
+  hint?: string
   children: React.ReactNode
 }) {
   return (
     <div style={{ marginBottom: 26 }}>
       <div style={{
         display: 'flex', alignItems: 'center', gap: 8,
-        marginBottom: 10,
+        marginBottom: hint ? 6 : 10,
       }}>
         <div style={{
           width: 22, height: 22, borderRadius: '50%',
-          background: 'var(--ink)', color: 'var(--yellow)',
+          background: '#181713', color: '#F6F5AE',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           fontFamily: "'Montserrat Alternates', sans-serif",
           fontWeight: 700, fontSize: 11, flexShrink: 0,
@@ -328,6 +340,17 @@ function FormSection({ num, label, children }: {
           {label}
         </span>
       </div>
+      {hint && (
+        <p style={{
+          margin: '0 0 10px 30px',
+          fontFamily: "'Geologica', sans-serif",
+          fontWeight: 300, fontSize: 12,
+          color: `rgba(var(--ink-rgb),0.55)`,
+          lineHeight: 1.45,
+        }}>
+          {hint}
+        </p>
+      )}
       {children}
     </div>
   )

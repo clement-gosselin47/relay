@@ -326,7 +326,7 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
                   display: 'flex', alignItems: 'center', gap: 12,
                   borderBottom: i < history.length - 1 ? `1px solid rgba(var(--ink-rgb),0.06)` : 'none',
                 }}>
-                  <CategoryTile cat={h.request.category} size={36} />
+                  <CategoryTile cat={h.request.categories?.[0] ?? 'autre'} size={36} />
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{
                       fontFamily: "'Montserrat Alternates', sans-serif",

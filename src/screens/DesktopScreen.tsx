@@ -154,36 +154,49 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
               await supabase.from('profiles').update({ available: v }).eq('id', profile.id)
             }} />
           </div>
-          <div style={{ fontSize: 11.5, color: `rgba(var(--ink-rgb),0.55)` }}>
+          <div style={{ fontSize: 11.5, color: profile.available ? 'rgba(24,23,19,0.55)' : `rgba(var(--ink-rgb),0.55)` }}>
             {profile.available ? 'Tu apparais dans le radar' : 'Active pour recevoir des demandes'}
           </div>
         </div>
 
         {/* Mini profile */}
         <div style={{
-          display: 'flex', alignItems: 'center', gap: 10,
-          padding: '12px 0',
+          display: 'flex', alignItems: 'center', gap: 8,
+          paddingTop: 12,
           borderTop: `1px solid rgba(var(--ink-rgb),0.08)`,
         }}>
-          <Avatar name={profile.name} size={38} />
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{
-              fontFamily: "'Montserrat Alternates', sans-serif",
-              fontWeight: 600, fontSize: 13,
-              overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-            }}>
-              {profile.name}
+          <button
+            onClick={() => { setScreen('profile'); setShowCreate(false) }}
+            style={{
+              flex: 1, minWidth: 0,
+              display: 'flex', alignItems: 'center', gap: 10,
+              padding: '8px 10px', borderRadius: 12,
+              background: 'transparent', border: '1px solid transparent',
+              cursor: 'pointer', textAlign: 'left',
+            }}
+          >
+            <Avatar name={profile.name} size={34} />
+            <div style={{ minWidth: 0 }}>
+              <div style={{
+                fontFamily: "'Montserrat Alternates', sans-serif",
+                fontWeight: 600, fontSize: 13,
+                overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+              }}>
+                {profile.name}
+              </div>
+              <div style={{ fontSize: 11, color: `rgba(var(--ink-rgb),0.5)`, marginTop: 1 }}>
+                {profile.filiere}
+              </div>
             </div>
-            <div style={{ fontSize: 11, color: `rgba(var(--ink-rgb),0.5)`, marginTop: 1 }}>
-              {profile.filiere}
-            </div>
-          </div>
+          </button>
           <button
             onClick={onSignOut}
             style={{
+              flexShrink: 0,
               background: 'none', border: 'none', cursor: 'pointer',
               fontSize: 11, color: `rgba(var(--ink-rgb),0.4)`,
               fontFamily: "'Geologica', sans-serif",
+              padding: '4px 6px',
             }}
           >
             Quitter
