@@ -51,7 +51,7 @@ export function HomeScreen({ userId, userName, requests, loading }: HomeScreenPr
 
   return (
     <div style={{
-      background: '#F0EEE9', height: '100%',
+      background: 'var(--bone)', height: '100%',
       display: 'flex', flexDirection: 'column',
       fontFamily: "'Geologica', sans-serif",
     }}>
@@ -79,6 +79,8 @@ export function HomeScreen({ userId, userName, requests, loading }: HomeScreenPr
             }} />
             Live · Ynov Lyon
           </div>
+
+          <img src="/logo-t-black.png" alt="Relay" style={{ height: 36, width: 'auto' }} />
 
         </div>
 
@@ -156,9 +158,10 @@ function RequestCard({
 
   return (
     <div style={{
-      background: yellow ? '#F6F5AE' : '#FAFAF7',
-      border: yellow ? 'none' : '1px solid rgba(24,23,19,0.12)',
+      background: yellow ? '#F6F5AE' : 'var(--paper)',
+      border: yellow ? 'none' : `1px solid rgba(var(--ink-rgb),0.12)`,
       borderRadius: 24, padding: '18px 18px 16px',
+      color: yellow ? '#181713' : 'var(--ink)',
       animation: 'slide-up .3s ease',
     }}>
       {/* Urgency badge */}
@@ -182,7 +185,7 @@ function RequestCard({
         fontFamily: "'Montserrat Alternates', sans-serif",
         fontWeight: 600, fontSize: 20,
         lineHeight: 1.15, letterSpacing: -0.4,
-        marginBottom: 12, color: '#181713',
+        marginBottom: 12, color: yellow ? '#181713' : 'var(--ink)',
       }}>
         {r.title}
       </div>
@@ -192,10 +195,10 @@ function RequestCard({
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
           <Avatar name={r.author.name} size={26} />
           <div style={{ fontSize: 12 }}>
-            <span style={{ fontWeight: 600, color: '#181713' }}>
+            <span style={{ fontWeight: 600, color: yellow ? '#181713' : 'var(--ink)' }}>
               {r.author.name.split(' ')[0]}
             </span>
-            <span style={{ color: 'rgba(24,23,19,0.6)' }}> · {r.author.filiere}</span>
+            <span style={{ color: yellow ? 'rgba(24,23,19,0.6)' : `rgba(var(--ink-rgb),0.6)` }}> · {r.author.filiere}</span>
           </div>
         </div>
       )}
@@ -204,13 +207,13 @@ function RequestCard({
       <div style={{
         display: 'flex', alignItems: 'center', gap: 10,
         paddingTop: 12,
-        borderTop: `1px dashed ${yellow ? 'rgba(24,23,19,0.18)' : 'rgba(24,23,19,0.10)'}`,
+        borderTop: `1px dashed ${yellow ? 'rgba(24,23,19,0.18)' : 'rgba(var(--ink-rgb),0.10)'}`,
       }}>
-        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12, color: '#181713' }}>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12, color: yellow ? '#181713' : 'var(--ink)' }}>
           <MapPin size={13} strokeWidth={1.7} /> {r.location}
         </span>
-        <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'rgba(24,23,19,0.3)', flexShrink: 0 }} />
-        <span style={{ fontSize: 12, color: 'rgba(24,23,19,0.6)' }}>
+        <span style={{ width: 3, height: 3, borderRadius: '50%', background: yellow ? 'rgba(24,23,19,0.3)' : `rgba(var(--ink-rgb),0.3)`, flexShrink: 0 }} />
+        <span style={{ fontSize: 12, color: yellow ? 'rgba(24,23,19,0.6)' : `rgba(var(--ink-rgb),0.6)` }}>
           {timeAgo(r.created_at)}
         </span>
         <button
@@ -219,8 +222,8 @@ function RequestCard({
           style={{
             marginLeft: 'auto',
             padding: '9px 14px', borderRadius: 999,
-            background: isHelping ? 'rgba(24,23,19,0.15)' : '#181713',
-            color: isHelping ? 'rgba(24,23,19,0.4)' : (yellow ? '#F6F5AE' : '#F0EEE9'),
+            background: isHelping ? `rgba(var(--ink-rgb),0.12)` : 'var(--ink)',
+            color: isHelping ? `rgba(var(--ink-rgb),0.35)` : 'var(--bone)',
             border: 'none', cursor: isHelping ? 'default' : 'pointer',
             fontFamily: "'Montserrat Alternates', sans-serif",
             fontWeight: 600, fontSize: 12.5,
@@ -247,11 +250,11 @@ function EmptyFeed({ name }: { name: string }) {
       <div style={{
         fontFamily: "'Montserrat Alternates', sans-serif",
         fontWeight: 700, fontSize: 22, letterSpacing: -0.5,
-        marginBottom: 10, color: '#181713',
+        marginBottom: 10, color: 'var(--ink)',
       }}>
         Le campus est calme, {name.split(' ')[0]}
       </div>
-      <div style={{ fontSize: 14, color: 'rgba(24,23,19,0.55)', lineHeight: 1.5, maxWidth: 260 }}>
+      <div style={{ fontSize: 14, color: `rgba(var(--ink-rgb),0.55)`, lineHeight: 1.5, maxWidth: 260 }}>
         Personne n'a encore posté de demande. Lance la tienne !
       </div>
     </div>
@@ -264,14 +267,14 @@ function SkeletonFeed() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
       {[0, 1, 2].map(i => (
         <div key={i} style={{
-          background: i % 2 === 0 ? 'rgba(246,245,174,0.5)' : '#FAFAF7',
+          background: i % 2 === 0 ? 'rgba(246,245,174,0.5)' : 'var(--paper)',
           borderRadius: 24, padding: '18px',
-          border: i % 2 === 0 ? 'none' : '1px solid rgba(24,23,19,0.08)',
+          border: i % 2 === 0 ? 'none' : `1px solid rgba(var(--ink-rgb),0.08)`,
           animation: 'pulse 1.4s infinite',
         }}>
-          <div style={{ height: 14, background: 'rgba(24,23,19,0.08)', borderRadius: 7, width: '40%', marginBottom: 12 }} />
-          <div style={{ height: 20, background: 'rgba(24,23,19,0.10)', borderRadius: 7, width: '85%', marginBottom: 8 }} />
-          <div style={{ height: 14, background: 'rgba(24,23,19,0.06)', borderRadius: 7, width: '60%' }} />
+          <div style={{ height: 14, background: `rgba(var(--ink-rgb),0.08)`, borderRadius: 7, width: '40%', marginBottom: 12 }} />
+          <div style={{ height: 20, background: `rgba(var(--ink-rgb),0.10)`, borderRadius: 7, width: '85%', marginBottom: 8 }} />
+          <div style={{ height: 14, background: `rgba(var(--ink-rgb),0.06)`, borderRadius: 7, width: '60%' }} />
         </div>
       ))}
     </div>

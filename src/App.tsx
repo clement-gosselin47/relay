@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
+import { Sun, Moon } from 'lucide-react'
 import './index.css'
 import { useAuth } from './hooks/useAuth'
 import { useMediaQuery } from './hooks/useMediaQuery'
 import { useRequests } from './hooks/useRequests'
+import { useTheme } from './context/ThemeContext'
 import { AuthModal } from './components/auth/AuthModal'
 import { BottomBar } from './components/layout/BottomBar'
 import { Toast } from './components/ui/Toast'
@@ -10,7 +12,6 @@ import { HomeScreen } from './screens/HomeScreen'
 import { CreateScreen } from './screens/CreateScreen'
 import { ProfileScreen } from './screens/ProfileScreen'
 import { DesktopScreen } from './screens/DesktopScreen'
-import { RelayLogo } from './components/ui/RelayLogo'
 
 type MobileScreen = 'home' | 'messages' | 'profile'
 
@@ -34,20 +35,24 @@ export default function App() {
 
   if (isDesktop) {
     return (
-      <DesktopScreen
-        profile={profile}
-        onUpdate={updateProfile}
-        onSignOut={signOut}
-      />
+      <>
+        <DesktopScreen
+          profile={profile}
+          onUpdate={updateProfile}
+          onSignOut={signOut}
+        />
+        <ThemeToggleButton />
+      </>
     )
   }
 
   // ── Mobile layout ──
   return (
+    <>
     <div style={{
       maxWidth: 480, margin: '0 auto',
       height: '100svh', position: 'relative',
-      overflow: 'hidden', background: '#F0EEE9',
+      overflow: 'hidden', background: 'var(--bone)',
     }}>
       {/* Screens */}
       <div style={{ height: '100%', position: 'relative' }}>
@@ -102,6 +107,8 @@ export default function App() {
         />
       )}
     </div>
+    <ThemeToggleButton />
+    </>
   )
 }
 
@@ -110,19 +117,47 @@ function MessagesPlaceholder() {
     <div style={{
       height: '100%', display: 'flex',
       flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-      background: '#F0EEE9', gap: 12, padding: 24,
+      background: 'var(--bone)', gap: 12, padding: 24,
     }}>
       <div style={{ fontSize: 52 }}>💬</div>
       <div style={{
         fontFamily: "'Montserrat Alternates', sans-serif",
-        fontWeight: 700, fontSize: 22, letterSpacing: -0.5, color: '#181713',
+        fontWeight: 700, fontSize: 22, letterSpacing: -0.5, color: 'var(--ink)',
       }}>
         Messages
       </div>
-      <div style={{ fontSize: 14, color: 'rgba(24,23,19,0.55)', textAlign: 'center', lineHeight: 1.5, maxWidth: 260 }}>
+      <div style={{ fontSize: 14, color: `rgba(var(--ink-rgb),0.55)`, textAlign: 'center', lineHeight: 1.5, maxWidth: 260 }}>
         Tes conversations avec les aidants apparaîtront ici.
       </div>
     </div>
+  )
+}
+
+function ThemeToggleButton() {
+  const { theme, toggle } = useTheme()
+  return (
+    <button
+      onClick={toggle}
+      aria-label={theme === 'dark' ? 'Mode clair' : 'Mode sombre'}
+      style={{
+        position: 'fixed',
+        top: 'calc(env(safe-area-inset-top, 0px) + 12px)',
+        right: 16,
+        zIndex: 150,
+        width: 38, height: 38, borderRadius: '50%',
+        background: 'var(--paper)',
+        border: `1px solid rgba(var(--ink-rgb),0.12)`,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        cursor: 'pointer',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+        color: 'var(--ink)',
+      }}
+    >
+      {theme === 'dark'
+        ? <Sun size={16} strokeWidth={1.8} />
+        : <Moon size={16} strokeWidth={1.8} />
+      }
+    </button>
   )
 }
 
@@ -132,23 +167,16 @@ function SplashScreen() {
       height: '100svh', display: 'flex',
       flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
-      background: '#F0EEE9', gap: 16,
+      background: 'var(--bone)', gap: 16,
     }}>
-      <div style={{
-        width: 72, height: 72, borderRadius: 22,
-        background: '#181713',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        animation: 'breathe 2s ease-in-out infinite',
-      }}>
-        <RelayLogo size={40} color="#F6F5AE" />
-      </div>
-      <div style={{
-        fontFamily: "'Montserrat Alternates', sans-serif",
-        fontWeight: 700, fontSize: 28, letterSpacing: -1,
-        color: '#181713',
-      }}>
-        Relay
-      </div>
+      <img
+        src="/logo-t-color.png"
+        alt="Relay"
+        style={{
+          height: 80, width: 'auto',
+          animation: 'breathe 2s ease-in-out infinite',
+        }}
+      />
     </div>
   )
 }

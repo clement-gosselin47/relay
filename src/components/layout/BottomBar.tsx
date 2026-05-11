@@ -1,5 +1,4 @@
 import { Home, User, MessageSquare } from 'lucide-react'
-import { RelayLogo } from '../ui/RelayLogo'
 
 type Screen = 'home' | 'messages' | 'profile'
 
@@ -15,8 +14,8 @@ export function BottomBar({ active, onNavigate, onCreate }: BottomBarProps) {
       position: 'fixed', bottom: 0, left: '50%',
       transform: 'translateX(-50%)',
       width: '100%', maxWidth: 480,
-      background: '#FAFAF7',
-      borderTop: '1px solid rgba(24,23,19,0.08)',
+      background: 'var(--paper)',
+      borderTop: '1px solid rgba(var(--ink-rgb),0.08)',
       paddingBottom: 'env(safe-area-inset-bottom, 16px)',
       zIndex: 100,
     }}>
@@ -59,7 +58,7 @@ export function BottomBar({ active, onNavigate, onCreate }: BottomBarProps) {
           onMouseUp={e => (e.currentTarget.style.transform = 'translateY(-12px) scale(1)')}
           onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(-12px) scale(1)')}
         >
-          <RelayLogo size={28} color="#F6F5AE" />
+          <img src="/logo-t-color.png" alt="" style={{ height: 28, width: 'auto' }} />
         </button>
 
         {/* Profile */}
@@ -88,7 +87,7 @@ function NavItem({
       style={{
         display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3,
         background: 'none', border: 'none', cursor: 'pointer',
-        color: active ? '#181713' : 'rgba(24,23,19,0.4)',
+        color: active ? 'var(--ink)' : `rgba(var(--ink-rgb),0.4)`,
         fontFamily: "'Montserrat Alternates', sans-serif",
         fontWeight: 600, fontSize: 10, letterSpacing: 0.2,
         padding: '4px 16px',

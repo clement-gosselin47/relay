@@ -86,7 +86,7 @@ export function CreateScreen({ userId, profile, onClose, onSuccess }: CreateScre
   return (
     <div style={{
       position: 'fixed', inset: 0, zIndex: 200,
-      background: '#F0EEE9',
+      background: 'var(--bone)',
       display: 'flex', flexDirection: 'column',
       fontFamily: "'Geologica', sans-serif",
       maxWidth: 480, left: '50%', transform: 'translateX(-50%)',
@@ -96,21 +96,21 @@ export function CreateScreen({ userId, profile, onClose, onSuccess }: CreateScre
       <div style={{
         padding: '56px 20px 14px',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        borderBottom: '1px solid rgba(24,23,19,0.06)',
-        background: '#F0EEE9', flexShrink: 0,
+        borderBottom: `1px solid rgba(var(--ink-rgb),0.06)`,
+        background: 'var(--bone)', flexShrink: 0,
       }}>
         <button onClick={onClose} style={{
           width: 40, height: 40, borderRadius: '50%',
-          background: '#FAFAF7', border: '1px solid rgba(24,23,19,0.12)',
+          background: 'var(--paper)', border: `1px solid rgba(var(--ink-rgb),0.12)`,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          cursor: 'pointer',
+          cursor: 'pointer', color: 'var(--ink)',
         }}>
-          <X size={18} color="#181713" />
+          <X size={18} />
         </button>
         <div style={{
           fontFamily: "'Montserrat Alternates', sans-serif",
           fontWeight: 600, fontSize: 14,
-          letterSpacing: 0.3, textTransform: 'uppercase', color: '#181713',
+          letterSpacing: 0.3, textTransform: 'uppercase', color: 'var(--ink)',
         }}>
           Demande flash
         </div>
@@ -149,8 +149,8 @@ export function CreateScreen({ userId, profile, onClose, onSuccess }: CreateScre
                 style={{
                   padding: '14px 8px',
                   borderRadius: 16,
-                  background: cat === key ? '#181713' : '#FAFAF7',
-                  border: `1.5px solid ${cat === key ? '#181713' : 'rgba(24,23,19,0.12)'}`,
+                  background: cat === key ? 'var(--ink)' : 'var(--paper)',
+                  border: `1.5px solid ${cat === key ? 'var(--ink)' : `rgba(var(--ink-rgb),0.12)`}`,
                   cursor: 'pointer',
                   display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
                   transition: 'all .15s',
@@ -159,7 +159,7 @@ export function CreateScreen({ userId, profile, onClose, onSuccess }: CreateScre
                 <span style={{
                   fontFamily: "'Montserrat Alternates', sans-serif",
                   fontWeight: 600, fontSize: 11,
-                  color: cat === key ? '#F6F5AE' : '#181713',
+                  color: cat === key ? 'var(--yellow)' : 'var(--ink)',
                 }}>
                   {def.label}
                 </span>
@@ -177,9 +177,9 @@ export function CreateScreen({ userId, profile, onClose, onSuccess }: CreateScre
                 onClick={() => toggleFiliere(f)}
                 style={{
                   padding: '8px 14px', borderRadius: 999,
-                  background: filieres.includes(f) ? '#181713' : '#FAFAF7',
-                  border: `1.5px solid ${filieres.includes(f) ? '#181713' : 'rgba(24,23,19,0.12)'}`,
-                  color: filieres.includes(f) ? '#F6F5AE' : '#181713',
+                  background: filieres.includes(f) ? 'var(--ink)' : 'var(--paper)',
+                  border: `1.5px solid ${filieres.includes(f) ? 'var(--ink)' : `rgba(var(--ink-rgb),0.12)`}`,
+                  color: filieres.includes(f) ? 'var(--yellow)' : 'var(--ink)',
                   fontFamily: "'Montserrat Alternates', sans-serif",
                   fontWeight: 600, fontSize: 13,
                   cursor: 'pointer', transition: 'all .15s',
@@ -216,9 +216,10 @@ export function CreateScreen({ userId, profile, onClose, onSuccess }: CreateScre
         {/* 6 — Urgence */}
         <FormSection num={6} label="C'est urgent ?">
           <div style={{
-            background: urgent ? '#F6F5AE' : '#FAFAF7',
-            border: `1.5px solid ${urgent ? '#181713' : 'rgba(24,23,19,0.12)'}`,
+            background: urgent ? '#F6F5AE' : 'var(--paper)',
+            border: `1.5px solid ${urgent ? '#181713' : `rgba(var(--ink-rgb),0.12)`}`,
             borderRadius: 20, padding: '16px 18px',
+            color: urgent ? '#181713' : 'var(--ink)',
             transition: 'all .2s',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -226,11 +227,10 @@ export function CreateScreen({ userId, profile, onClose, onSuccess }: CreateScre
                 <div style={{
                   fontFamily: "'Montserrat Alternates', sans-serif",
                   fontWeight: 600, fontSize: 15,
-                  color: '#181713',
                 }}>
                   Demande flash
                 </div>
-                <div style={{ fontSize: 13, color: 'rgba(24,23,19,0.6)', marginTop: 2 }}>
+                <div style={{ fontSize: 13, opacity: 0.6, marginTop: 2 }}>
                   Apparaît en priorité avec un timer
                 </div>
               </div>
@@ -242,7 +242,7 @@ export function CreateScreen({ userId, profile, onClose, onSuccess }: CreateScre
                 <div style={{
                   fontFamily: "'Montserrat Alternates', sans-serif",
                   fontWeight: 600, fontSize: 12,
-                  letterSpacing: 0.3, color: 'rgba(24,23,19,0.6)',
+                  letterSpacing: 0.3, opacity: 0.6,
                   textTransform: 'uppercase', marginBottom: 10,
                 }}>
                   Expire dans
@@ -277,15 +277,15 @@ export function CreateScreen({ userId, profile, onClose, onSuccess }: CreateScre
         position: 'absolute', bottom: 0, left: 0, right: 0,
         padding: '16px 20px',
         paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 16px)',
-        background: 'linear-gradient(to top, #F0EEE9 80%, transparent)',
+        background: `linear-gradient(to top, var(--bone) 80%, transparent)`,
       }}>
         <button
           onClick={handleSubmit}
           disabled={!isReady || loading}
           style={{
             width: '100%', padding: '17px',
-            background: isReady && !loading ? '#181713' : 'rgba(24,23,19,0.18)',
-            color: isReady && !loading ? '#F6F5AE' : 'rgba(24,23,19,0.35)',
+            background: isReady && !loading ? 'var(--ink)' : `rgba(var(--ink-rgb),0.18)`,
+            color: isReady && !loading ? 'var(--yellow)' : `rgba(var(--ink-rgb),0.35)`,
             border: 'none', borderRadius: 18,
             fontFamily: "'Montserrat Alternates', sans-serif",
             fontWeight: 700, fontSize: 16,
@@ -313,7 +313,7 @@ function FormSection({ num, label, children }: {
       }}>
         <div style={{
           width: 22, height: 22, borderRadius: '50%',
-          background: '#181713', color: '#F6F5AE',
+          background: 'var(--ink)', color: 'var(--yellow)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           fontFamily: "'Montserrat Alternates', sans-serif",
           fontWeight: 700, fontSize: 11, flexShrink: 0,
@@ -323,7 +323,7 @@ function FormSection({ num, label, children }: {
         <span style={{
           fontFamily: "'Montserrat Alternates', sans-serif",
           fontWeight: 600, fontSize: 13,
-          letterSpacing: 0.2, color: '#181713',
+          letterSpacing: 0.2, color: 'var(--ink)',
         }}>
           {label}
         </span>
@@ -335,12 +335,12 @@ function FormSection({ num, label, children }: {
 
 const inputStyle: React.CSSProperties = {
   width: '100%', boxSizing: 'border-box',
-  background: '#FAFAF7',
-  border: '1.5px solid rgba(24,23,19,0.12)',
+  background: 'var(--paper)',
+  border: `1.5px solid rgba(var(--ink-rgb),0.12)`,
   borderRadius: 14, padding: '14px 16px',
   fontFamily: "'Geologica', sans-serif",
   fontWeight: 300, fontSize: 15,
-  color: '#181713', outline: 'none',
+  color: 'var(--ink)', outline: 'none',
 }
 
 const textAreaStyle: React.CSSProperties = {

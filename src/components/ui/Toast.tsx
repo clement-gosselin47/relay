@@ -15,7 +15,8 @@ export function Toast({ message, type = 'success', onDismiss, duration = 3000 }:
     return () => clearTimeout(t)
   }, [onDismiss, duration])
 
-  const bg = type === 'success' ? '#181713' : type === 'error' ? '#c0392b' : '#3d3a35'
+  const bg = type === 'success' ? 'var(--ink)' : type === 'error' ? '#c0392b' : '#3d3a35'
+  const fg = type === 'success' ? 'var(--yellow)' : '#fff'
 
   return (
     <div
@@ -23,7 +24,7 @@ export function Toast({ message, type = 'success', onDismiss, duration = 3000 }:
       style={{
         position: 'fixed', bottom: 100, left: '50%',
         transform: 'translateX(-50%)',
-        background: bg, color: type === 'success' ? '#F6F5AE' : '#fff',
+        background: bg, color: fg,
         padding: '12px 20px', borderRadius: 999,
         fontFamily: "'Montserrat Alternates', sans-serif",
         fontWeight: 600, fontSize: 14,

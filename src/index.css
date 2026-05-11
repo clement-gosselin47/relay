@@ -6,11 +6,14 @@
   --yellow:      #F6F5AE;
   --yellow-deep: #EDEC7A;
   --ink:         #181713;
+  --ink-rgb:     24, 23, 19;
   --ink70:       rgba(24,23,19,0.70);
   --ink55:       rgba(24,23,19,0.55);
   --ink35:       rgba(24,23,19,0.35);
   --bone:        #F0EEE9;
+  --bone-rgb:    240, 238, 233;
   --paper:       #FAFAF7;
+  --paper-rgb:   250, 250, 247;
   --line:        rgba(24,23,19,0.12);
   --line-soft:   rgba(24,23,19,0.06);
 
@@ -22,6 +25,21 @@
   --radius-lg:  24px;
   --radius-xl:  32px;
   --radius-full: 9999px;
+}
+
+/* ── Dark mode tokens ── */
+[data-theme="dark"] {
+  --ink:         #EAE8E3;
+  --ink-rgb:     234, 232, 227;
+  --ink70:       rgba(234,232,227,0.70);
+  --ink55:       rgba(234,232,227,0.55);
+  --ink35:       rgba(234,232,227,0.35);
+  --bone:        #131210;
+  --bone-rgb:    19, 18, 16;
+  --paper:       #1D1C19;
+  --paper-rgb:   29, 28, 25;
+  --line:        rgba(234,232,227,0.12);
+  --line-soft:   rgba(234,232,227,0.06);
 }
 
 /* ── Base reset ── */

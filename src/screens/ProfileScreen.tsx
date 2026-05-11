@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Check, Plus, X, ArrowLeft, ChevronDown, LogOut } from 'lucide-react'
+import { Check, Plus, X, ArrowLeft, ChevronDown, LogOut, Sun, Moon } from 'lucide-react'
+import { useTheme } from '../context/ThemeContext'
 import { Avatar } from '../components/ui/Avatar'
 import { CategoryTile } from '../components/ui/CategoryTile'
 import { Toggle } from '../components/ui/Toggle'
@@ -84,9 +85,9 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
 
   return (
     <div style={{
-      background: '#F0EEE9', height: '100%',
+      background: 'var(--bone)', height: '100%',
       display: 'flex', flexDirection: 'column',
-      fontFamily: "'Geologica', sans-serif", color: '#181713',
+      fontFamily: "'Geologica', sans-serif", color: 'var(--ink)',
     }}>
       {/* Header bar */}
       <div style={{
@@ -104,10 +105,10 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
           onClick={() => setShowSettings(true)}
           style={{
             height: 38, borderRadius: 999,
-            background: '#FAFAF7', border: '1px solid rgba(24,23,19,0.12)',
+            background: 'var(--paper)', border: `1px solid rgba(var(--ink-rgb),0.12)`,
             display: 'flex', alignItems: 'center', gap: 6,
             cursor: 'pointer', padding: '0 14px',
-            fontSize: 13, color: 'rgba(24,23,19,0.65)',
+            fontSize: 13, color: `rgba(var(--ink-rgb),0.65)`,
             fontFamily: "'Geologica', sans-serif",
           }}
         >
@@ -123,7 +124,7 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
 
         {/* ── Hero ── */}
         <div style={{
-          background: '#FAFAF7', border: '1px solid rgba(24,23,19,0.12)',
+          background: 'var(--paper)', border: `1px solid rgba(var(--ink-rgb),0.12)`,
           borderRadius: 28, padding: '28px 24px',
           display: 'flex', alignItems: 'center', gap: 20,
           marginBottom: 12,
@@ -146,13 +147,14 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
                 background: '#F6F5AE', padding: '4px 12px', borderRadius: 999,
                 fontFamily: "'Montserrat Alternates', sans-serif",
                 fontWeight: 600, fontSize: 12, letterSpacing: 0.2,
+                color: '#181713',
                 marginBottom: 8,
               }}>
                 {profile.filiere}
               </div>
             )}
 
-            <div style={{ fontSize: 13, color: 'rgba(24,23,19,0.5)' }}>
+            <div style={{ fontSize: 13, color: `rgba(var(--ink-rgb),0.5)` }}>
               {profile.email}
             </div>
           </div>
@@ -160,8 +162,9 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
 
         {/* ── Disponibilité ── */}
         <div style={{
-          background: profile.available ? '#F6F5AE' : '#FAFAF7',
-          border: `1.5px solid ${profile.available ? '#181713' : 'rgba(24,23,19,0.12)'}`,
+          background: profile.available ? '#F6F5AE' : 'var(--paper)',
+          border: `1.5px solid ${profile.available ? '#181713' : `rgba(var(--ink-rgb),0.12)`}`,
+          color: profile.available ? '#181713' : 'var(--ink)',
           borderRadius: 28, padding: 20,
           marginBottom: 12, position: 'relative', overflow: 'hidden',
           transition: 'all .25s',
@@ -239,7 +242,7 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
 
         {/* ── Compétences ── */}
         <div style={{
-          background: '#FAFAF7', border: '1px solid rgba(24,23,19,0.12)',
+          background: 'var(--paper)', border: `1px solid rgba(var(--ink-rgb),0.12)`,
           borderRadius: 24, padding: '18px',
           marginBottom: 12,
         }}>
@@ -248,14 +251,14 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
             {profile.skills.map(s => (
               <span key={s} style={{
                 padding: '8px 12px', borderRadius: 999,
-                background: '#F0EEE9', border: '1px solid rgba(24,23,19,0.10)',
-                fontSize: 13, fontWeight: 500, color: '#181713',
+                background: 'var(--bone)', border: `1px solid rgba(var(--ink-rgb),0.10)`,
+                fontSize: 13, fontWeight: 500, color: 'var(--ink)',
                 display: 'inline-flex', alignItems: 'center', gap: 6,
               }}>
                 {s}
                 <button
                   onClick={() => handleRemoveSkill(s)}
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex', color: 'rgba(24,23,19,0.4)' }}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex', color: `rgba(var(--ink-rgb),0.4)` }}
                   aria-label={`Retirer ${s}`}
                 >
                   <X size={12} strokeWidth={2.5} />
@@ -272,9 +275,9 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
                   placeholder="Ex : Figma"
                   style={{
                     padding: '7px 12px', borderRadius: 999,
-                    border: '1.5px solid #181713',
+                    border: '1.5px solid var(--ink)',
                     fontFamily: "'Geologica', sans-serif",
-                    fontSize: 13, background: '#F0EEE9',
+                    fontSize: 13, background: 'var(--bone)',
                     outline: 'none', width: 110,
                   }}
                 />
@@ -287,8 +290,8 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
                 onClick={() => setAddingSkill(true)}
                 style={{
                   padding: '8px 13px', borderRadius: 999,
-                  background: 'transparent', border: '1px dashed rgba(24,23,19,0.3)',
-                  fontSize: 13, fontWeight: 500, color: 'rgba(24,23,19,0.6)',
+                  background: 'transparent', border: `1px dashed rgba(var(--ink-rgb),0.3)`,
+                  fontSize: 13, fontWeight: 500, color: `rgba(var(--ink-rgb),0.6)`,
                   cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 4,
                 }}
               >
@@ -307,12 +310,12 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
 
         {/* ── Historique ── */}
         <div style={{
-          background: '#FAFAF7', border: '1px solid rgba(24,23,19,0.12)',
+          background: 'var(--paper)', border: `1px solid rgba(var(--ink-rgb),0.12)`,
           borderRadius: 24, padding: '18px',
         }}>
           <SectionTitle extra={`${stats.helpsGiven} aides`}>Historique</SectionTitle>
           {history.length === 0 ? (
-            <div style={{ fontSize: 13, color: 'rgba(24,23,19,0.45)', textAlign: 'center', padding: '16px 0' }}>
+            <div style={{ fontSize: 13, color: `rgba(var(--ink-rgb),0.45)`, textAlign: 'center', padding: '16px 0' }}>
               Aucune aide pour l'instant
             </div>
           ) : (
@@ -321,7 +324,7 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
                 <div key={h.id} style={{
                   padding: '12px 0',
                   display: 'flex', alignItems: 'center', gap: 12,
-                  borderBottom: i < history.length - 1 ? '1px solid rgba(24,23,19,0.06)' : 'none',
+                  borderBottom: i < history.length - 1 ? `1px solid rgba(var(--ink-rgb),0.06)` : 'none',
                 }}>
                   <CategoryTile cat={h.request.category} size={36} />
                   <div style={{ flex: 1, minWidth: 0 }}>
@@ -332,7 +335,7 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
                     }}>
                       {h.request.title}
                     </div>
-                    <div style={{ fontSize: 11.5, color: 'rgba(24,23,19,0.55)', marginTop: 2 }}>
+                    <div style={{ fontSize: 11.5, color: `rgba(var(--ink-rgb),0.55)`, marginTop: 2 }}>
                       {timeAgo(h.created_at)}
                     </div>
                   </div>
@@ -362,6 +365,7 @@ interface AccountSettingsProps {
 }
 
 function AccountSettings({ profile, onBack, onSignOut, onUpdateSkills, onSaveInfo, isDesktop, px }: AccountSettingsProps) {
+  const { theme, toggle: toggleTheme } = useTheme()
   const [name, setName]       = useState(profile.name)
   const [filiere, setFiliere] = useState(profile.filiere)
   const [skills, setSkills]   = useState<string[]>(profile.skills)
@@ -393,9 +397,9 @@ function AccountSettings({ profile, onBack, onSignOut, onUpdateSkills, onSaveInf
 
   return (
     <div style={{
-      background: '#F0EEE9', height: '100%',
+      background: 'var(--bone)', height: '100%',
       display: 'flex', flexDirection: 'column',
-      fontFamily: "'Geologica', sans-serif", color: '#181713',
+      fontFamily: "'Geologica', sans-serif", color: 'var(--ink)',
     }}>
       {/* Header */}
       <div style={{
@@ -407,7 +411,7 @@ function AccountSettings({ profile, onBack, onSignOut, onUpdateSkills, onSaveInf
           onClick={onBack}
           style={{
             width: 38, height: 38, borderRadius: '50%',
-            background: '#FAFAF7', border: '1px solid rgba(24,23,19,0.12)',
+            background: 'var(--paper)', border: `1px solid rgba(var(--ink-rgb),0.12)`,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             cursor: 'pointer', flexShrink: 0,
           }}
@@ -437,7 +441,7 @@ function AccountSettings({ profile, onBack, onSignOut, onUpdateSkills, onSaveInf
               onChange={e => setName(e.target.value)}
               style={inputStyle}
               onFocus={e => { e.currentTarget.style.borderColor = '#181713' }}
-              onBlur={e => { e.currentTarget.style.borderColor = 'rgba(24,23,19,0.15)' }}
+              onBlur={e => { e.currentTarget.style.borderColor = `rgba(var(--ink-rgb),0.15)` }}
             />
           </SettingsField>
 
@@ -460,7 +464,7 @@ function AccountSettings({ profile, onBack, onSignOut, onUpdateSkills, onSaveInf
                 cursor: 'pointer',
               }}
               onFocus={e => { e.currentTarget.style.borderColor = '#181713' }}
-              onBlur={e => { e.currentTarget.style.borderColor = 'rgba(24,23,19,0.15)' }}
+              onBlur={e => { e.currentTarget.style.borderColor = `rgba(var(--ink-rgb),0.15)` }}
             >
               <option value="">Choisir une filière</option>
               {FILIERES.map(f => (
@@ -472,7 +476,7 @@ function AccountSettings({ profile, onBack, onSignOut, onUpdateSkills, onSaveInf
               style={{
                 position: 'absolute', right: 14, top: '50%',
                 transform: 'translateY(-50%)',
-                color: 'rgba(24,23,19,0.45)', pointerEvents: 'none',
+                color: `rgba(var(--ink-rgb),0.45)`, pointerEvents: 'none',
               }}
             />
           </div>
@@ -484,14 +488,14 @@ function AccountSettings({ profile, onBack, onSignOut, onUpdateSkills, onSaveInf
             {skills.map(s => (
               <span key={s} style={{
                 padding: '8px 12px', borderRadius: 999,
-                background: '#F0EEE9', border: '1px solid rgba(24,23,19,0.12)',
+                background: 'var(--bone)', border: `1px solid rgba(var(--ink-rgb),0.12)`,
                 fontSize: 13, fontWeight: 500,
                 display: 'inline-flex', alignItems: 'center', gap: 6,
               }}>
                 {s}
                 <button
                   onClick={() => removeSkill(s)}
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex', color: 'rgba(24,23,19,0.4)' }}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex', color: `rgba(var(--ink-rgb),0.4)` }}
                   aria-label={`Retirer ${s}`}
                 >
                   <X size={12} strokeWidth={2.5} />
@@ -508,9 +512,9 @@ function AccountSettings({ profile, onBack, onSignOut, onUpdateSkills, onSaveInf
                   placeholder="Ex : Figma"
                   style={{
                     padding: '7px 12px', borderRadius: 999,
-                    border: '1.5px solid #181713',
+                    border: '1.5px solid var(--ink)',
                     fontFamily: "'Geologica', sans-serif",
-                    fontSize: 13, background: '#F0EEE9',
+                    fontSize: 13, background: 'var(--bone)',
                     outline: 'none', width: 120,
                   }}
                 />
@@ -526,8 +530,8 @@ function AccountSettings({ profile, onBack, onSignOut, onUpdateSkills, onSaveInf
                 onClick={() => setAddingSkill(true)}
                 style={{
                   padding: '8px 13px', borderRadius: 999,
-                  background: 'transparent', border: '1px dashed rgba(24,23,19,0.3)',
-                  fontSize: 13, fontWeight: 500, color: 'rgba(24,23,19,0.6)',
+                  background: 'transparent', border: `1px dashed rgba(var(--ink-rgb),0.3)`,
+                  fontSize: 13, fontWeight: 500, color: `rgba(var(--ink-rgb),0.6)`,
                   cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 4,
                 }}
               >
@@ -543,8 +547,8 @@ function AccountSettings({ profile, onBack, onSignOut, onUpdateSkills, onSaveInf
           disabled={saving || !name.trim()}
           style={{
             width: '100%', padding: '14px',
-            background: saved ? '#3a8a4a' : (saving || !name.trim() ? 'rgba(24,23,19,0.1)' : '#181713'),
-            color: saved ? '#fff' : (saving || !name.trim() ? 'rgba(24,23,19,0.3)' : '#F6F5AE'),
+            background: saved ? '#3a8a4a' : (saving || !name.trim() ? `rgba(var(--ink-rgb),0.1)` : 'var(--ink)'),
+            color: saved ? '#fff' : (saving || !name.trim() ? `rgba(var(--ink-rgb),0.3)` : 'var(--bone)'),
             border: 'none', borderRadius: 16,
             cursor: saving || !name.trim() ? 'default' : 'pointer',
             fontFamily: "'Montserrat Alternates', sans-serif",
@@ -556,6 +560,31 @@ function AccountSettings({ profile, onBack, onSignOut, onUpdateSkills, onSaveInf
           {saved ? 'Sauvegardé' : saving ? 'Sauvegarde…' : 'Sauvegarder'}
         </button>
 
+        {/* ── Apparence ── */}
+        <SettingsSection label="Apparence">
+          <button
+            onClick={toggleTheme}
+            style={{
+              width: '100%', padding: '14px 16px',
+              background: 'transparent',
+              border: `1.5px solid rgba(var(--ink-rgb),0.12)`,
+              borderRadius: 14, cursor: 'pointer',
+              display: 'flex', alignItems: 'center', gap: 10,
+              fontFamily: "'Geologica', sans-serif",
+              fontSize: 14, color: 'var(--ink)',
+              transition: 'background .15s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = `rgba(var(--ink-rgb),0.04)` }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}
+          >
+            {theme === 'dark'
+              ? <Sun size={16} strokeWidth={1.8} />
+              : <Moon size={16} strokeWidth={1.8} />
+            }
+            {theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'}
+          </button>
+        </SettingsSection>
+
         {/* ── Déconnexion ── */}
         <SettingsSection label="Compte">
           <button
@@ -563,7 +592,7 @@ function AccountSettings({ profile, onBack, onSignOut, onUpdateSkills, onSaveInf
             style={{
               width: '100%', padding: '14px 16px',
               background: 'transparent',
-              border: '1.5px solid rgba(24,23,19,0.15)',
+              border: `1.5px solid rgba(var(--ink-rgb),0.15)`,
               borderRadius: 14, cursor: 'pointer',
               display: 'flex', alignItems: 'center', gap: 10,
               fontFamily: "'Geologica', sans-serif",
@@ -587,18 +616,18 @@ function AccountSettings({ profile, onBack, onSignOut, onUpdateSkills, onSaveInf
 
 const inputStyle: React.CSSProperties = {
   width: '100%', padding: '12px 14px',
-  borderRadius: 12, border: '1.5px solid rgba(24,23,19,0.15)',
+  borderRadius: 12, border: `1.5px solid rgba(var(--ink-rgb),0.15)`,
   fontFamily: "'Geologica', sans-serif",
-  fontSize: 14, color: '#181713', background: '#FAFAF7',
+  fontSize: 14, color: 'var(--ink)', background: 'var(--paper)',
   outline: 'none', boxSizing: 'border-box',
   transition: 'border-color .15s',
 }
 
 const readonlyStyle: React.CSSProperties = {
   padding: '12px 14px', borderRadius: 12,
-  border: '1.5px solid rgba(24,23,19,0.08)',
-  background: 'rgba(24,23,19,0.04)',
-  fontSize: 14, color: 'rgba(24,23,19,0.4)',
+  border: `1.5px solid rgba(var(--ink-rgb),0.08)`,
+  background: `rgba(var(--ink-rgb),0.04)`,
+  fontSize: 14, color: `rgba(var(--ink-rgb),0.4)`,
   fontFamily: "'Geologica', sans-serif",
 }
 
@@ -609,13 +638,13 @@ function SettingsSection({ label, children }: { label: string; children: React.R
         fontFamily: "'Montserrat Alternates', sans-serif",
         fontWeight: 600, fontSize: 11,
         letterSpacing: 0.5, textTransform: 'uppercase',
-        color: 'rgba(24,23,19,0.45)', marginBottom: 12,
+        color: `rgba(var(--ink-rgb),0.45)`, marginBottom: 12,
       }}>
         {label}
       </div>
       <div style={{
-        background: '#FAFAF7', borderRadius: 18,
-        border: '1px solid rgba(24,23,19,0.08)',
+        background: 'var(--paper)', borderRadius: 18,
+        border: `1px solid rgba(var(--ink-rgb),0.08)`,
         padding: '16px',
         display: 'flex', flexDirection: 'column', gap: 14,
       }}>
@@ -633,13 +662,13 @@ function SettingsField({ label, hint, children }: { label: string; hint?: string
         marginBottom: 6,
       }}>
         <span style={{
-          fontSize: 12, fontWeight: 500, color: 'rgba(24,23,19,0.55)',
+          fontSize: 12, fontWeight: 500, color: `rgba(var(--ink-rgb),0.55)`,
           fontFamily: "'Geologica', sans-serif",
         }}>
           {label}
         </span>
         {hint && (
-          <span style={{ fontSize: 11, color: 'rgba(24,23,19,0.35)' }}>{hint}</span>
+          <span style={{ fontSize: 11, color: `rgba(var(--ink-rgb),0.35)` }}>{hint}</span>
         )}
       </div>
       {children}
@@ -650,7 +679,7 @@ function SettingsField({ label, hint, children }: { label: string; hint?: string
 function StatCard({ n, label }: { n: string; label: string }) {
   return (
     <div style={{
-      background: '#FAFAF7', border: '1px solid rgba(24,23,19,0.12)',
+      background: 'var(--paper)', border: `1px solid rgba(var(--ink-rgb),0.12)`,
       borderRadius: 16, padding: '12px', textAlign: 'center',
     }}>
       <div style={{
@@ -659,7 +688,7 @@ function StatCard({ n, label }: { n: string; label: string }) {
       }}>
         {n}
       </div>
-      <div style={{ fontSize: 10.5, color: 'rgba(24,23,19,0.6)', marginTop: 2, lineHeight: 1.2 }}>
+      <div style={{ fontSize: 10.5, color: `rgba(var(--ink-rgb),0.6)`, marginTop: 2, lineHeight: 1.2 }}>
         {label}
       </div>
     </div>
@@ -673,11 +702,11 @@ function SectionTitle({ children, extra }: { children: React.ReactNode; extra?: 
       fontFamily: "'Montserrat Alternates', sans-serif",
       fontWeight: 600, fontSize: 12,
       letterSpacing: 0.4, textTransform: 'uppercase' as const,
-      color: 'rgba(24,23,19,0.6)', marginBottom: 10,
+      color: `rgba(var(--ink-rgb),0.6)`, marginBottom: 10,
     }}>
       {children}
       {extra && (
-        <span style={{ marginLeft: 'auto', fontFamily: "'Geologica', sans-serif", fontWeight: 400, fontSize: 11, color: 'rgba(24,23,19,0.4)', textTransform: 'none' }}>
+        <span style={{ marginLeft: 'auto', fontFamily: "'Geologica', sans-serif", fontWeight: 400, fontSize: 11, color: `rgba(var(--ink-rgb),0.4)`, textTransform: 'none' }}>
           {extra}
         </span>
       )}
