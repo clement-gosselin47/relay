@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { RelayLogo } from '../ui/RelayLogo'
 
 const FILIERES = ['Design UX', 'Dev Web', 'Dev Logiciel', 'Marketing', 'Audiovisuel', 'Création 3D', 'Communication', 'Autre']
 
@@ -31,20 +30,17 @@ export function AuthModal({ onSignIn }: AuthModalProps) {
   return (
     <div style={{
       position: 'fixed', inset: 0, zIndex: 1000,
-      background: '#F0EEE9',
+      background: 'var(--bone)',
       display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
       padding: '24px 24px',
     }}>
       {/* Logo */}
-      <div style={{
-        width: 64, height: 64, borderRadius: 20,
-        background: '#181713',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        marginBottom: 24,
-      }}>
-        <RelayLogo size={36} color="#F6F5AE" />
-      </div>
+      <img
+        src="/logo-t-color.png"
+        alt="Relay"
+        style={{ height: 64, width: 'auto', marginBottom: 24 }}
+      />
 
       {step === 'sent' ? (
         <div style={{ textAlign: 'center', maxWidth: 320 }}>

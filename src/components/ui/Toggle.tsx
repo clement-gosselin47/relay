@@ -16,7 +16,7 @@ export function Toggle({ on, onChange, size = 'sm' }: ToggleProps) {
       onClick={() => onChange(!on)}
       style={{
         width: w, height: h, borderRadius: h,
-        background: on ? '#181713' : 'rgba(24,23,19,0.15)',
+        background: on ? 'var(--yellow)' : `rgba(var(--ink-rgb),0.15)`,
         border: 'none', cursor: 'pointer',
         position: 'relative', transition: 'background .2s',
         flexShrink: 0,
@@ -26,7 +26,7 @@ export function Toggle({ on, onChange, size = 'sm' }: ToggleProps) {
         position: 'absolute',
         top: 3, left: on ? w - dot - 3 : 3,
         width: dot, height: dot, borderRadius: '50%',
-        background: on ? '#F6F5AE' : '#fff',
+        background: on ? '#181713' : 'var(--paper)',
         transition: 'left .2s',
       }} />
     </button>

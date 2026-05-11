@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react'
-import { Home, User, MessageSquare, MapPin, Zap, ArrowRight, Search } from 'lucide-react'
+import { Home, User, MessageSquare, MapPin, Zap, ArrowRight, Search, Sun, Moon } from 'lucide-react'
+import { useTheme } from '../context/ThemeContext'
 import { ProfileScreen } from './ProfileScreen'
-import { RelayLogo } from '../components/ui/RelayLogo'
 import { Avatar } from '../components/ui/Avatar'
 import { Toggle } from '../components/ui/Toggle'
 import { Toast } from '../components/ui/Toast'
@@ -20,6 +20,7 @@ interface DesktopScreenProps {
 }
 
 export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenProps) {
+  const { theme, toggle: toggleTheme } = useTheme()
   const [screen, setScreen]   = useState<Screen>('home')
   const [showCreate, setShowCreate] = useState(false)
   const [toast, setToast]     = useState<ToastState | null>(null)
@@ -54,38 +55,33 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
 
   return (
     <div style={{
-      display: 'flex', height: '100svh', background: '#F0EEE9',
+      display: 'flex', height: '100svh', background: 'var(--bone)',
       fontFamily: "'Geologica', sans-serif",
     }}>
       {/* ── SIDEBAR ──────────────────────────── */}
       <div style={{
         width: 260, flexShrink: 0,
-        background: '#FAFAF7',
-        borderRight: '1px solid rgba(24,23,19,0.08)',
+        background: 'var(--paper)',
+        borderRight: `1px solid rgba(var(--ink-rgb),0.08)`,
         display: 'flex', flexDirection: 'column',
         padding: '32px 20px 24px',
         position: 'sticky', top: 0, height: '100svh',
         overflowY: 'auto',
       }}>
         {/* Logo */}
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: 10, marginBottom: 32,
-        }}>
-          <div style={{
-            width: 40, height: 40, borderRadius: 12,
-            background: '#181713',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>
-            <RelayLogo size={22} color="#F6F5AE" />
-          </div>
-          <span style={{
-            fontFamily: "'Montserrat Alternates', sans-serif",
-            fontWeight: 700, fontSize: 20, letterSpacing: -0.5,
-            color: '#181713',
-          }}>
-            Relay
-          </span>
-        </div>
+        <button
+          onClick={() => { setScreen('home'); setShowCreate(false) }}
+          style={{
+            background: 'none', border: 'none', cursor: 'pointer',
+            padding: 0, marginBottom: 32, display: 'flex', alignItems: 'center',
+          }}
+        >
+          <img
+            src={theme === 'dark' ? '/logo-t-color.png' : '/logo-t-black.png'}
+            alt="Relay"
+            style={{ height: 48, width: 'auto' }}
+          />
+        </button>
 
         {/* Flash request FAB */}
         <button
@@ -103,7 +99,7 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
           onMouseEnter={e => { e.currentTarget.style.background = '#EDEC7A' }}
           onMouseLeave={e => { e.currentTarget.style.background = '#F6F5AE' }}
         >
-          <RelayLogo size={20} color="#181713" />
+          <img src="/logo-t-black.png" alt="" style={{ height: 20, width: 'auto' }} />
           Demande flash
         </button>
 
@@ -131,10 +127,11 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
 
         {/* Availability toggle */}
         <div style={{
-          background: profile.available ? '#F6F5AE' : 'rgba(24,23,19,0.05)',
-          border: `1.5px solid ${profile.available ? '#181713' : 'rgba(24,23,19,0.10)'}`,
+          background: profile.available ? '#F6F5AE' : `rgba(var(--ink-rgb),0.05)`,
+          border: `1.5px solid ${profile.available ? '#181713' : `rgba(var(--ink-rgb),0.10)`}`,
           borderRadius: 16, padding: '14px 14px',
           marginTop: 20, marginBottom: 16,
+          color: profile.available ? '#181713' : 'var(--ink)',
           transition: 'all .25s',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
@@ -157,7 +154,7 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
               await supabase.from('profiles').update({ available: v }).eq('id', profile.id)
             }} />
           </div>
-          <div style={{ fontSize: 11.5, color: 'rgba(24,23,19,0.55)' }}>
+          <div style={{ fontSize: 11.5, color: `rgba(var(--ink-rgb),0.55)` }}>
             {profile.available ? 'Tu apparais dans le radar' : 'Active pour recevoir des demandes'}
           </div>
         </div>
@@ -166,7 +163,7 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
         <div style={{
           display: 'flex', alignItems: 'center', gap: 10,
           padding: '12px 0',
-          borderTop: '1px solid rgba(24,23,19,0.08)',
+          borderTop: `1px solid rgba(var(--ink-rgb),0.08)`,
         }}>
           <Avatar name={profile.name} size={38} />
           <div style={{ flex: 1, minWidth: 0 }}>
@@ -177,7 +174,7 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
             }}>
               {profile.name}
             </div>
-            <div style={{ fontSize: 11, color: 'rgba(24,23,19,0.5)', marginTop: 1 }}>
+            <div style={{ fontSize: 11, color: `rgba(var(--ink-rgb),0.5)`, marginTop: 1 }}>
               {profile.filiere}
             </div>
           </div>
@@ -185,7 +182,7 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
             onClick={onSignOut}
             style={{
               background: 'none', border: 'none', cursor: 'pointer',
-              fontSize: 11, color: 'rgba(24,23,19,0.4)',
+              fontSize: 11, color: `rgba(var(--ink-rgb),0.4)`,
               fontFamily: "'Geologica', sans-serif",
             }}
           >
@@ -214,11 +211,11 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
           }}>
             <div style={{
               flex: 1, display: 'flex', alignItems: 'center', gap: 10,
-              background: '#FAFAF7',
-              border: '1.5px solid rgba(24,23,19,0.12)',
+              background: 'var(--paper)',
+              border: `1.5px solid rgba(var(--ink-rgb),0.12)`,
               borderRadius: 14, padding: '12px 16px',
             }}>
-              <Search size={16} strokeWidth={1.7} color="rgba(24,23,19,0.4)" />
+              <Search size={16} strokeWidth={1.7} color={`rgba(var(--ink-rgb),0.4)`} />
               <input
                 value={search}
                 onChange={e => setSearch(e.target.value)}
@@ -226,7 +223,7 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
                 style={{
                   border: 'none', background: 'none', outline: 'none',
                   fontFamily: "'Geologica', sans-serif",
-                  fontWeight: 300, fontSize: 14, color: '#181713',
+                  fontWeight: 300, fontSize: 14, color: 'var(--ink)',
                   flex: 1,
                 }}
               />
@@ -235,7 +232,7 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
               background: '#F6F5AE', border: '1.5px solid #181713',
               borderRadius: 14, padding: '12px 16px',
               fontFamily: "'Montserrat Alternates', sans-serif",
-              fontWeight: 600, fontSize: 12,
+              fontWeight: 600, fontSize: 12, color: '#181713',
               display: 'flex', alignItems: 'center', gap: 6,
             }}>
               <span style={{
@@ -250,7 +247,7 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
 
         {/* Grid */}
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '60px', color: 'rgba(24,23,19,0.4)' }}>
+          <div style={{ textAlign: 'center', padding: '60px', color: `rgba(var(--ink-rgb),0.4)` }}>
             Chargement…
           </div>
         ) : filtered.length === 0 ? (
@@ -262,7 +259,7 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
             }}>
               {search ? 'Aucun résultat' : 'Le campus est calme'}
             </div>
-            <div style={{ fontSize: 14, color: 'rgba(24,23,19,0.5)' }}>
+            <div style={{ fontSize: 14, color: `rgba(var(--ink-rgb),0.5)` }}>
               {search ? 'Essaie un autre terme.' : 'Sois le premier à lancer une demande.'}
             </div>
           </div>
@@ -292,7 +289,7 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
         padding: '32px 20px',
         display: 'flex', flexDirection: 'column', gap: 16,
         overflowY: 'auto',
-        borderLeft: '1px solid rgba(24,23,19,0.08)',
+        borderLeft: `1px solid rgba(var(--ink-rgb),0.08)`,
       }}>
         {/* Campus card */}
         <div style={{
@@ -331,7 +328,7 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
             fontFamily: "'Montserrat Alternates', sans-serif",
             fontWeight: 600, fontSize: 12,
             letterSpacing: 0.4, textTransform: 'uppercase',
-            color: 'rgba(24,23,19,0.5)', marginBottom: 12,
+            color: `rgba(var(--ink-rgb),0.5)`, marginBottom: 12,
           }}>
             Activité récente
           </div>
@@ -339,7 +336,7 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
             <div key={r.id} style={{
               display: 'flex', alignItems: 'center', gap: 10,
               padding: '10px 0',
-              borderBottom: '1px solid rgba(24,23,19,0.06)',
+              borderBottom: `1px solid rgba(var(--ink-rgb),0.06)`,
             }}>
               <Avatar name={r.author?.name ?? '?'} size={32} />
               <div style={{ flex: 1, minWidth: 0 }}>
@@ -349,7 +346,7 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
                 }}>
                   {r.title}
                 </div>
-                <div style={{ fontSize: 11, color: 'rgba(24,23,19,0.5)', marginTop: 1 }}>
+                <div style={{ fontSize: 11, color: `rgba(var(--ink-rgb),0.5)`, marginTop: 1 }}>
                   {timeAgo(r.created_at)}
                 </div>
               </div>
@@ -359,14 +356,14 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
 
         {/* Global stats */}
         <div style={{
-          background: '#FAFAF7', border: '1px solid rgba(24,23,19,0.10)',
+          background: 'var(--paper)', border: `1px solid rgba(var(--ink-rgb),0.10)`,
           borderRadius: 20, padding: '16px',
         }}>
           <div style={{
             fontFamily: "'Montserrat Alternates', sans-serif",
             fontWeight: 600, fontSize: 12,
             letterSpacing: 0.4, textTransform: 'uppercase',
-            color: 'rgba(24,23,19,0.5)', marginBottom: 14,
+            color: `rgba(var(--ink-rgb),0.5)`, marginBottom: 14,
           }}>
             Aujourd'hui
           </div>
@@ -401,9 +398,10 @@ function DesktopCard({ r, variant, isHelping, onHelp }: {
 
   return (
     <div style={{
-      background: yellow ? '#F6F5AE' : '#FAFAF7',
-      border: yellow ? 'none' : '1px solid rgba(24,23,19,0.12)',
+      background: yellow ? '#F6F5AE' : 'var(--paper)',
+      border: yellow ? 'none' : `1px solid rgba(var(--ink-rgb),0.12)`,
       borderRadius: 24, padding: '20px',
+      color: yellow ? '#181713' : 'var(--ink)',
       animation: 'slide-up .3s ease',
     }}>
       {r.urgent && mins !== null && mins > 0 && (
@@ -432,7 +430,7 @@ function DesktopCard({ r, variant, isHelping, onHelp }: {
           <Avatar name={r.author.name} size={24} />
           <span style={{ fontSize: 12 }}>
             <strong>{r.author.name.split(' ')[0]}</strong>
-            <span style={{ color: 'rgba(24,23,19,0.6)' }}> · {r.author.filiere}</span>
+            <span style={{ color: yellow ? 'rgba(24,23,19,0.6)' : `rgba(var(--ink-rgb),0.6)` }}> · {r.author.filiere}</span>
           </span>
         </div>
       )}
@@ -440,7 +438,7 @@ function DesktopCard({ r, variant, isHelping, onHelp }: {
       <div style={{
         display: 'flex', alignItems: 'center', gap: 8,
         paddingTop: 12,
-        borderTop: `1px dashed ${yellow ? 'rgba(24,23,19,0.18)' : 'rgba(24,23,19,0.10)'}`,
+        borderTop: `1px dashed ${yellow ? 'rgba(24,23,19,0.18)' : 'rgba(var(--ink-rgb),0.10)'}`,
       }}>
         <MapPin size={12} strokeWidth={1.7} />
         <span style={{ fontSize: 12 }}>{r.location}</span>
@@ -450,8 +448,8 @@ function DesktopCard({ r, variant, isHelping, onHelp }: {
           disabled={isHelping}
           style={{
             padding: '8px 14px', borderRadius: 999,
-            background: isHelping ? 'rgba(24,23,19,0.12)' : '#181713',
-            color: isHelping ? 'rgba(24,23,19,0.35)' : (yellow ? '#F6F5AE' : '#F0EEE9'),
+            background: isHelping ? `rgba(var(--ink-rgb),0.12)` : 'var(--ink)',
+            color: isHelping ? `rgba(var(--ink-rgb),0.35)` : 'var(--bone)',
             border: 'none', cursor: isHelping ? 'default' : 'pointer',
             fontFamily: "'Montserrat Alternates', sans-serif",
             fontWeight: 600, fontSize: 12,
@@ -477,13 +475,13 @@ function SideNavItem({ icon, label, active, onClick }: {
         width: '100%', display: 'flex', alignItems: 'center', gap: 10,
         padding: '10px 12px', borderRadius: 12,
         background: active ? '#F6F5AE' : 'transparent',
-        border: active ? '1px solid rgba(24,23,19,0.12)' : '1px solid transparent',
+        border: active ? `1px solid rgba(var(--ink-rgb),0.12)` : '1px solid transparent',
         cursor: 'pointer', transition: 'all .15s',
         fontFamily: "'Montserrat Alternates', sans-serif",
-        fontWeight: 600, fontSize: 14, color: active ? '#181713' : 'rgba(24,23,19,0.55)',
+        fontWeight: 600, fontSize: 14, color: active ? '#181713' : `rgba(var(--ink-rgb),0.55)`,
         textAlign: 'left',
       }}
-      onMouseEnter={e => { if (!active) e.currentTarget.style.background = 'rgba(24,23,19,0.05)' }}
+      onMouseEnter={e => { if (!active) e.currentTarget.style.background = `rgba(var(--ink-rgb),0.05)` }}
       onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent' }}
     >
       {icon} {label}
@@ -495,7 +493,7 @@ function SideNavItem({ icon, label, active, onClick }: {
 function StatRow({ label, value }: { label: string; value: string }) {
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      <span style={{ fontSize: 13, color: 'rgba(24,23,19,0.6)' }}>{label}</span>
+      <span style={{ fontSize: 13, color: `rgba(var(--ink-rgb),0.6)` }}>{label}</span>
       <span style={{
         fontFamily: "'Montserrat Alternates', sans-serif",
         fontWeight: 700, fontSize: 15,
@@ -515,14 +513,14 @@ function CreateOverlay({ userId, profile, onClose, onSuccess }: {
   return (
     <div style={{
       position: 'fixed', inset: 0, zIndex: 500,
-      background: 'rgba(24,23,19,0.5)',
+      background: `rgba(var(--ink-rgb),0.5)`,
       display: 'flex', alignItems: 'center', justifyContent: 'center',
     }}
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
       <div style={{
         width: 480, maxHeight: '90vh',
-        background: '#F0EEE9', borderRadius: 28,
+        background: 'var(--bone)', borderRadius: 28,
         overflow: 'hidden', position: 'relative',
         boxShadow: '0 24px 80px rgba(0,0,0,0.3)',
       }}>
