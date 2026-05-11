@@ -17,7 +17,7 @@ export interface Request {
   author_id: string
   title: string
   description: string | null
-  category: string
+  categories: string[]
   target_filieres: string[]
   location: string
   urgent: boolean

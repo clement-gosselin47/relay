@@ -5,7 +5,7 @@ import type { Profile, Request } from '../types'
 interface HistoryItem {
   id: string
   created_at: string
-  request: Pick<Request, 'id' | 'title' | 'category'>
+  request: Pick<Request, 'id' | 'title' | 'categories'>
 }
 
 interface ProfileStats {
@@ -24,7 +24,7 @@ export function useProfile(userId: string | undefined) {
       const [{ data: offers }, { count: reqCount }] = await Promise.all([
         supabase
           .from('help_offers')
-          .select('id, created_at, request:requests(id, title, category)')
+          .select('id, created_at, request:requests(id, title, categories)')
           .eq('helper_id', userId)
           .order('created_at', { ascending: false })
           .limit(10),

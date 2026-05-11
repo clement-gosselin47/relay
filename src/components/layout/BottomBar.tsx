@@ -46,10 +46,11 @@ export function BottomBar({ active, onNavigate, onCreate }: BottomBarProps) {
           style={{
             width: 58, height: 58,
             borderRadius: '50%',
-            background: '#181713',
-            border: 'none', cursor: 'pointer',
+            background: '#F6F5AE',
+            border: '1.5px solid #181713',
+            cursor: 'pointer',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 4px 16px rgba(24,23,19,0.28)',
+            boxShadow: 'none',
             transform: 'translateY(-12px)',
             transition: 'transform .15s, box-shadow .15s',
             flexShrink: 0,
@@ -58,7 +59,7 @@ export function BottomBar({ active, onNavigate, onCreate }: BottomBarProps) {
           onMouseUp={e => (e.currentTarget.style.transform = 'translateY(-12px) scale(1)')}
           onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(-12px) scale(1)')}
         >
-          <img src="/logo-t-color.png" alt="" style={{ height: 28, width: 'auto' }} />
+          <img src="/logo-t-black.png" alt="" style={{ height: 28, width: 'auto' }} />
         </button>
 
         {/* Profile */}
