@@ -17,17 +17,83 @@ export function MessagesScreen({ userId, isDesktop }: MessagesScreenProps) {
 
   const selectedConv = conversations.find(c => c.id === selectedId) ?? null
 
+  // ── Desktop : 2 panneaux ────────────────────────────────────
   if (isDesktop) {
     return (
       <div style={{ display: 'flex', height: '100%', overflow: 'hidden' }}>
-        {/* Conversations list */}
         <div style={{
           width: 300, flexShrink: 0,
           borderRight: '1px solid rgba(var(--ink-rgb),0.08)',
-          display: 'flex', flexDirection: 'column',
-          overflowY: 'auto',
+          display: 'flex', flexDirection: 'column', overflowY: 'auto',
         }}>
-          <ListHeader count={conversations.length} />
+          <div style={{
+            padding: '20px 20px 14px',
+            borderBottom: '1px solid rgba(var(--ink-rgb),0.06)',
+          }}>
+            <div style={{
+              fontFamily: "'Montserrat Alternates', sans-serif",
+              fontWeight: 700, fontSize: 17, color: 'var(--ink)', letterSpacing: -0.4,
+            }}>
+              Messages
+            </div>
+            <div style={{ fontSize: 12, color: 'rgba(var(--ink-rgb),0.4)', marginTop: 2 }}>
+              {conversations.length} conversation{conversations.length !== 1 ? 's' : ''}
+            </div>
+          </div>
+          <ConversationList
+            conversations={conversations}
+            loading={loading}
+            userId={userId}
+            selectedId={selectedId}
+            onSelect={setSelectedId}
+            isDesktop
+          />
+        </div>
+
+        <div style={{ flex: 1, overflow: 'hidden' }}>
+          {selectedConv
+            ? <ConversationScreen conversation={selectedConv} userId={userId} />
+            : <EmptyPanel />
+          }
+        </div>
+      </div>
+    )
+  }
+
+  // ── Mobile : liste pleine page ──────────────────────────────
+  return (
+    <>
+      <div style={{
+        height: '100%', display: 'flex', flexDirection: 'column',
+        background: 'var(--bone)', fontFamily: "'Geologica', sans-serif",
+      }}>
+        {/* Header yellow — même style que HomeScreen */}
+        <div style={{
+          background: '#F6F5AE',
+          padding: '56px 22px 24px',
+          borderRadius: '0 0 32px 32px',
+          flexShrink: 0,
+        }}>
+          <div style={{
+            fontFamily: "'Montserrat Alternates', sans-serif",
+            fontWeight: 700, fontSize: 38,
+            lineHeight: 0.95, letterSpacing: -1.2, color: '#181713',
+          }}>
+            Messages<span style={{ opacity: 0.3 }}>.</span>
+          </div>
+          <div style={{ marginTop: 10, fontSize: 13, color: 'rgba(24,23,19,0.65)' }}>
+            {conversations.length > 0
+              ? `${conversations.length} conversation${conversations.length > 1 ? 's' : ''} active${conversations.length > 1 ? 's' : ''}.`
+              : 'Tes conversations avec tes aidants.'}
+          </div>
+        </div>
+
+        {/* Liste */}
+        <div style={{
+          flex: 1, overflowY: 'auto',
+          padding: '16px 16px 110px',
+          display: 'flex', flexDirection: 'column', gap: 12,
+        }}>
           <ConversationList
             conversations={conversations}
             loading={loading}
@@ -36,121 +102,35 @@ export function MessagesScreen({ userId, isDesktop }: MessagesScreenProps) {
             onSelect={setSelectedId}
           />
         </div>
-
-        {/* Conversation view */}
-        <div style={{ flex: 1, overflow: 'hidden' }}>
-          {selectedConv ? (
-            <ConversationScreen
-              conversation={selectedConv}
-              userId={userId}
-            />
-          ) : (
-            <EmptyConversation />
-          )}
-        </div>
       </div>
-    )
-  }
 
-  // Mobile: stack list ↔ chat
-  if (selectedConv) {
-    return (
-      <div style={{ height: '100%' }}>
+      {/* Conversation en overlay fixe */}
+      {selectedConv && (
         <ConversationScreen
           conversation={selectedConv}
           userId={userId}
           onBack={() => setSelectedId(null)}
         />
-      </div>
-    )
-  }
-
-  return (
-    <div style={{
-      height: '100%', display: 'flex', flexDirection: 'column',
-      background: 'var(--bone)', fontFamily: "'Geologica', sans-serif",
-    }}>
-      {/* Header */}
-      <div style={{
-        background: '#F6F5AE',
-        padding: '56px 22px 26px',
-        borderRadius: '0 0 32px 32px',
-        flexShrink: 0,
-      }}>
-        <div style={{
-          fontFamily: "'Montserrat Alternates', sans-serif",
-          fontWeight: 700, fontSize: 38,
-          lineHeight: 0.95, letterSpacing: -1.2,
-          color: '#181713',
-        }}>
-          Messages
-          <span style={{ color: '#181713', opacity: 0.3 }}>.</span>
-        </div>
-        <div style={{ marginTop: 10, fontSize: 13, color: 'rgba(24,23,19,0.65)' }}>
-          Tes conversations avec tes aidants.
-        </div>
-      </div>
-
-      {/* List */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '16px 16px 110px' }}>
-        <ConversationList
-          conversations={conversations}
-          loading={loading}
-          userId={userId}
-          selectedId={selectedId}
-          onSelect={setSelectedId}
-        />
-      </div>
-    </div>
+      )}
+    </>
   )
 }
 
-// ── Subcomponents ─────────────────────────────────────────────
+// ── Conversation list ─────────────────────────────────────────
 
-function ListHeader({ count }: { count: number }) {
-  return (
-    <div style={{
-      padding: '20px 20px 12px',
-      borderBottom: '1px solid rgba(var(--ink-rgb),0.06)',
-      flexShrink: 0,
-    }}>
-      <div style={{
-        fontFamily: "'Montserrat Alternates', sans-serif",
-        fontWeight: 700, fontSize: 18, color: 'var(--ink)',
-        letterSpacing: -0.4,
-      }}>
-        Messages
-      </div>
-      <div style={{ fontSize: 12, color: 'rgba(var(--ink-rgb),0.45)', marginTop: 2 }}>
-        {count} conversation{count !== 1 ? 's' : ''}
-      </div>
-    </div>
-  )
-}
-
-function ConversationList({ conversations, loading, userId, selectedId, onSelect }: {
+function ConversationList({ conversations, loading, userId, selectedId, onSelect, isDesktop }: {
   conversations: Conversation[]
   loading: boolean
   userId: string
   selectedId: string | null
   onSelect: (id: string) => void
+  isDesktop?: boolean
 }) {
   if (loading) {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: isDesktop ? 0 : 12, padding: isDesktop ? 0 : '0' }}>
         {[0, 1, 2].map(i => (
-          <div key={i} style={{
-            padding: '14px 16px',
-            borderBottom: '1px solid rgba(var(--ink-rgb),0.06)',
-            display: 'flex', gap: 12, alignItems: 'center',
-            animation: 'pulse 1.4s infinite',
-          }}>
-            <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'rgba(var(--ink-rgb),0.08)', flexShrink: 0 }} />
-            <div style={{ flex: 1 }}>
-              <div style={{ height: 13, background: 'rgba(var(--ink-rgb),0.08)', borderRadius: 6, width: '50%', marginBottom: 8 }} />
-              <div style={{ height: 11, background: 'rgba(var(--ink-rgb),0.06)', borderRadius: 6, width: '80%' }} />
-            </div>
-          </div>
+          <SkeletonCard key={i} isDesktop={isDesktop} />
         ))}
       </div>
     )
@@ -162,7 +142,7 @@ function ConversationList({ conversations, loading, userId, selectedId, onSelect
         display: 'flex', flexDirection: 'column', alignItems: 'center',
         justifyContent: 'center', padding: '60px 24px', textAlign: 'center',
       }}>
-        <MessageSquare size={40} strokeWidth={1.2} color="rgba(var(--ink-rgb),0.2)" />
+        <MessageSquare size={40} strokeWidth={1.2} color="rgba(var(--ink-rgb),0.18)" />
         <div style={{
           fontFamily: "'Montserrat Alternates', sans-serif",
           fontWeight: 700, fontSize: 18, letterSpacing: -0.4,
@@ -170,117 +150,235 @@ function ConversationList({ conversations, loading, userId, selectedId, onSelect
         }}>
           Aucun message
         </div>
-        <div style={{ fontSize: 13, color: 'rgba(var(--ink-rgb),0.5)', lineHeight: 1.5, maxWidth: 240 }}>
+        <div style={{ fontSize: 13, color: 'rgba(var(--ink-rgb),0.45)', lineHeight: 1.5, maxWidth: 240 }}>
           Aide un camarade et la conversation s'ouvrira ici automatiquement.
         </div>
       </div>
     )
   }
 
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
-      {conversations.map(conv => {
-        const other = userId === conv.requester_id ? conv.helper : conv.requester
-        const isSelected = conv.id === selectedId
-        const hasUnread = conv.unread_count > 0
-
-        return (
-          <button
+  if (isDesktop) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        {conversations.map(conv => (
+          <DesktopConvRow
             key={conv.id}
-            onClick={() => onSelect(conv.id)}
-            style={{
-              display: 'flex', alignItems: 'center', gap: 12,
-              padding: '14px 16px',
-              background: isSelected ? 'rgba(246,245,174,0.5)' : 'transparent',
-              borderBottom: '1px solid rgba(var(--ink-rgb),0.06)',
-              border: 'none',
-              borderLeft: isSelected ? '3px solid #181713' : '3px solid transparent',
-              cursor: 'pointer', textAlign: 'left',
-              transition: 'background .15s',
-              width: '100%',
-            }}
-          >
-            {/* Avatar */}
-            <div style={{ flexShrink: 0, position: 'relative' }}>
-              <Avatar name={other?.name ?? '?'} size={44} />
-              {hasUnread && (
-                <div style={{
-                  position: 'absolute', top: 0, right: 0,
-                  width: 10, height: 10, borderRadius: '50%',
-                  background: '#181713',
-                  border: '2px solid var(--bone)',
-                }} />
-              )}
-            </div>
+            conv={conv}
+            userId={userId}
+            isSelected={conv.id === selectedId}
+            onSelect={() => onSelect(conv.id)}
+          />
+        ))}
+      </div>
+    )
+  }
 
-            {/* Content */}
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 2 }}>
-                <span style={{
-                  fontFamily: "'Montserrat Alternates', sans-serif",
-                  fontWeight: hasUnread ? 700 : 600, fontSize: 13,
-                  color: 'var(--ink)',
-                  overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                  flex: 1, marginRight: 8,
-                }}>
-                  {other?.name?.split(' ')[0] ?? '…'} · {other?.filiere}
-                </span>
-                {conv.last_message && (
-                  <span style={{ fontSize: 11, color: 'rgba(var(--ink-rgb),0.4)', flexShrink: 0 }}>
-                    {timeAgo(conv.last_message.created_at)}
-                  </span>
-                )}
-              </div>
-              <div style={{
-                fontSize: 11, color: 'rgba(var(--ink-rgb),0.5)',
-                overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                marginBottom: 2,
-              }}>
-                {conv.request?.title}
-              </div>
-              {conv.last_message && (
-                <div style={{
-                  fontSize: 12,
-                  color: hasUnread ? 'var(--ink)' : 'rgba(var(--ink-rgb),0.45)',
-                  fontWeight: hasUnread ? 500 : 300,
-                  overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                }}>
-                  {conv.last_message.sender_id === userId ? 'Toi : ' : ''}{conv.last_message.content}
-                </div>
-              )}
-            </div>
+  return (
+    <>
+      {conversations.map(conv => (
+        <MobileConvCard
+          key={conv.id}
+          conv={conv}
+          userId={userId}
+          onSelect={() => onSelect(conv.id)}
+        />
+      ))}
+    </>
+  )
+}
 
-            {/* Unread count */}
-            {hasUnread && (
-              <div style={{
-                width: 20, height: 20, borderRadius: '50%',
-                background: '#181713', color: '#F6F5AE',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontFamily: "'Montserrat Alternates', sans-serif",
-                fontWeight: 700, fontSize: 10, flexShrink: 0,
-              }}>
-                {conv.unread_count > 9 ? '9+' : conv.unread_count}
-              </div>
-            )}
-          </button>
-        )
-      })}
+// ── Mobile card ───────────────────────────────────────────────
+
+function MobileConvCard({ conv, userId, onSelect }: {
+  conv: Conversation; userId: string; onSelect: () => void
+}) {
+  const other = userId === conv.requester_id ? conv.helper : conv.requester
+  const hasUnread = conv.unread_count > 0
+
+  return (
+    <button
+      onClick={onSelect}
+      style={{
+        width: '100%', textAlign: 'left',
+        background: hasUnread ? 'var(--paper)' : 'var(--paper)',
+        border: hasUnread
+          ? '1.5px solid #181713'
+          : '1px solid rgba(var(--ink-rgb),0.10)',
+        borderRadius: 20,
+        padding: '14px 16px',
+        display: 'flex', alignItems: 'center', gap: 12,
+        cursor: 'pointer',
+        transition: 'all .15s',
+      }}
+    >
+      {/* Avatar + dot */}
+      <div style={{ position: 'relative', flexShrink: 0 }}>
+        <Avatar name={other?.name ?? '?'} size={46} />
+        {hasUnread && (
+          <div style={{
+            position: 'absolute', top: 1, right: 1,
+            width: 11, height: 11, borderRadius: '50%',
+            background: '#181713', border: '2px solid var(--paper)',
+          }} />
+        )}
+      </div>
+
+      {/* Content */}
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 3 }}>
+          <span style={{
+            fontFamily: "'Montserrat Alternates', sans-serif",
+            fontWeight: 700, fontSize: 13.5, color: 'var(--ink)',
+            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+            flex: 1, marginRight: 8,
+          }}>
+            {other?.name?.split(' ')[0] ?? '…'}
+            <span style={{ fontWeight: 500, opacity: 0.5, fontSize: 12 }}> · {other?.filiere}</span>
+          </span>
+          {conv.last_message && (
+            <span style={{ fontSize: 11, color: 'rgba(var(--ink-rgb),0.38)', flexShrink: 0 }}>
+              {timeAgo(conv.last_message.created_at)}
+            </span>
+          )}
+        </div>
+
+        <div style={{
+          fontSize: 11.5, color: 'rgba(var(--ink-rgb),0.45)',
+          overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+          marginBottom: 4,
+        }}>
+          {conv.request?.title}
+        </div>
+
+        {conv.last_message && (
+          <div style={{
+            fontSize: 12.5,
+            color: hasUnread ? 'var(--ink)' : 'rgba(var(--ink-rgb),0.42)',
+            fontWeight: hasUnread ? 500 : 300,
+            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+          }}>
+            {conv.last_message.sender_id === userId ? 'Toi : ' : ''}
+            {conv.last_message.content}
+          </div>
+        )}
+      </div>
+
+      {hasUnread && (
+        <div style={{
+          width: 22, height: 22, borderRadius: '50%',
+          background: '#181713', color: '#F6F5AE',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontFamily: "'Montserrat Alternates', sans-serif",
+          fontWeight: 700, fontSize: 10, flexShrink: 0,
+        }}>
+          {conv.unread_count > 9 ? '9+' : conv.unread_count}
+        </div>
+      )}
+    </button>
+  )
+}
+
+// ── Desktop row ───────────────────────────────────────────────
+
+function DesktopConvRow({ conv, userId, isSelected, onSelect }: {
+  conv: Conversation; userId: string; isSelected: boolean; onSelect: () => void
+}) {
+  const other = userId === conv.requester_id ? conv.helper : conv.requester
+  const hasUnread = conv.unread_count > 0
+
+  return (
+    <button
+      onClick={onSelect}
+      style={{
+        width: '100%', textAlign: 'left', border: 'none',
+        borderBottom: '1px solid rgba(var(--ink-rgb),0.06)',
+        borderLeft: `3px solid ${isSelected ? '#181713' : 'transparent'}`,
+        background: isSelected ? 'rgba(246,245,174,0.45)' : 'transparent',
+        padding: '12px 16px',
+        display: 'flex', alignItems: 'center', gap: 10,
+        cursor: 'pointer', transition: 'background .15s',
+      }}
+    >
+      <div style={{ position: 'relative', flexShrink: 0 }}>
+        <Avatar name={other?.name ?? '?'} size={40} />
+        {hasUnread && (
+          <div style={{
+            position: 'absolute', top: 0, right: 0,
+            width: 9, height: 9, borderRadius: '50%',
+            background: '#181713', border: '2px solid var(--paper)',
+          }} />
+        )}
+      </div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 }}>
+          <span style={{
+            fontFamily: "'Montserrat Alternates', sans-serif",
+            fontWeight: hasUnread ? 700 : 600, fontSize: 12.5, color: 'var(--ink)',
+          }}>
+            {other?.name?.split(' ')[0] ?? '…'}
+          </span>
+          {conv.last_message && (
+            <span style={{ fontSize: 10.5, color: 'rgba(var(--ink-rgb),0.38)' }}>
+              {timeAgo(conv.last_message.created_at)}
+            </span>
+          )}
+        </div>
+        <div style={{
+          fontSize: 11, color: 'rgba(var(--ink-rgb),0.4)',
+          overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginBottom: 2,
+        }}>
+          {conv.request?.title}
+        </div>
+        {conv.last_message && (
+          <div style={{
+            fontSize: 12, fontWeight: hasUnread ? 500 : 300,
+            color: hasUnread ? 'var(--ink)' : 'rgba(var(--ink-rgb),0.4)',
+            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+          }}>
+            {conv.last_message.sender_id === userId ? 'Toi : ' : ''}
+            {conv.last_message.content}
+          </div>
+        )}
+      </div>
+    </button>
+  )
+}
+
+// ── Skeleton ──────────────────────────────────────────────────
+
+function SkeletonCard({ isDesktop }: { isDesktop?: boolean }) {
+  return (
+    <div style={{
+      display: 'flex', alignItems: 'center', gap: 12,
+      padding: isDesktop ? '12px 16px' : '14px 16px',
+      borderBottom: isDesktop ? '1px solid rgba(var(--ink-rgb),0.06)' : 'none',
+      borderRadius: isDesktop ? 0 : 20,
+      background: isDesktop ? 'transparent' : 'var(--paper)',
+      animation: 'pulse 1.4s infinite',
+    }}>
+      <div style={{ width: isDesktop ? 40 : 46, height: isDesktop ? 40 : 46, borderRadius: '50%', background: 'rgba(var(--ink-rgb),0.07)', flexShrink: 0 }} />
+      <div style={{ flex: 1 }}>
+        <div style={{ height: 12, background: 'rgba(var(--ink-rgb),0.07)', borderRadius: 6, width: '45%', marginBottom: 8 }} />
+        <div style={{ height: 11, background: 'rgba(var(--ink-rgb),0.05)', borderRadius: 6, width: '75%' }} />
+      </div>
     </div>
   )
 }
 
-function EmptyConversation() {
+// ── Desktop empty state ───────────────────────────────────────
+
+function EmptyPanel() {
   return (
     <div style={{
       height: '100%', display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
-      color: 'rgba(var(--ink-rgb),0.3)',
+      color: 'rgba(var(--ink-rgb),0.25)',
     }}>
-      <MessageSquare size={48} strokeWidth={1} />
+      <MessageSquare size={44} strokeWidth={1} />
       <div style={{
         fontFamily: "'Montserrat Alternates', sans-serif",
-        fontWeight: 600, fontSize: 15, marginTop: 16,
-        color: 'rgba(var(--ink-rgb),0.4)',
+        fontWeight: 600, fontSize: 14, marginTop: 14,
+        color: 'rgba(var(--ink-rgb),0.35)',
       }}>
         Sélectionne une conversation
       </div>
