@@ -60,19 +60,20 @@ export function MessagesScreen({ userId, isDesktop }: MessagesScreenProps) {
     )
   }
 
-  // ── Mobile : même structure exacte que HomeScreen ─────────────
+  // ── Mobile ───────────────────────────────────────────────────
   return (
     <div style={{
-      background: 'var(--bone)', height: '100%',
+      background: 'var(--bone)', height: '100%', width: '100%',
       display: 'flex', flexDirection: 'column',
       fontFamily: "'Geologica', sans-serif",
+      overflowX: 'hidden',
     }}>
-      {/* Header yellow — identique à HomeScreen */}
+      {/* Header yellow */}
       <div style={{
         background: '#F6F5AE',
         padding: '56px 22px 26px',
         borderRadius: '0 0 32px 32px',
-        flexShrink: 0,
+        position: 'relative', flexShrink: 0,
       }}>
         <div style={{
           fontFamily: "'Montserrat Alternates', sans-serif",
@@ -88,12 +89,11 @@ export function MessagesScreen({ userId, isDesktop }: MessagesScreenProps) {
         </div>
       </div>
 
-      {/* Liste — même padding que le feed HomeScreen */}
+      {/* Liste — même structure que HomeScreen feed */}
       <div style={{
         flex: 1, overflowY: 'auto',
         padding: '20px 16px 110px',
         WebkitOverflowScrolling: 'touch',
-        display: 'flex', flexDirection: 'column', gap: 12,
       }}>
         <ConversationList
           conversations={conversations}
@@ -104,7 +104,7 @@ export function MessagesScreen({ userId, isDesktop }: MessagesScreenProps) {
         />
       </div>
 
-      {/* Conversation — overlay identique à CreateScreen */}
+      {/* Conversation overlay */}
       {selectedConv && (
         <ConversationScreen
           conversation={selectedConv}
@@ -174,7 +174,7 @@ function ConversationList({ conversations, loading, userId, selectedId, onSelect
   }
 
   return (
-    <>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
       {conversations.map(conv => (
         <MobileConvCard
           key={conv.id}
@@ -183,7 +183,7 @@ function ConversationList({ conversations, loading, userId, selectedId, onSelect
           onSelect={() => onSelect(conv.id)}
         />
       ))}
-    </>
+    </div>
   )
 }
 
