@@ -214,15 +214,15 @@ export function CreateScreen({ userId, profile, onClose, onSuccess }: CreateScre
               onClick={() => toggleFiliere('Toutes')}
               style={{
                 padding: '8px 14px', borderRadius: 999,
-                background: allSelected ? '#F6F5AE' : 'var(--paper)',
-                border: `1.5px solid ${allSelected ? '#181713' : `rgba(var(--ink-rgb),0.12)`}`,
-                color: '#181713',
+                background: allSelected ? 'var(--ink)' : 'var(--paper)',
+                border: `1.5px solid ${allSelected ? 'var(--ink)' : `rgba(var(--ink-rgb),0.12)`}`,
+                color: allSelected ? 'var(--yellow)' : 'var(--ink)',
                 fontFamily: "'Montserrat Alternates', sans-serif",
                 fontWeight: 600, fontSize: 13,
                 cursor: 'pointer', transition: 'all .15s',
               }}
             >
-              Toutes ✦
+              Toutes
             </button>
           </div>
         </FormSection>
