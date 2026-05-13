@@ -1,12 +1,16 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
+import { DEV_BYPASS, MOCK_CONVERSATIONS } from '../lib/dev-mock'
 import type { Conversation, Message } from '../types'
 
 export function useConversations(userId: string) {
-  const [conversations, setConversations] = useState<Conversation[]>([])
-  const [loading, setLoading] = useState(true)
+  const [conversations, setConversations] = useState<Conversation[]>(
+    DEV_BYPASS ? MOCK_CONVERSATIONS : []
+  )
+  const [loading, setLoading] = useState(!DEV_BYPASS)
 
   const fetch = useCallback(async () => {
+    if (DEV_BYPASS) return
     const { data } = await supabase
       .from('conversations')
       .select(`
@@ -39,6 +43,7 @@ export function useConversations(userId: string) {
   }, [userId])
 
   useEffect(() => {
+    if (DEV_BYPASS) return
     fetch()
     const channel = supabase
       .channel(`convs:${userId}`)

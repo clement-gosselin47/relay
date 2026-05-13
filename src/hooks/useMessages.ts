@@ -1,9 +1,12 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
+import { DEV_BYPASS, MOCK_MESSAGES } from '../lib/dev-mock'
 import type { Message } from '../types'
 
 export function useMessages(conversationId: string | null, userId: string) {
-  const [messages, setMessages] = useState<Message[]>([])
+  const [messages, setMessages] = useState<Message[]>(
+    DEV_BYPASS && conversationId ? (MOCK_MESSAGES[conversationId] ?? []) : []
+  )
   const [loading, setLoading] = useState(false)
 
   const markRead = useCallback(async () => {
@@ -18,6 +21,10 @@ export function useMessages(conversationId: string | null, userId: string) {
 
   useEffect(() => {
     if (!conversationId) { setMessages([]); return }
+    if (DEV_BYPASS) {
+      setMessages(MOCK_MESSAGES[conversationId] ?? [])
+      return
+    }
     setLoading(true)
 
     supabase
@@ -49,6 +56,18 @@ export function useMessages(conversationId: string | null, userId: string) {
 
   async function sendMessage(content: string) {
     if (!conversationId || !content.trim()) return
+    if (DEV_BYPASS) {
+      const mock: Message = {
+        id: `m-mock-${Date.now()}`,
+        conversation_id: conversationId,
+        sender_id: userId,
+        content: content.trim(),
+        read: true,
+        created_at: new Date().toISOString(),
+      }
+      setMessages(prev => [...prev, mock])
+      return
+    }
     const { data } = await supabase
       .from('messages')
       .insert({ conversation_id: conversationId, sender_id: userId, content: content.trim() })
