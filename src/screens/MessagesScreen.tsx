@@ -116,7 +116,6 @@ export function MessagesScreen({ userId, isDesktop }: MessagesScreenProps) {
           onBack={() => setSelectedId(null)}
         />
       )}
-      </div>
     </div>
   )
 }
