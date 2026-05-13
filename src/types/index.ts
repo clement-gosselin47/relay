@@ -35,3 +35,25 @@ export interface HelpOffer {
   created_at: string
   helper?: Profile
 }
+
+export interface Message {
+  id: string
+  conversation_id: string
+  sender_id: string
+  content: string
+  read: boolean
+  created_at: string
+}
+
+export interface Conversation {
+  id: string
+  request_id: string
+  requester_id: string
+  helper_id: string
+  created_at: string
+  request?: { title: string }
+  requester?: Pick<Profile, 'id' | 'name' | 'filiere'>
+  helper?: Pick<Profile, 'id' | 'name' | 'filiere'>
+  last_message?: Message | null
+  unread_count: number
+}

@@ -169,3 +169,69 @@ alter publication supabase_realtime add table public.help_offers;
 -- pg_cron : expiration auto (décommenter après activation extension)
 -- ============================================================
 -- select cron.schedule('expire-requests','* * * * *','select public.expire_requests();');
+
+-- ============================================================
+-- TABLE : conversations  (à exécuter dans Supabase SQL Editor)
+-- ============================================================
+create table public.conversations (
+  id            uuid        primary key default uuid_generate_v4(),
+  request_id    uuid        not null references public.requests(id) on delete cascade,
+  requester_id  uuid        not null references public.profiles(id) on delete cascade,
+  helper_id     uuid        not null references public.profiles(id) on delete cascade,
+  created_at    timestamptz not null default now(),
+  unique (request_id, helper_id)
+);
+
+alter table public.conversations enable row level security;
+
+create policy "conversations_select" on public.conversations
+  for select using (auth.uid() = requester_id or auth.uid() = helper_id);
+create policy "conversations_insert" on public.conversations
+  for insert with check (auth.uid() = helper_id or auth.uid() = requester_id);
+
+create index conversations_requester_idx on public.conversations(requester_id);
+create index conversations_helper_idx    on public.conversations(helper_id);
+
+-- ============================================================
+-- TABLE : messages
+-- ============================================================
+create table public.messages (
+  id              uuid        primary key default uuid_generate_v4(),
+  conversation_id uuid        not null references public.conversations(id) on delete cascade,
+  sender_id       uuid        not null references public.profiles(id) on delete cascade,
+  content         text        not null,
+  read            boolean     not null default false,
+  created_at      timestamptz not null default now()
+);
+
+alter table public.messages enable row level security;
+
+create policy "messages_select" on public.messages
+  for select using (
+    exists (
+      select 1 from public.conversations c
+      where c.id = conversation_id
+        and (c.requester_id = auth.uid() or c.helper_id = auth.uid())
+    )
+  );
+create policy "messages_insert" on public.messages
+  for insert with check (
+    auth.uid() = sender_id and exists (
+      select 1 from public.conversations c
+      where c.id = conversation_id
+        and (c.requester_id = auth.uid() or c.helper_id = auth.uid())
+    )
+  );
+create policy "messages_update" on public.messages
+  for update using (
+    exists (
+      select 1 from public.conversations c
+      where c.id = conversation_id
+        and (c.requester_id = auth.uid() or c.helper_id = auth.uid())
+    )
+  );
+
+create index messages_conv_idx on public.messages(conversation_id, created_at);
+
+alter publication supabase_realtime add table public.conversations;
+alter publication supabase_realtime add table public.messages;

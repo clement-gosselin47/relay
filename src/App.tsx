@@ -11,6 +11,7 @@ import { Toast } from './components/ui/Toast'
 import { HomeScreen } from './screens/HomeScreen'
 import { CreateScreen } from './screens/CreateScreen'
 import { ProfileScreen } from './screens/ProfileScreen'
+import { MessagesScreen } from './screens/MessagesScreen'
 import { DesktopScreen } from './screens/DesktopScreen'
 
 type MobileScreen = 'home' | 'messages' | 'profile'
@@ -62,10 +63,11 @@ export default function App() {
             userName={profile.name}
             requests={requests}
             loading={reqLoading}
+            onNavigateToMessages={() => setMobileScreen('messages')}
           />
         )}
         {mobileScreen === 'messages' && (
-          <MessagesPlaceholder />
+          <MessagesScreen userId={user.id} />
         )}
         {mobileScreen === 'profile' && (
           <ProfileScreen
@@ -107,31 +109,10 @@ export default function App() {
         />
       )}
     </div>
-    <ThemeToggleButton />
     </>
   )
 }
 
-function MessagesPlaceholder() {
-  return (
-    <div style={{
-      height: '100%', display: 'flex',
-      flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-      background: 'var(--bone)', gap: 12, padding: 24,
-    }}>
-      <div style={{ fontSize: 52 }}>💬</div>
-      <div style={{
-        fontFamily: "'Montserrat Alternates', sans-serif",
-        fontWeight: 700, fontSize: 22, letterSpacing: -0.5, color: 'var(--ink)',
-      }}>
-        Messages
-      </div>
-      <div style={{ fontSize: 14, color: `rgba(var(--ink-rgb),0.55)`, textAlign: 'center', lineHeight: 1.5, maxWidth: 260 }}>
-        Tes conversations avec les aidants apparaîtront ici.
-      </div>
-    </div>
-  )
-}
 
 function ThemeToggleButton() {
   const { theme, toggle } = useTheme()
