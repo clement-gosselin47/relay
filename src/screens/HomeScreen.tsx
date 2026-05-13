@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react'
-import { Avatar } from '../components/ui/Avatar'
 import { Toast } from '../components/ui/Toast'
 import { RequestCard } from '../components/ui/RequestCard'
 import { supabase } from '../lib/supabase'
