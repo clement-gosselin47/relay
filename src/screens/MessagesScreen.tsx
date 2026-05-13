@@ -62,10 +62,14 @@ export function MessagesScreen({ userId, isDesktop }: MessagesScreenProps) {
 
   // ── Mobile : liste pleine page ──────────────────────────────
   return (
-    <>
+    <div style={{
+      height: '100%', width: '100%', overflow: 'hidden',
+      position: 'relative', display: 'flex', flexDirection: 'column',
+      background: 'var(--bone)', fontFamily: "'Geologica', sans-serif",
+    }}>
       <div style={{
         height: '100%', display: 'flex', flexDirection: 'column',
-        background: 'var(--bone)', fontFamily: "'Geologica', sans-serif",
+        width: '100%', overflowX: 'hidden',
       }}>
         {/* Header yellow — même style que HomeScreen */}
         <div style={{
@@ -112,7 +116,8 @@ export function MessagesScreen({ userId, isDesktop }: MessagesScreenProps) {
           onBack={() => setSelectedId(null)}
         />
       )}
-    </>
+      </div>
+    </div>
   )
 }
 

@@ -53,9 +53,11 @@ export function ConversationScreen({ conversation, userId, onBack }: Conversatio
   const containerStyle: React.CSSProperties = isDesktopMode
     ? { display: 'flex', flexDirection: 'column', height: '100%', background: 'var(--bone)', fontFamily: "'Geologica', sans-serif" }
     : {
-        position: 'fixed', inset: 0, zIndex: 200,
-        maxWidth: 480, width: '100%',
+        position: 'fixed',
+        top: 0, bottom: 0,
         left: '50%', transform: 'translateX(-50%)',
+        width: '100%', maxWidth: 480,
+        zIndex: 200, overflow: 'hidden',
         display: 'flex', flexDirection: 'column',
         background: 'var(--bone)',
         fontFamily: "'Geologica', sans-serif",
