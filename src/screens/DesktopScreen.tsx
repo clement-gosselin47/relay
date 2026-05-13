@@ -1,13 +1,14 @@
 import { useState, useCallback } from 'react'
-import { Home, User, MessageSquare, MapPin, Zap, ArrowRight, Search } from 'lucide-react'
+import { Home, User, MessageSquare, Search } from 'lucide-react'
 import { useTheme } from '../context/ThemeContext'
 import { ProfileScreen } from './ProfileScreen'
 import { Avatar } from '../components/ui/Avatar'
+import { RequestCard } from '../components/ui/RequestCard'
 import { Toggle } from '../components/ui/Toggle'
 import { Toast } from '../components/ui/Toast'
 import { useRequests } from '../hooks/useRequests'
 import { supabase } from '../lib/supabase'
-import { timeAgo, minutesLeft } from '../lib/utils'
+import { timeAgo } from '../lib/utils'
 import type { Profile, Request } from '../types'
 
 type Screen = 'home' | 'messages' | 'profile'
@@ -283,7 +284,7 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
             gap: 16,
           }}>
             {filtered.map((r, i) => (
-              <DesktopCard
+              <RequestCard
                 key={r.id}
                 r={r}
                 variant={i % 2 === 0 ? 'yellow' : 'white'}
@@ -305,35 +306,45 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
         borderLeft: `1px solid rgba(var(--ink-rgb),0.08)`,
       }}>
         {/* Campus card */}
-        <div style={{
-          background: '#181713', borderRadius: 24,
-          padding: '20px', color: '#F6F5AE',
-          position: 'relative', overflow: 'hidden',
-        }}>
-          <div style={{
-            position: 'absolute', right: -30, bottom: -30,
-            width: 120, height: 120, borderRadius: '50%',
-            background: '#F6F5AE', opacity: 0.07,
-          }} />
-          <div style={{
-            fontFamily: "'Montserrat Alternates', sans-serif",
-            fontWeight: 600, fontSize: 11,
-            letterSpacing: 0.5, textTransform: 'uppercase',
-            color: 'rgba(246,245,174,0.6)', marginBottom: 10,
-          }}>
-            Campus · Ynov Lyon
-          </div>
-          <div style={{
-            fontFamily: "'Montserrat Alternates', sans-serif",
-            fontWeight: 700, fontSize: 36, letterSpacing: -1,
-            lineHeight: 1,
-          }}>
-            {filtered.length}
-          </div>
-          <div style={{ fontSize: 13, color: 'rgba(246,245,174,0.7)', marginTop: 4 }}>
-            demande{filtered.length !== 1 ? 's' : ''} active{filtered.length !== 1 ? 's' : ''}
-          </div>
-        </div>
+        {(() => {
+          const isDark = theme === 'dark'
+          const cardBg   = isDark ? '#F6F5AE' : '#181713'
+          const cardText = isDark ? '#181713' : '#F6F5AE'
+          const cardSub  = isDark ? 'rgba(24,23,19,0.55)' : 'rgba(246,245,174,0.6)'
+          const orb      = isDark ? '#181713' : '#F6F5AE'
+          return (
+            <div style={{
+              background: cardBg, borderRadius: 24,
+              padding: '20px', color: cardText,
+              position: 'relative', overflow: 'hidden',
+              transition: 'background .25s, color .25s',
+            }}>
+              <div style={{
+                position: 'absolute', right: -30, bottom: -30,
+                width: 120, height: 120, borderRadius: '50%',
+                background: orb, opacity: 0.07,
+              }} />
+              <div style={{
+                fontFamily: "'Montserrat Alternates', sans-serif",
+                fontWeight: 600, fontSize: 11,
+                letterSpacing: 0.5, textTransform: 'uppercase',
+                color: cardSub, marginBottom: 10,
+              }}>
+                Campus · Ynov Lyon
+              </div>
+              <div style={{
+                fontFamily: "'Montserrat Alternates', sans-serif",
+                fontWeight: 700, fontSize: 36, letterSpacing: -1,
+                lineHeight: 1, color: cardText,
+              }}>
+                {filtered.length}
+              </div>
+              <div style={{ fontSize: 13, color: cardSub, marginTop: 4 }}>
+                demande{filtered.length !== 1 ? 's' : ''} active{filtered.length !== 1 ? 's' : ''}
+              </div>
+            </div>
+          )
+        })()}
 
         {/* Recent activity */}
         <div>
@@ -402,80 +413,6 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
   )
 }
 
-// ── Desktop Card ──────────────────────────────────────────────
-function DesktopCard({ r, variant, isHelping, onHelp }: {
-  r: Request; variant: 'yellow' | 'white'; isHelping: boolean; onHelp: () => void
-}) {
-  const yellow = variant === 'yellow'
-  const mins = r.expires_at ? minutesLeft(r.expires_at) : null
-
-  return (
-    <div style={{
-      background: yellow ? '#F6F5AE' : 'var(--paper)',
-      border: yellow ? 'none' : `1px solid rgba(var(--ink-rgb),0.12)`,
-      borderRadius: 24, padding: '20px',
-      color: yellow ? '#181713' : 'var(--ink)',
-      animation: 'slide-up .3s ease',
-    }}>
-      {r.urgent && mins !== null && mins > 0 && (
-        <div style={{ marginBottom: 12 }}>
-          <span style={{
-            display: 'inline-flex', alignItems: 'center', gap: 4,
-            fontFamily: "'Montserrat Alternates', sans-serif",
-            fontWeight: 600, fontSize: 11, padding: '4px 9px', borderRadius: 999,
-            background: '#181713', color: '#F6F5AE',
-          }}>
-            <Zap size={11} strokeWidth={2} /> {mins} min
-          </span>
-        </div>
-      )}
-
-      <div style={{
-        fontFamily: "'Montserrat Alternates', sans-serif",
-        fontWeight: 600, fontSize: 18, lineHeight: 1.2,
-        letterSpacing: -0.4, marginBottom: 12,
-      }}>
-        {r.title}
-      </div>
-
-      {r.author && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
-          <Avatar name={r.author.name} size={24} />
-          <span style={{ fontSize: 12 }}>
-            <strong>{r.author.name.split(' ')[0]}</strong>
-            <span style={{ color: yellow ? 'rgba(24,23,19,0.6)' : `rgba(var(--ink-rgb),0.6)` }}> · {r.author.filiere}</span>
-          </span>
-        </div>
-      )}
-
-      <div style={{
-        display: 'flex', alignItems: 'center', gap: 8,
-        paddingTop: 12,
-        borderTop: `1px dashed ${yellow ? 'rgba(24,23,19,0.18)' : 'rgba(var(--ink-rgb),0.10)'}`,
-      }}>
-        <MapPin size={12} strokeWidth={1.7} />
-        <span style={{ fontSize: 12 }}>{r.location}</span>
-        <span style={{ flex: 1 }} />
-        <button
-          onClick={onHelp}
-          disabled={isHelping}
-          style={{
-            padding: '8px 14px', borderRadius: 999,
-            background: isHelping ? `rgba(var(--ink-rgb),0.12)` : 'var(--ink)',
-            color: isHelping ? `rgba(var(--ink-rgb),0.35)` : 'var(--bone)',
-            border: 'none', cursor: isHelping ? 'default' : 'pointer',
-            fontFamily: "'Montserrat Alternates', sans-serif",
-            fontWeight: 600, fontSize: 12,
-            display: 'inline-flex', alignItems: 'center', gap: 5,
-            transition: 'all .15s',
-          }}
-        >
-          {isHelping ? 'En cours…' : "J'aide"} {!isHelping && <ArrowRight size={12} />}
-        </button>
-      </div>
-    </div>
-  )
-}
 
 // ── Sidebar helpers ───────────────────────────────────────────
 function SideNavItem({ icon, label, active, onClick }: {
