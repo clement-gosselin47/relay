@@ -7,7 +7,7 @@ import { expiresAt } from '../lib/utils'
 import { Toggle } from '../components/ui/Toggle'
 import type { Profile, Request } from '../types'
 
-const FILIERES = ['Design', 'Dev', 'Marketing', 'Audio', 'Création', '3D', 'Toutes']
+const FILIERES_LIST = ['Design', 'Dev', 'Marketing', 'Audio', 'Création', '3D']
 const DURATIONS = [5, 10, 15]
 
 interface CreateScreenProps {
@@ -33,8 +33,16 @@ export function CreateScreen({ userId, profile, onClose, onSuccess }: CreateScre
     setCats(prev => prev.includes(key) ? prev.filter(x => x !== key) : [...prev, key])
   }
 
+  const allSelected = FILIERES_LIST.every(f => filieres.includes(f))
+
   function toggleFiliere(f: string) {
-    setFilieres(prev => prev.includes(f) ? prev.filter(x => x !== f) : [...prev, f])
+    if (f === 'Toutes') {
+      setFilieres(allSelected ? [] : [...FILIERES_LIST])
+    } else {
+      setFilieres(prev =>
+        prev.includes(f) ? prev.filter(x => x !== f) : [...prev, f]
+      )
+    }
   }
 
   async function handleSubmit() {
@@ -182,23 +190,40 @@ export function CreateScreen({ userId, profile, onClose, onSuccess }: CreateScre
           hint="Quelle filière peut t'aider ? Les étudiants de ces filières verront ta demande en priorité."
         >
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-            {FILIERES.map(f => (
-              <button
-                key={f}
-                onClick={() => toggleFiliere(f)}
-                style={{
-                  padding: '8px 14px', borderRadius: 999,
-                  background: filieres.includes(f) ? 'var(--ink)' : 'var(--paper)',
-                  border: `1.5px solid ${filieres.includes(f) ? 'var(--ink)' : `rgba(var(--ink-rgb),0.12)`}`,
-                  color: filieres.includes(f) ? 'var(--yellow)' : 'var(--ink)',
-                  fontFamily: "'Montserrat Alternates', sans-serif",
-                  fontWeight: 600, fontSize: 13,
-                  cursor: 'pointer', transition: 'all .15s',
-                }}
-              >
-                {f}
-              </button>
-            ))}
+            {FILIERES_LIST.map(f => {
+              const active = filieres.includes(f)
+              return (
+                <button
+                  key={f}
+                  onClick={() => toggleFiliere(f)}
+                  style={{
+                    padding: '8px 14px', borderRadius: 999,
+                    background: active ? 'var(--ink)' : 'var(--paper)',
+                    border: `1.5px solid ${active ? 'var(--ink)' : `rgba(var(--ink-rgb),0.12)`}`,
+                    color: active ? 'var(--yellow)' : 'var(--ink)',
+                    fontFamily: "'Montserrat Alternates', sans-serif",
+                    fontWeight: 600, fontSize: 13,
+                    cursor: 'pointer', transition: 'all .15s',
+                  }}
+                >
+                  {f}
+                </button>
+              )
+            })}
+            <button
+              onClick={() => toggleFiliere('Toutes')}
+              style={{
+                padding: '8px 14px', borderRadius: 999,
+                background: allSelected ? '#F6F5AE' : 'var(--paper)',
+                border: `1.5px solid ${allSelected ? '#181713' : `rgba(var(--ink-rgb),0.12)`}`,
+                color: '#181713',
+                fontFamily: "'Montserrat Alternates', sans-serif",
+                fontWeight: 600, fontSize: 13,
+                cursor: 'pointer', transition: 'all .15s',
+              }}
+            >
+              Toutes ✦
+            </button>
           </div>
         </FormSection>
 
