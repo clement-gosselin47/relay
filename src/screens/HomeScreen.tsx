@@ -9,11 +9,12 @@ interface HomeScreenProps {
   userName: string
   requests: Request[]
   loading: boolean
+  onNavigateToMessages?: () => void
 }
 
 interface ToastState { msg: string; type: 'success' | 'info' | 'error' }
 
-export function HomeScreen({ userId, userName, requests, loading }: HomeScreenProps) {
+export function HomeScreen({ userId, userName, requests, loading, onNavigateToMessages }: HomeScreenProps) {
   const [toast, setToast] = useState<ToastState | null>(null)
   const [helping, setHelping] = useState<Set<string>>(new Set())
 
@@ -35,7 +36,12 @@ export function HomeScreen({ userId, userName, requests, loading }: HomeScreenPr
     if (error) { showToast('Une erreur est survenue.', 'error'); return }
 
     if (data === 'ok') {
+      await supabase.from('conversations').upsert(
+        { request_id: r.id, requester_id: r.author_id, helper_id: userId },
+        { onConflict: 'request_id,helper_id', ignoreDuplicates: true }
+      )
       showToast(`Super ! ${r.author?.name?.split(' ')[0] ?? 'L\'auteur'} va être prévenu·e.`)
+      onNavigateToMessages?.()
     } else if (data === 'already_taken') {
       showToast('Quelqu\'un est déjà en route !', 'info')
     } else if (data === 'expired') {
@@ -77,8 +83,6 @@ export function HomeScreen({ userId, userName, requests, loading }: HomeScreenPr
             }} />
             Live · Ynov Lyon
           </div>
-
-          <img src="/logo-t-black.png" alt="Relay" style={{ height: 36, width: 'auto' }} />
 
         </div>
 

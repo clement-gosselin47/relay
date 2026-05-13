@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react'
 import { Home, User, MessageSquare, Search } from 'lucide-react'
 import { useTheme } from '../context/ThemeContext'
 import { ProfileScreen } from './ProfileScreen'
+import { MessagesScreen } from './MessagesScreen'
 import { Avatar } from '../components/ui/Avatar'
 import { RequestCard } from '../components/ui/RequestCard'
 import { Toggle } from '../components/ui/Toggle'
@@ -42,8 +43,14 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
     })
     setHelping(prev => { const s = new Set(prev); s.delete(r.id); return s })
     if (error) { showToast('Erreur.', 'error'); return }
-    if (data === 'ok') showToast(`Super ! ${r.author?.name?.split(' ')[0] ?? 'L\'auteur'} va être prévenu·e.`)
-    else if (data === 'already_taken') showToast('Quelqu\'un est déjà en route !', 'info')
+    if (data === 'ok') {
+      await supabase.from('conversations').upsert(
+        { request_id: r.id, requester_id: r.author_id, helper_id: profile.id },
+        { onConflict: 'request_id,helper_id', ignoreDuplicates: true }
+      )
+      showToast(`Super ! ${r.author?.name?.split(' ')[0] ?? 'L\'auteur'} va être prévenu·e.`)
+      setScreen('messages')
+    } else if (data === 'already_taken') showToast('Quelqu\'un est déjà en route !', 'info')
     else if (data === 'expired') showToast('Cette demande a expiré.', 'info')
   }
 
@@ -214,6 +221,10 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
             onSignOut={onSignOut}
             isDesktop
           />
+        </div>
+      ) : screen === 'messages' ? (
+        <div style={{ flex: 1, overflow: 'hidden' }}>
+          <MessagesScreen userId={profile.id} isDesktop />
         </div>
       ) : (
       <div style={{ flex: 1, overflowY: 'auto', padding: '32px 28px' }}>
