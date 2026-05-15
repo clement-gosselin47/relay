@@ -1,6 +1,19 @@
 import { useState } from 'react'
 
-const FILIERES = ['Design UX', 'Dev Web', 'Dev Logiciel', 'Marketing', 'Audiovisuel', 'Création 3D', 'Communication', 'Autre']
+const FILIERES = [
+  'Informatique - Développement',
+  'Informatique - Infrastructure & Réseau',
+  'Intelligence Artificielle & Data',
+  'Cybersécurité',
+  '3D, Animation & Jeu Vidéo',
+  'Marketing & Communication Digitale',
+  'Création & Digital Design',
+  'Audiovisuel',
+  'Bâtiment Numérique',
+  'Architecture d\'intérieur',
+  'BTS SIO SLAM',
+  'BTS SIO SISR',
+]
 
 interface AuthModalProps {
   onSignIn: (email: string, name: string, filiere: string) => Promise<{ error: Error | null }>
@@ -34,12 +47,29 @@ export function AuthModal({ onSignIn }: AuthModalProps) {
       display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
       padding: '24px 24px',
+      overflow: 'hidden',
     }}>
+      {/* Déco jaune */}
+      <div style={{
+        position: 'absolute', top: -120, right: -100,
+        width: 320, height: 320, borderRadius: '50%',
+        background: '#F6F5AE', opacity: 0.6,
+        pointerEvents: 'none', zIndex: 0,
+      }} />
+      <div style={{
+        position: 'absolute', bottom: -100, left: -80,
+        width: 260, height: 260, borderRadius: '50%',
+        background: '#F6F5AE', opacity: 0.4,
+        pointerEvents: 'none', zIndex: 0,
+      }} />
+
+      {/* Contenu au-dessus des ronds */}
+      <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
       {/* Logo */}
       <img
-        src="/logo-t-color.png"
+        src="/logo-t-black.png"
         alt="Relay"
-        style={{ height: 64, width: 'auto', marginBottom: 24 }}
+        style={{ height: 88, width: 'auto', marginBottom: 28 }}
       />
 
       {step === 'sent' ? (
@@ -79,7 +109,7 @@ export function AuthModal({ onSignIn }: AuthModalProps) {
             fontSize: 14, color: 'rgba(24,23,19,0.6)',
             textAlign: 'center', marginBottom: 32, lineHeight: 1.4,
           }}>
-            Entraide flash entre étudiants Ynov
+            Tends la main, reçois un coup de pouce.
           </div>
 
           <Label>Ton prénom</Label>
@@ -122,8 +152,8 @@ export function AuthModal({ onSignIn }: AuthModalProps) {
             disabled={!canSubmit || loading}
             style={{
               width: '100%', padding: '16px',
-              background: canSubmit && !loading ? '#181713' : 'rgba(24,23,19,0.2)',
-              color: canSubmit && !loading ? '#F6F5AE' : 'rgba(24,23,19,0.4)',
+              background: canSubmit && !loading ? '#181713' : '#D8D6D1',
+              color: canSubmit && !loading ? '#F6F5AE' : '#A8A5A0',
               border: 'none', borderRadius: 16,
               fontFamily: "'Montserrat Alternates', sans-serif",
               fontWeight: 700, fontSize: 15,
@@ -135,6 +165,7 @@ export function AuthModal({ onSignIn }: AuthModalProps) {
           </button>
         </form>
       )}
+      </div>
     </div>
   )
 }

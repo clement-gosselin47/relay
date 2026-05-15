@@ -42,9 +42,6 @@ export function ConversationScreen({ conversation, userId, onBack }: Conversatio
 
   function handleInputChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setDraft(e.target.value)
-    // Auto-grow textarea
-    e.target.style.height = 'auto'
-    e.target.style.height = Math.min(e.target.scrollHeight, 120) + 'px'
   }
 
   // Position fixe pour couvrir la BottomBar mobile, même style que CreateScreen
@@ -200,7 +197,7 @@ export function ConversationScreen({ conversation, userId, onBack }: Conversatio
             placeholder="Écrire un message…"
             rows={1}
             style={{
-              flex: 1, resize: 'none', overflow: 'hidden',
+              flex: 1, resize: 'none', overflowY: 'auto',
               background: 'var(--bone)',
               border: '1.5px solid rgba(var(--ink-rgb),0.12)',
               borderRadius: 18, padding: '10px 14px',
@@ -217,10 +214,11 @@ export function ConversationScreen({ conversation, userId, onBack }: Conversatio
             disabled={!draft.trim()}
             style={{
               width: 40, height: 40, borderRadius: '50%', flexShrink: 0,
-              background: draft.trim() ? '#181713' : '#D8D6D1',
-              border: 'none', cursor: draft.trim() ? 'pointer' : 'default',
+              background: draft.trim() ? '#181713' : 'var(--bone)',
+              border: draft.trim() ? 'none' : '1.5px solid rgba(var(--ink-rgb),0.12)',
+              cursor: draft.trim() ? 'pointer' : 'default',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: draft.trim() ? '#F6F5AE' : '#A8A5A0',
+              color: draft.trim() ? '#F6F5AE' : '#B0ADA8',
               transition: 'all .15s',
               marginBottom: 0,
             }}
