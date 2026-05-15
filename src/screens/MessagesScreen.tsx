@@ -63,10 +63,9 @@ export function MessagesScreen({ userId, isDesktop }: MessagesScreenProps) {
   // ── Mobile ───────────────────────────────────────────────────
   return (
     <div style={{
-      background: 'var(--bone)', height: '100%', width: '100%',
+      background: 'var(--bone)', height: '100%',
       display: 'flex', flexDirection: 'column',
       fontFamily: "'Geologica', sans-serif",
-      overflowX: 'hidden',
     }}>
       {/* Header yellow */}
       <div style={{
