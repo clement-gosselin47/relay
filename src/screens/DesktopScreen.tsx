@@ -197,18 +197,6 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
               </div>
             </div>
           </button>
-          <button
-            onClick={onSignOut}
-            style={{
-              flexShrink: 0,
-              background: 'none', border: 'none', cursor: 'pointer',
-              fontSize: 11, color: `rgba(var(--ink-rgb),0.4)`,
-              fontFamily: "'Geologica', sans-serif",
-              padding: '4px 6px',
-            }}
-          >
-            Quitter
-          </button>
         </div>
       </div>
 
