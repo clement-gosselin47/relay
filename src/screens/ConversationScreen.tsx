@@ -217,10 +217,10 @@ export function ConversationScreen({ conversation, userId, onBack }: Conversatio
             disabled={!draft.trim()}
             style={{
               width: 40, height: 40, borderRadius: '50%', flexShrink: 0,
-              background: draft.trim() ? '#181713' : 'rgba(var(--ink-rgb),0.08)',
+              background: draft.trim() ? '#181713' : '#D8D6D1',
               border: 'none', cursor: draft.trim() ? 'pointer' : 'default',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: draft.trim() ? '#F6F5AE' : 'rgba(var(--ink-rgb),0.25)',
+              color: draft.trim() ? '#F6F5AE' : '#A8A5A0',
               transition: 'all .15s',
               marginBottom: 0,
             }}
