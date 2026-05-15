@@ -378,6 +378,7 @@ function AccountSettings({ profile, onBack, onSignOut, onUpdateSkills, onSaveInf
   const [saved, setSaved]     = useState(false)
   const [avatarUrl, setAvatarUrl] = useState<string | null>(profile.avatar_url ?? null)
   const [avatarUploading, setAvatarUploading] = useState(false)
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
 
   async function handleSave() {
     if (!name.trim()) return
@@ -643,7 +644,7 @@ function AccountSettings({ profile, onBack, onSignOut, onUpdateSkills, onSaveInf
         {/* ── Déconnexion ── */}
         <SettingsSection label="Compte">
           <button
-            onClick={onSignOut}
+            onClick={() => setShowLogoutConfirm(true)}
             style={{
               width: '100%', padding: '14px 16px',
               background: 'transparent',
@@ -661,6 +662,67 @@ function AccountSettings({ profile, onBack, onSignOut, onUpdateSkills, onSaveInf
             Se déconnecter
           </button>
         </SettingsSection>
+
+        {/* ── Popup confirmation déconnexion ── */}
+        {showLogoutConfirm && (
+          <div style={{
+            position: 'fixed', inset: 0, zIndex: 500,
+            background: 'rgba(24,23,19,0.45)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            padding: '0 24px',
+          }}
+            onClick={() => setShowLogoutConfirm(false)}
+          >
+            <div
+              onClick={e => e.stopPropagation()}
+              style={{
+                background: 'var(--paper)', borderRadius: 24,
+                padding: '28px 24px 20px',
+                width: '100%', maxWidth: 400,
+                display: 'flex', flexDirection: 'column', gap: 12,
+              }}
+            >
+              <div style={{
+                fontFamily: "'Montserrat Alternates', sans-serif",
+                fontWeight: 700, fontSize: 18, letterSpacing: -0.4,
+                color: 'var(--ink)', textAlign: 'center',
+              }}>
+                Se déconnecter ?
+              </div>
+              <div style={{
+                fontSize: 13, color: 'rgba(var(--ink-rgb),0.55)',
+                textAlign: 'center', lineHeight: 1.5,
+              }}>
+                Tu devras te reconnecter via un lien email pour accéder à Relay.
+              </div>
+              <button
+                onClick={onSignOut}
+                style={{
+                  width: '100%', padding: '14px',
+                  background: '#c0392b', color: '#fff',
+                  border: 'none', borderRadius: 14,
+                  fontFamily: "'Montserrat Alternates', sans-serif",
+                  fontWeight: 700, fontSize: 15, cursor: 'pointer',
+                  marginTop: 4,
+                }}
+              >
+                Oui, me déconnecter
+              </button>
+              <button
+                onClick={() => setShowLogoutConfirm(false)}
+                style={{
+                  width: '100%', padding: '12px',
+                  background: 'transparent', color: 'rgba(var(--ink-rgb),0.5)',
+                  border: 'none', borderRadius: 14,
+                  fontFamily: "'Geologica', sans-serif",
+                  fontSize: 14, cursor: 'pointer',
+                }}
+              >
+                Annuler
+              </button>
+            </div>
+          </div>
+        )}
 
       </div>
     </div>
