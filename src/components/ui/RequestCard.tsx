@@ -8,9 +8,10 @@ interface RequestCardProps {
   variant: 'yellow' | 'white'
   isHelping: boolean
   onHelp: () => void
+  isDesktop?: boolean
 }
 
-export function RequestCard({ r, variant, isHelping, onHelp }: RequestCardProps) {
+export function RequestCard({ r, variant, isHelping, onHelp, isDesktop = false }: RequestCardProps) {
   const yellow = variant === 'yellow'
   const mins = r.expires_at ? minutesLeft(r.expires_at) : null
 
@@ -23,17 +24,17 @@ export function RequestCard({ r, variant, isHelping, onHelp }: RequestCardProps)
     <div style={{
       background: yellow ? '#F6F5AE' : 'var(--paper)',
       border: yellow ? 'none' : '1px solid rgba(var(--ink-rgb),0.12)',
-      borderRadius: 24,
-      padding: '18px 18px 16px',
+      borderRadius: isDesktop ? 24 : 18,
+      padding: isDesktop ? '18px 18px 16px' : '12px 14px 10px',
       color: inkColor,
       animation: 'slide-up .3s ease',
       display: 'flex',
       flexDirection: 'column',
-      minHeight: 160,
+      minHeight: isDesktop ? 160 : 120,
     }}>
       {/* TOP — auteur + badge urgence */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-        <Avatar name={r.author?.name ?? '?'} size={26} />
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: isDesktop ? 12 : 8 }}>
+        <Avatar name={r.author?.name ?? '?'} size={isDesktop ? 26 : 24} />
         {r.author && (
           <div style={{ fontSize: 12, lineHeight: 1 }}>
             <span style={{ fontWeight: 600, color: inkColor }}>
@@ -63,9 +64,9 @@ export function RequestCard({ r, variant, isHelping, onHelp }: RequestCardProps)
       <div style={{
         fontFamily: "'Montserrat Alternates', sans-serif",
         fontWeight: 600,
-        fontSize: 19,
-        lineHeight: 1.15,
-        letterSpacing: -0.4,
+        fontSize: isDesktop ? 19 : 15,
+        lineHeight: isDesktop ? 1.15 : 1.2,
+        letterSpacing: isDesktop ? -0.4 : -0.3,
         color: inkColor,
       }}>
         {r.title}
@@ -77,18 +78,18 @@ export function RequestCard({ r, variant, isHelping, onHelp }: RequestCardProps)
       {/* FOOTER — ancré en bas */}
       <div style={{
         display: 'flex', alignItems: 'center',
-        paddingTop: 12,
+        paddingTop: isDesktop ? 12 : 8,
         borderTop: `1px dashed ${borderDashed}`,
-        marginTop: 12,
+        marginTop: isDesktop ? 12 : 8,
       }}>
-        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12, color: inkColor }}>
-          <MapPin size={13} strokeWidth={1.7} /> {r.location}
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: isDesktop ? 12 : 10.5, color: inkColor }}>
+          <MapPin size={isDesktop ? 13 : 11} strokeWidth={1.7} /> {r.location}
         </span>
         <span style={{
           width: 3, height: 3, borderRadius: '50%',
           background: ink60, flexShrink: 0, margin: '0 8px',
         }} />
-        <span style={{ fontSize: 12, color: ink60 }}>
+        <span style={{ fontSize: isDesktop ? 12 : 10.5, color: ink60 }}>
           {timeAgo(r.created_at)}
         </span>
 
@@ -97,7 +98,7 @@ export function RequestCard({ r, variant, isHelping, onHelp }: RequestCardProps)
           disabled={isHelping}
           style={{
             marginLeft: 'auto',
-            padding: '9px 14px', borderRadius: 999,
+            padding: isDesktop ? '9px 14px' : '7px 12px', borderRadius: 999,
             background: isHelping ? 'rgba(var(--ink-rgb),0.12)' : 'var(--ink)',
             color: isHelping ? 'rgba(var(--ink-rgb),0.35)' : 'var(--bone)',
             border: 'none', cursor: isHelping ? 'default' : 'pointer',

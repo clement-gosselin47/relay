@@ -36,14 +36,11 @@ export default function App() {
 
   if (isDesktop) {
     return (
-      <>
-        <DesktopScreen
-          profile={profile}
-          onUpdate={updateProfile}
-          onSignOut={signOut}
-        />
-        <ThemeToggleButton />
-      </>
+      <DesktopScreen
+        profile={profile}
+        onUpdate={updateProfile}
+        onSignOut={signOut}
+      />
     )
   }
 

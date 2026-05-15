@@ -9,16 +9,18 @@ import { timeAgo } from '../lib/utils'
 import type { Profile } from '../types'
 
 const FILIERES = [
-  'Dev Web',
-  'Dev Logiciel',
-  'Design UX / UI',
+  'Informatique - Développement',
+  'Informatique - Infrastructure & Réseau',
+  'Intelligence Artificielle & Data',
   'Cybersécurité',
-  'Intelligence Artificielle',
-  'Réseaux & Systèmes',
-  'Marketing Digital',
-  'Créa / Communication',
-  'Management',
-  'Jeux Vidéo',
+  '3D, Animation & Jeu Vidéo',
+  'Marketing & Communication Digitale',
+  'Création & Digital Design',
+  'Audiovisuel',
+  'Bâtiment Numérique',
+  'Architecture d\'intérieur',
+  'BTS SIO SLAM',
+  'BTS SIO SISR',
 ]
 
 interface ProfileScreenProps {
@@ -91,7 +93,7 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
     }}>
       {/* Header bar */}
       <div style={{
-        padding: isDesktop ? `32px ${px} 14px` : `56px ${px} 14px`,
+        padding: isDesktop ? `32px ${px} 14px` : `28px ${px} 10px`,
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         flexShrink: 0,
       }}>
@@ -125,16 +127,16 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
         {/* ── Hero ── */}
         <div style={{
           background: 'var(--paper)', border: `1px solid rgba(var(--ink-rgb),0.12)`,
-          borderRadius: 28, padding: '28px 24px',
-          display: 'flex', alignItems: 'center', gap: 20,
-          marginBottom: 12,
+          borderRadius: isDesktop ? 28 : 18, padding: isDesktop ? '28px 24px' : '16px 16px',
+          display: 'flex', alignItems: 'center', gap: isDesktop ? 20 : 14,
+          marginBottom: isDesktop ? 12 : 8,
         }}>
-          <Avatar name={profile.name} size={isDesktop ? 88 : 76} ring />
+          <Avatar name={profile.name} size={isDesktop ? 88 : 56} ring url={profile.avatar_url} />
 
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{
               fontFamily: "'Montserrat Alternates', sans-serif",
-              fontWeight: 700, fontSize: isDesktop ? 32 : 26,
+              fontWeight: 700, fontSize: isDesktop ? 32 : 20,
               letterSpacing: -0.7, lineHeight: 1.1,
               marginBottom: 6,
             }}>
@@ -165,8 +167,8 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
           background: profile.available ? '#F6F5AE' : 'var(--paper)',
           border: `1.5px solid ${profile.available ? '#181713' : `rgba(var(--ink-rgb),0.12)`}`,
           color: profile.available ? '#181713' : 'var(--ink)',
-          borderRadius: 28, padding: 20,
-          marginBottom: 12, position: 'relative', overflow: 'hidden',
+          borderRadius: isDesktop ? 28 : 18, padding: isDesktop ? 20 : 14,
+          marginBottom: isDesktop ? 12 : 8, position: 'relative', overflow: 'hidden',
           transition: 'all .25s',
         }}>
           {profile.available && (
@@ -181,7 +183,7 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
           <div style={{ position: 'relative', zIndex: 1 }}>
             <div style={{
               display: 'flex', alignItems: 'center',
-              justifyContent: 'space-between', marginBottom: 14,
+              justifyContent: 'space-between', marginBottom: isDesktop ? 14 : 10,
             }}>
               <div>
                 <div style={{
@@ -200,7 +202,7 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
                 </div>
                 <div style={{
                   fontFamily: "'Montserrat Alternates', sans-serif",
-                  fontWeight: 700, fontSize: 26, letterSpacing: -0.6, lineHeight: 1.05,
+                  fontWeight: 700, fontSize: isDesktop ? 26 : 20, letterSpacing: -0.6, lineHeight: 1.05,
                 }}>
                   {profile.available ? 'Sur le campus' : 'Hors-ligne'}
                 </div>
@@ -243,8 +245,8 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
         {/* ── Compétences ── */}
         <div style={{
           background: 'var(--paper)', border: `1px solid rgba(var(--ink-rgb),0.12)`,
-          borderRadius: 24, padding: '18px',
-          marginBottom: 12,
+          borderRadius: isDesktop ? 24 : 18, padding: isDesktop ? '18px' : '12px',
+          marginBottom: isDesktop ? 12 : 8,
         }}>
           <SectionTitle>Compétences</SectionTitle>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
@@ -302,16 +304,16 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
         </div>
 
         {/* ── Stats ── */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 10, marginBottom: 12 }}>
-          <StatCard n={String(stats.helpsGiven)} label="Aides apportées" />
-          <StatCard n={String(stats.requestsMade)} label="Demandes lancées" />
-          <StatCard n="—" label="Réponse moy." />
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 8, marginBottom: isDesktop ? 12 : 8 }}>
+          <StatCard n={String(stats.helpsGiven)} label="Aides apportées" isDesktop={isDesktop} />
+          <StatCard n={String(stats.requestsMade)} label="Demandes lancées" isDesktop={isDesktop} />
+          <StatCard n="—" label="Réponse moy." isDesktop={isDesktop} />
         </div>
 
         {/* ── Historique ── */}
         <div style={{
           background: 'var(--paper)', border: `1px solid rgba(var(--ink-rgb),0.12)`,
-          borderRadius: 24, padding: '18px',
+          borderRadius: isDesktop ? 24 : 18, padding: isDesktop ? '18px' : '12px',
         }}>
           <SectionTitle extra={`${stats.helpsGiven} aides`}>Historique</SectionTitle>
           {history.length === 0 ? (
@@ -366,6 +368,7 @@ interface AccountSettingsProps {
 
 function AccountSettings({ profile, onBack, onSignOut, onUpdateSkills, onSaveInfo, isDesktop, px }: AccountSettingsProps) {
   const { theme, toggle: toggleTheme } = useTheme()
+  const { uploadAvatar } = useProfile(profile.id)
   const [name, setName]       = useState(profile.name)
   const [filiere, setFiliere] = useState(profile.filiere)
   const [skills, setSkills]   = useState<string[]>(profile.skills)
@@ -373,6 +376,8 @@ function AccountSettings({ profile, onBack, onSignOut, onUpdateSkills, onSaveInf
   const [addingSkill, setAddingSkill] = useState(false)
   const [saving, setSaving]   = useState(false)
   const [saved, setSaved]     = useState(false)
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(profile.avatar_url ?? null)
+  const [avatarUploading, setAvatarUploading] = useState(false)
 
   async function handleSave() {
     if (!name.trim()) return
@@ -403,7 +408,7 @@ function AccountSettings({ profile, onBack, onSignOut, onUpdateSkills, onSaveInf
     }}>
       {/* Header */}
       <div style={{
-        padding: isDesktop ? `32px ${px} 14px` : `56px ${px} 14px`,
+        padding: isDesktop ? `32px ${px} 14px` : `28px ${px} 10px`,
         display: 'flex', alignItems: 'center', gap: 12,
         flexShrink: 0,
       }}>
@@ -432,6 +437,56 @@ function AccountSettings({ profile, onBack, onSignOut, onUpdateSkills, onSaveInf
         padding: isDesktop ? `6px ${px} 40px` : `6px ${px} 110px`,
         WebkitOverflowScrolling: 'touch',
       }}>
+
+        {/* ── Photo de profil ── */}
+        <SettingsSection label="Photo de profil">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <div style={{ position: 'relative', flexShrink: 0 }}>
+              <Avatar name={name || profile.name} size={64} url={avatarUrl} ring />
+              {avatarUploading && (
+                <div style={{
+                  position: 'absolute', inset: 0, borderRadius: '50%',
+                  background: 'rgba(24,23,19,0.45)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <div style={{
+                    width: 20, height: 20, borderRadius: '50%',
+                    border: '2px solid rgba(255,255,255,0.4)',
+                    borderTopColor: '#fff',
+                    animation: 'spin 0.7s linear infinite',
+                  }} />
+                </div>
+              )}
+            </div>
+            <div style={{ flex: 1 }}>
+              <label style={{
+                display: 'inline-flex', alignItems: 'center', gap: 6,
+                padding: '8px 16px', borderRadius: 999,
+                background: 'var(--bone)', border: `1px solid rgba(var(--ink-rgb),0.15)`,
+                fontSize: 13, fontWeight: 500, color: 'var(--ink)',
+                cursor: avatarUploading ? 'default' : 'pointer',
+                fontFamily: "'Geologica', sans-serif",
+              }}>
+                {avatarUploading ? 'Envoi…' : 'Changer la photo'}
+                <input
+                  type="file"
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                  disabled={avatarUploading}
+                  onChange={async e => {
+                    const file = e.target.files?.[0]
+                    if (!file) return
+                    setAvatarUploading(true)
+                    const url = await uploadAvatar(profile, file)
+                    if (url) setAvatarUrl(url)
+                    setAvatarUploading(false)
+                    e.target.value = ''
+                  }}
+                />
+              </label>
+            </div>
+          </div>
+        </SettingsSection>
 
         {/* ── Identité ── */}
         <SettingsSection label="Identité">
@@ -676,15 +731,15 @@ function SettingsField({ label, hint, children }: { label: string; hint?: string
   )
 }
 
-function StatCard({ n, label }: { n: string; label: string }) {
+function StatCard({ n, label, isDesktop = false }: { n: string; label: string; isDesktop?: boolean }) {
   return (
     <div style={{
       background: 'var(--paper)', border: `1px solid rgba(var(--ink-rgb),0.12)`,
-      borderRadius: 16, padding: '12px', textAlign: 'center',
+      borderRadius: isDesktop ? 16 : 12, padding: isDesktop ? '12px' : '8px', textAlign: 'center',
     }}>
       <div style={{
         fontFamily: "'Montserrat Alternates', sans-serif",
-        fontWeight: 700, fontSize: 22, letterSpacing: -0.6,
+        fontWeight: 700, fontSize: isDesktop ? 22 : 18, letterSpacing: -0.6,
       }}>
         {n}
       </div>
