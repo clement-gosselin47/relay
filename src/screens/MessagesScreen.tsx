@@ -70,18 +70,19 @@ export function MessagesScreen({ userId, isDesktop }: MessagesScreenProps) {
       {/* Header yellow */}
       <div style={{
         background: '#F6F5AE',
-        padding: '56px 22px 26px',
-        borderRadius: '0 0 32px 32px',
+        padding: '26px 20px 12px',
+        borderRadius: '0 0 24px 24px',
         position: 'relative', flexShrink: 0,
       }}>
         <div style={{
           fontFamily: "'Montserrat Alternates', sans-serif",
-          fontWeight: 700, fontSize: 38,
-          lineHeight: 0.95, letterSpacing: -1.2, color: '#181713',
+          fontWeight: 700, fontSize: 28,
+          lineHeight: 0.95, letterSpacing: -0.8, color: '#181713',
+          marginTop: 30,
         }}>
           Messages<span style={{ color: '#181713', opacity: 0.3 }}>.</span>
         </div>
-        <div style={{ marginTop: 10, fontSize: 13, color: 'rgba(24,23,19,0.65)' }}>
+        <div style={{ marginTop: 4, fontSize: 12, color: 'rgba(24,23,19,0.65)' }}>
           {conversations.length > 0
             ? `${conversations.length} conversation${conversations.length > 1 ? 's' : ''} en cours.`
             : 'Tes conversations avec tes aidants.'}
@@ -91,7 +92,7 @@ export function MessagesScreen({ userId, isDesktop }: MessagesScreenProps) {
       {/* Liste — même structure que HomeScreen feed */}
       <div style={{
         flex: 1, overflowY: 'auto',
-        padding: '20px 16px 110px',
+        padding: '14px 14px 100px',
         WebkitOverflowScrolling: 'touch',
       }}>
         <ConversationList
@@ -203,8 +204,8 @@ function MobileConvCard({ conv, userId, onSelect }: {
         border: hasUnread
           ? '1.5px solid #181713'
           : '1px solid rgba(var(--ink-rgb),0.10)',
-        borderRadius: 20,
-        padding: '14px 16px',
+        borderRadius: 16,
+        padding: '10px 12px',
         display: 'flex', alignItems: 'center', gap: 12,
         cursor: 'pointer',
         transition: 'all .15s',
@@ -212,7 +213,7 @@ function MobileConvCard({ conv, userId, onSelect }: {
     >
       {/* Avatar + dot */}
       <div style={{ position: 'relative', flexShrink: 0 }}>
-        <Avatar name={other?.name ?? '?'} size={46} />
+        <Avatar name={other?.name ?? '?'} size={38} />
         {hasUnread && (
           <div style={{
             position: 'absolute', top: 1, right: 1,
@@ -227,22 +228,22 @@ function MobileConvCard({ conv, userId, onSelect }: {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 3 }}>
           <span style={{
             fontFamily: "'Montserrat Alternates', sans-serif",
-            fontWeight: 700, fontSize: 13.5, color: 'var(--ink)',
+            fontWeight: 700, fontSize: 12, color: 'var(--ink)',
             overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
             flex: 1, marginRight: 8,
           }}>
             {other?.name?.split(' ')[0] ?? '…'}
-            <span style={{ fontWeight: 500, opacity: 0.5, fontSize: 12 }}> · {other?.filiere}</span>
+            <span style={{ fontWeight: 500, opacity: 0.5, fontSize: 11 }}> · {other?.filiere}</span>
           </span>
           {conv.last_message && (
-            <span style={{ fontSize: 11, color: 'rgba(var(--ink-rgb),0.38)', flexShrink: 0 }}>
+            <span style={{ fontSize: 10, color: 'rgba(var(--ink-rgb),0.38)', flexShrink: 0 }}>
               {timeAgo(conv.last_message.created_at)}
             </span>
           )}
         </div>
 
         <div style={{
-          fontSize: 11.5, color: 'rgba(var(--ink-rgb),0.45)',
+          fontSize: 10.5, color: 'rgba(var(--ink-rgb),0.45)',
           overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
           marginBottom: 4,
         }}>
@@ -251,7 +252,7 @@ function MobileConvCard({ conv, userId, onSelect }: {
 
         {conv.last_message && (
           <div style={{
-            fontSize: 12.5,
+            fontSize: 11.5,
             color: hasUnread ? 'var(--ink)' : 'rgba(var(--ink-rgb),0.42)',
             fontWeight: hasUnread ? 500 : 300,
             overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
@@ -264,11 +265,11 @@ function MobileConvCard({ conv, userId, onSelect }: {
 
       {hasUnread && (
         <div style={{
-          width: 22, height: 22, borderRadius: '50%',
+          width: 18, height: 18, borderRadius: '50%',
           background: '#181713', color: '#F6F5AE',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           fontFamily: "'Montserrat Alternates', sans-serif",
-          fontWeight: 700, fontSize: 10, flexShrink: 0,
+          fontWeight: 700, fontSize: 9, flexShrink: 0,
         }}>
           {conv.unread_count > 9 ? '9+' : conv.unread_count}
         </div>
