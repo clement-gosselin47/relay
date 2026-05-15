@@ -62,5 +62,18 @@ export function useProfile(userId: string | undefined) {
     await supabase.from('profiles').update({ name, filiere }).eq('id', profile.id)
   }
 
-  return { history, stats, toggleAvailable, updateCampusRadius, updateSkills, updateProfileInfo }
+  async function uploadAvatar(profile: Profile, file: File): Promise<string | null> {
+    const ext = file.name.split('.').pop()
+    const path = `${profile.id}/avatar.${ext}`
+    const { error: uploadError } = await supabase.storage
+      .from('avatars')
+      .upload(path, file, { upsert: true })
+    if (uploadError) return null
+    const { data } = supabase.storage.from('avatars').getPublicUrl(path)
+    const url = `${data.publicUrl}?t=${Date.now()}`
+    await supabase.from('profiles').update({ avatar_url: url }).eq('id', profile.id)
+    return url
+  }
+
+  return { history, stats, toggleAvailable, updateCampusRadius, updateSkills, updateProfileInfo, uploadAvatar }
 }

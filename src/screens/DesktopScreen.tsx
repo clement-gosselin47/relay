@@ -183,7 +183,7 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
               cursor: 'pointer', textAlign: 'left',
             }}
           >
-            <Avatar name={profile.name} size={34} />
+            <Avatar name={profile.name} size={44} url={profile.avatar_url} />
             <div style={{ minWidth: 0 }}>
               <div style={{
                 fontFamily: "'Montserrat Alternates', sans-serif",
@@ -301,6 +301,7 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
                 variant={i % 2 === 0 ? 'yellow' : 'white'}
                 isHelping={helping.has(r.id)}
                 onHelp={() => handleHelp(r)}
+                isDesktop
               />
             ))}
           </div>

@@ -8,6 +8,7 @@ export interface Profile {
   skills: string[]
   available: boolean
   campus_radius: string
+  avatar_url?: string | null
   push_subscription: PushSubscriptionJSON | null
   created_at: string
 }

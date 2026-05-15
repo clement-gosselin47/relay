@@ -62,8 +62,8 @@ export function HomeScreen({ userId, userName, requests, loading, onNavigateToMe
       {/* Yellow header */}
       <div style={{
         background: '#F6F5AE',
-        padding: '56px 22px 26px',
-        borderRadius: '0 0 32px 32px',
+        padding: '26px 20px 12px',
+        borderRadius: '0 0 24px 24px',
         position: 'relative', flexShrink: 0,
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
@@ -89,9 +89,9 @@ export function HomeScreen({ userId, userName, requests, loading, onNavigateToMe
         {/* Title */}
         <div style={{
           fontFamily: "'Montserrat Alternates', sans-serif",
-          fontWeight: 700, fontSize: 38,
-          lineHeight: 0.95, letterSpacing: -1.2,
-          marginTop: 18, color: '#181713',
+          fontWeight: 700, fontSize: 28,
+          lineHeight: 0.95, letterSpacing: -0.8,
+          marginTop: 8, color: '#181713',
         }}>
           {activeRequests.length === 0
             ? 'Rien pour\nl\'instant'
@@ -100,7 +100,7 @@ export function HomeScreen({ userId, userName, requests, loading, onNavigateToMe
           <span style={{ color: '#181713', opacity: 0.3 }}>.</span>
         </div>
         <div style={{
-          marginTop: 10, fontSize: 13, color: 'rgba(24,23,19,0.65)', maxWidth: 280,
+          marginTop: 4, fontSize: 12, color: 'rgba(24,23,19,0.65)', maxWidth: 280,
         }}>
           {activeRequests.length === 0
             ? 'Le campus est calme. Sois le premier à lancer une demande.'
@@ -112,7 +112,7 @@ export function HomeScreen({ userId, userName, requests, loading, onNavigateToMe
       {/* Feed */}
       <div style={{
         flex: 1, overflowY: 'auto',
-        padding: '20px 16px 110px',
+        padding: '14px 14px 100px',
         WebkitOverflowScrolling: 'touch',
       }}>
         {loading ? (
@@ -120,7 +120,7 @@ export function HomeScreen({ userId, userName, requests, loading, onNavigateToMe
         ) : activeRequests.length === 0 ? (
           <EmptyFeed name={userName} />
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {activeRequests.map((r, i) => (
               <RequestCard
                 key={r.id}
