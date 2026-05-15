@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react'
-import { Sun, Moon } from 'lucide-react'
 import './index.css'
 import { useAuth } from './hooks/useAuth'
 import { useMediaQuery } from './hooks/useMediaQuery'
 import { useRequests } from './hooks/useRequests'
-import { useTheme } from './context/ThemeContext'
 import { AuthModal } from './components/auth/AuthModal'
 import { BottomBar } from './components/layout/BottomBar'
 import { Toast } from './components/ui/Toast'
@@ -111,33 +109,6 @@ export default function App() {
 }
 
 
-function ThemeToggleButton() {
-  const { theme, toggle } = useTheme()
-  return (
-    <button
-      onClick={toggle}
-      aria-label={theme === 'dark' ? 'Mode clair' : 'Mode sombre'}
-      style={{
-        position: 'fixed',
-        top: 'calc(env(safe-area-inset-top, 0px) + 12px)',
-        right: 16,
-        zIndex: 150,
-        width: 38, height: 38, borderRadius: '50%',
-        background: 'var(--paper)',
-        border: `1px solid rgba(var(--ink-rgb),0.12)`,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        cursor: 'pointer',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
-        color: 'var(--ink)',
-      }}
-    >
-      {theme === 'dark'
-        ? <Sun size={16} strokeWidth={1.8} />
-        : <Moon size={16} strokeWidth={1.8} />
-      }
-    </button>
-  )
-}
 
 function SplashScreen() {
   return (
