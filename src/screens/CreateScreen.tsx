@@ -106,7 +106,7 @@ export function CreateScreen({ userId, profile, onClose, onSuccess }: CreateScre
     }}>
       {/* Header */}
       <div style={{
-        padding: '56px 20px 14px',
+        padding: '20px 20px 14px',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         borderBottom: `1px solid rgba(var(--ink-rgb),0.06)`,
         background: 'var(--bone)', flexShrink: 0,
@@ -140,7 +140,7 @@ export function CreateScreen({ userId, profile, onClose, onSuccess }: CreateScre
           <textarea
             value={title}
             onChange={e => setTitle(e.target.value)}
-            placeholder=""
+            placeholder="Ex : J'ai besoin d'aide sur Figma pour ma maquette"
             rows={2}
             maxLength={120}
             style={{
@@ -153,7 +153,7 @@ export function CreateScreen({ userId, profile, onClose, onSuccess }: CreateScre
 
         {/* 2 — Catégories (multi) */}
         <FormSection num={2} label="Catégories">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 8 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
             {Object.entries(CATEGORY).map(([key, def]) => {
               const active = cats.includes(key)
               return (
@@ -161,22 +161,18 @@ export function CreateScreen({ userId, profile, onClose, onSuccess }: CreateScre
                   key={key}
                   onClick={() => toggleCat(key)}
                   style={{
-                    padding: '14px 8px',
-                    borderRadius: 16,
+                    padding: '8px 14px', borderRadius: 999,
                     background: active ? 'var(--ink)' : 'var(--paper)',
                     border: `1.5px solid ${active ? 'var(--ink)' : `rgba(var(--ink-rgb),0.12)`}`,
-                    cursor: 'pointer',
-                    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
-                    transition: 'all .15s',
+                    color: active ? 'var(--yellow)' : 'var(--ink)',
+                    fontFamily: "'Montserrat Alternates', sans-serif",
+                    fontWeight: 600, fontSize: 13,
+                    cursor: 'pointer', transition: 'all .15s',
+                    display: 'flex', alignItems: 'center', gap: 6,
                   }}
                 >
-                  <span style={{
-                    fontFamily: "'Montserrat Alternates', sans-serif",
-                    fontWeight: 600, fontSize: 11,
-                    color: active ? 'var(--yellow)' : 'var(--ink)',
-                  }}>
-                    {def.label}
-                  </span>
+                  <span>{def.emoji}</span>
+                  {def.label}
                 </button>
               )
             })}
@@ -227,8 +223,18 @@ export function CreateScreen({ userId, profile, onClose, onSuccess }: CreateScre
           </div>
         </FormSection>
 
-        {/* 4 — Description */}
-        <FormSection num={4} label="Description (optionnel)">
+        {/* 4 — Localisation */}
+        <FormSection num={4} label="Où es-tu ?">
+          <input
+            value={location}
+            onChange={e => setLocation(e.target.value)}
+            placeholder="Ex : Bât. B · Salle 204, Cafétéria RDC…"
+            style={inputStyle}
+          />
+        </FormSection>
+
+        {/* 5 — Description */}
+        <FormSection num={5} label="Description (optionnel)">
           <textarea
             value={desc}
             onChange={e => setDesc(e.target.value)}
@@ -236,16 +242,6 @@ export function CreateScreen({ userId, profile, onClose, onSuccess }: CreateScre
             rows={3}
             maxLength={300}
             style={textAreaStyle}
-          />
-        </FormSection>
-
-        {/* 5 — Localisation */}
-        <FormSection num={5} label="Où es-tu ?">
-          <input
-            value={location}
-            onChange={e => setLocation(e.target.value)}
-            placeholder="Ex : Bât. B · Salle 204, Cafétéria RDC…"
-            style={inputStyle}
           />
         </FormSection>
 
