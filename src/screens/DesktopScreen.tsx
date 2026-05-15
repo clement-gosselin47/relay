@@ -157,13 +157,13 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
                 {profile.available ? 'Disponible' : 'Hors-ligne'}
               </span>
             </span>
-            <Toggle on={profile.available} onChange={async v => {
+            <Toggle darkTrack on={profile.available} onChange={async v => {
               onUpdate({ available: v })
               await supabase.from('profiles').update({ available: v }).eq('id', profile.id)
             }} />
           </div>
-          <div style={{ fontSize: 11.5, color: profile.available ? 'rgba(24,23,19,0.55)' : `rgba(var(--ink-rgb),0.55)` }}>
-            {profile.available ? 'Tu apparais dans le radar' : 'Active pour recevoir des demandes'}
+          <div style={{ fontSize: 11.5, color: profile.available ? 'rgba(24,23,19,0.72)' : `rgba(var(--ink-rgb),0.55)` }}>
+            {profile.available ? 'Visible sur le campus' : 'Hors du radar'}
           </div>
         </div>
 

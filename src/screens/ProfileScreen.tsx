@@ -93,7 +93,7 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
     }}>
       {/* Header bar */}
       <div style={{
-        padding: isDesktop ? `32px ${px} 14px` : `28px ${px} 10px`,
+        padding: isDesktop ? `22px ${px} 12px` : `28px ${px} 10px`,
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         flexShrink: 0,
       }}>
@@ -127,16 +127,16 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
         {/* ── Hero ── */}
         <div style={{
           background: 'var(--paper)', border: `1px solid rgba(var(--ink-rgb),0.12)`,
-          borderRadius: isDesktop ? 28 : 18, padding: isDesktop ? '28px 24px' : '16px 16px',
-          display: 'flex', alignItems: 'center', gap: isDesktop ? 20 : 14,
-          marginBottom: isDesktop ? 12 : 8,
+          borderRadius: isDesktop ? 22 : 18, padding: isDesktop ? '20px 20px' : '16px 16px',
+          display: 'flex', alignItems: 'center', gap: isDesktop ? 16 : 14,
+          marginBottom: isDesktop ? 10 : 8,
         }}>
-          <Avatar name={profile.name} size={isDesktop ? 88 : 56} ring url={profile.avatar_url} />
+          <Avatar name={profile.name} size={isDesktop ? 72 : 56} ring url={profile.avatar_url} />
 
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{
               fontFamily: "'Montserrat Alternates', sans-serif",
-              fontWeight: 700, fontSize: isDesktop ? 32 : 20,
+              fontWeight: 700, fontSize: isDesktop ? 26 : 20,
               letterSpacing: -0.7, lineHeight: 1.1,
               marginBottom: 6,
             }}>
@@ -167,8 +167,8 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
           background: profile.available ? '#F6F5AE' : 'var(--paper)',
           border: `1.5px solid ${profile.available ? '#181713' : `rgba(var(--ink-rgb),0.12)`}`,
           color: profile.available ? '#181713' : 'var(--ink)',
-          borderRadius: isDesktop ? 28 : 18, padding: isDesktop ? 20 : 14,
-          marginBottom: isDesktop ? 12 : 8, position: 'relative', overflow: 'hidden',
+          borderRadius: isDesktop ? 22 : 18, padding: isDesktop ? 16 : 14,
+          marginBottom: isDesktop ? 10 : 8, position: 'relative', overflow: 'hidden',
           transition: 'all .25s',
         }}>
           {profile.available && (
@@ -202,7 +202,7 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
                 </div>
                 <div style={{
                   fontFamily: "'Montserrat Alternates', sans-serif",
-                  fontWeight: 700, fontSize: isDesktop ? 26 : 20, letterSpacing: -0.6, lineHeight: 1.05,
+                  fontWeight: 700, fontSize: isDesktop ? 22 : 20, letterSpacing: -0.6, lineHeight: 1.05,
                 }}>
                   {profile.available ? 'Sur le campus' : 'Hors-ligne'}
                 </div>
@@ -245,8 +245,8 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
         {/* ── Compétences ── */}
         <div style={{
           background: 'var(--paper)', border: `1px solid rgba(var(--ink-rgb),0.12)`,
-          borderRadius: isDesktop ? 24 : 18, padding: isDesktop ? '18px' : '12px',
-          marginBottom: isDesktop ? 12 : 8,
+          borderRadius: isDesktop ? 20 : 18, padding: isDesktop ? '14px' : '12px',
+          marginBottom: isDesktop ? 10 : 8,
         }}>
           <SectionTitle>Compétences</SectionTitle>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
@@ -304,7 +304,7 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
         </div>
 
         {/* ── Stats ── */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 8, marginBottom: isDesktop ? 12 : 8 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 8, marginBottom: isDesktop ? 10 : 8 }}>
           <StatCard n={String(stats.helpsGiven)} label="Aides apportées" isDesktop={isDesktop} />
           <StatCard n={String(stats.requestsMade)} label="Demandes lancées" isDesktop={isDesktop} />
           <StatCard n="—" label="Réponse moy." isDesktop={isDesktop} />
@@ -313,7 +313,7 @@ export function ProfileScreen({ profile, onUpdate, onSignOut, isDesktop = false 
         {/* ── Historique ── */}
         <div style={{
           background: 'var(--paper)', border: `1px solid rgba(var(--ink-rgb),0.12)`,
-          borderRadius: isDesktop ? 24 : 18, padding: isDesktop ? '18px' : '12px',
+          borderRadius: isDesktop ? 20 : 18, padding: isDesktop ? '14px' : '12px',
         }}>
           <SectionTitle extra={`${stats.helpsGiven} aides`}>Historique</SectionTitle>
           {history.length === 0 ? (

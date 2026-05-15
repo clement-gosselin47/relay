@@ -135,7 +135,7 @@ export function ConversationScreen({ conversation, userId, onBack }: Conversatio
         ) : (
           messages.map((m, i) => {
             const isMine = m.sender_id === userId
-            const prevMine = i > 0 && messages[i - 1].sender_id === userId
+            const prevSame = i > 0 && messages[i - 1].sender_id === m.sender_id
             const showTime = i === messages.length - 1 ||
               new Date(messages[i + 1].created_at).getTime() - new Date(m.created_at).getTime() > 5 * 60 * 1000
 
@@ -144,14 +144,12 @@ export function ConversationScreen({ conversation, userId, onBack }: Conversatio
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: isMine ? 'flex-end' : 'flex-start',
-                marginTop: isMine === prevMine ? 2 : 10,
+                marginTop: prevSame ? 2 : 10,
               }}>
                 <div style={{
                   maxWidth: '78%',
                   padding: '10px 14px',
-                  borderRadius: isMine
-                    ? (prevMine ? '18px 4px 4px 18px' : '18px 18px 4px 18px')
-                    : (prevMine ? '4px 18px 18px 4px' : '18px 18px 18px 4px'),
+                  borderRadius: isMine ? '18px 18px 8px 18px' : '18px 18px 18px 8px',
                   background: isMine ? '#181713' : 'var(--paper)',
                   color: isMine ? '#F6F5AE' : 'var(--ink)',
                   border: isMine ? 'none' : '1px solid rgba(var(--ink-rgb),0.09)',
