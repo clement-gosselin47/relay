@@ -51,7 +51,7 @@ export default function App() {
   return (
     <>
     <div style={{
-      maxWidth: 480, margin: '0 auto',
+      width: '100%', maxWidth: 480, margin: '0 auto',
       height: '100svh', position: 'relative',
       overflow: 'hidden', background: 'var(--bone)',
     }}>

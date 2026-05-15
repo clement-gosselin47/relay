@@ -60,51 +60,50 @@ export function MessagesScreen({ userId, isDesktop }: MessagesScreenProps) {
     )
   }
 
-  // ── Mobile : liste pleine page ──────────────────────────────
+  // ── Mobile ───────────────────────────────────────────────────
   return (
-    <>
+    <div style={{
+      background: 'var(--bone)', height: '100%',
+      display: 'flex', flexDirection: 'column',
+      fontFamily: "'Geologica', sans-serif",
+    }}>
+      {/* Header yellow */}
       <div style={{
-        height: '100%', display: 'flex', flexDirection: 'column',
-        background: 'var(--bone)', fontFamily: "'Geologica', sans-serif",
+        background: '#F6F5AE',
+        padding: '56px 22px 26px',
+        borderRadius: '0 0 32px 32px',
+        position: 'relative', flexShrink: 0,
       }}>
-        {/* Header yellow — même style que HomeScreen */}
         <div style={{
-          background: '#F6F5AE',
-          padding: '56px 22px 24px',
-          borderRadius: '0 0 32px 32px',
-          flexShrink: 0,
+          fontFamily: "'Montserrat Alternates', sans-serif",
+          fontWeight: 700, fontSize: 38,
+          lineHeight: 0.95, letterSpacing: -1.2, color: '#181713',
         }}>
-          <div style={{
-            fontFamily: "'Montserrat Alternates', sans-serif",
-            fontWeight: 700, fontSize: 38,
-            lineHeight: 0.95, letterSpacing: -1.2, color: '#181713',
-          }}>
-            Messages<span style={{ opacity: 0.3 }}>.</span>
-          </div>
-          <div style={{ marginTop: 10, fontSize: 13, color: 'rgba(24,23,19,0.65)' }}>
-            {conversations.length > 0
-              ? `${conversations.length} conversation${conversations.length > 1 ? 's' : ''} active${conversations.length > 1 ? 's' : ''}.`
-              : 'Tes conversations avec tes aidants.'}
-          </div>
+          Messages<span style={{ color: '#181713', opacity: 0.3 }}>.</span>
         </div>
-
-        {/* Liste */}
-        <div style={{
-          flex: 1, overflowY: 'auto',
-          padding: '16px 16px 110px',
-          display: 'flex', flexDirection: 'column', gap: 12,
-        }}>
-          <ConversationList
-            conversations={conversations}
-            loading={loading}
-            userId={userId}
-            selectedId={selectedId}
-            onSelect={setSelectedId}
-          />
+        <div style={{ marginTop: 10, fontSize: 13, color: 'rgba(24,23,19,0.65)' }}>
+          {conversations.length > 0
+            ? `${conversations.length} conversation${conversations.length > 1 ? 's' : ''} en cours.`
+            : 'Tes conversations avec tes aidants.'}
         </div>
       </div>
 
-      {/* Conversation en overlay fixe */}
+      {/* Liste — même structure que HomeScreen feed */}
+      <div style={{
+        flex: 1, overflowY: 'auto',
+        padding: '20px 16px 110px',
+        WebkitOverflowScrolling: 'touch',
+      }}>
+        <ConversationList
+          conversations={conversations}
+          loading={loading}
+          userId={userId}
+          selectedId={selectedId}
+          onSelect={setSelectedId}
+        />
+      </div>
+
+      {/* Conversation overlay */}
       {selectedConv && (
         <ConversationScreen
           conversation={selectedConv}
@@ -112,7 +111,7 @@ export function MessagesScreen({ userId, isDesktop }: MessagesScreenProps) {
           onBack={() => setSelectedId(null)}
         />
       )}
-    </>
+    </div>
   )
 }
 
@@ -174,7 +173,7 @@ function ConversationList({ conversations, loading, userId, selectedId, onSelect
   }
 
   return (
-    <>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
       {conversations.map(conv => (
         <MobileConvCard
           key={conv.id}
@@ -183,7 +182,7 @@ function ConversationList({ conversations, loading, userId, selectedId, onSelect
           onSelect={() => onSelect(conv.id)}
         />
       ))}
-    </>
+    </div>
   )
 }
 
