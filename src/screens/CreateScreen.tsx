@@ -29,9 +29,10 @@ interface CreateScreenProps {
   profile: Profile
   onClose: () => void
   onSuccess: (r: Request) => void
+  isDesktop?: boolean
 }
 
-export function CreateScreen({ userId, profile, onClose, onSuccess }: CreateScreenProps) {
+export function CreateScreen({ userId, profile, onClose, onSuccess, isDesktop }: CreateScreenProps) {
   const [title, setTitle]                 = useState('')
   const [cats, setCats]                   = useState<string[]>([])
   const [filieres, setFilieres]           = useState<string[]>([])
@@ -113,15 +114,23 @@ export function CreateScreen({ userId, profile, onClose, onSuccess }: CreateScre
       ? 'Toutes les filières'
       : `${filieres.length} filière${filieres.length > 1 ? 's' : ''} ciblée${filieres.length > 1 ? 's' : ''}`
 
+  const containerStyle: React.CSSProperties = isDesktop
+    ? {
+        display: 'flex', flexDirection: 'column',
+        height: '100%', background: 'var(--bone)',
+        fontFamily: "'Geologica', sans-serif",
+      }
+    : {
+        position: 'fixed', inset: 0, zIndex: 200,
+        background: 'var(--bone)',
+        display: 'flex', flexDirection: 'column',
+        fontFamily: "'Geologica', sans-serif",
+        maxWidth: 480, left: '50%', transform: 'translateX(-50%)',
+        width: '100%',
+      }
+
   return (
-    <div style={{
-      position: 'fixed', inset: 0, zIndex: 200,
-      background: 'var(--bone)',
-      display: 'flex', flexDirection: 'column',
-      fontFamily: "'Geologica', sans-serif",
-      maxWidth: 480, left: '50%', transform: 'translateX(-50%)',
-      width: '100%',
-    }}>
+    <div style={containerStyle}>
 
       {/* ── Header ── */}
       <div style={{

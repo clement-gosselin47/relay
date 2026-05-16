@@ -485,12 +485,13 @@ function CreateOverlay({ userId, profile, onClose, onSuccess }: {
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
       <div style={{
-        width: 480, maxHeight: '90vh',
+        width: 480, height: '88vh',
         background: 'var(--bone)', borderRadius: 28,
         overflow: 'hidden', position: 'relative',
         boxShadow: '0 24px 80px rgba(0,0,0,0.3)',
+        display: 'flex', flexDirection: 'column',
       }}>
-        <CreateScreen userId={userId} profile={profile} onClose={onClose} onSuccess={onSuccess} />
+        <CreateScreen userId={userId} profile={profile} onClose={onClose} onSuccess={onSuccess} isDesktop />
       </div>
     </div>
   )
