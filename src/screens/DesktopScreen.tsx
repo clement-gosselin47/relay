@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { Home, User, MessageSquare, Search } from 'lucide-react'
+import { Home, User, MessageSquare, Search, Settings } from 'lucide-react'
 import { useTheme } from '../context/ThemeContext'
 import { ProfileScreen } from './ProfileScreen'
 import { MessagesScreen } from './MessagesScreen'
@@ -12,7 +12,7 @@ import { supabase } from '../lib/supabase'
 import { timeAgo } from '../lib/utils'
 import type { Profile, Request } from '../types'
 
-type Screen = 'home' | 'messages' | 'profile'
+type Screen = 'home' | 'messages' | 'profile' | 'settings'
 interface ToastState { msg: string; type: 'success' | 'info' | 'error' }
 
 interface DesktopScreenProps {
@@ -131,6 +131,12 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
             active={screen === 'profile'}
             onClick={() => { setScreen('profile'); setShowCreate(false) }}
           />
+          <SideNavItem
+            icon={<Settings size={18} strokeWidth={screen === 'settings' ? 2.2 : 1.7} />}
+            label="Paramètres"
+            active={screen === 'settings'}
+            onClick={() => { setScreen('settings'); setShowCreate(false) }}
+          />
         </nav>
 
         {/* Availability toggle */}
@@ -150,7 +156,7 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
                 <span style={{
                   width: 8, height: 8, borderRadius: '50%',
-                  background: profile.available ? '#3a8a4a' : 'rgba(24,23,19,0.4)',
+                  background: profile.available ? '#3a8a4a' : 'rgba(var(--ink-rgb),0.35)',
                   boxShadow: profile.available ? '0 0 0 3px rgba(58,138,74,0.18)' : 'none',
                   flexShrink: 0,
                 }} />
@@ -213,6 +219,15 @@ export function DesktopScreen({ profile, onUpdate, onSignOut }: DesktopScreenPro
       ) : screen === 'messages' ? (
         <div style={{ flex: 1, overflow: 'hidden' }}>
           <MessagesScreen userId={profile.id} isDesktop />
+        </div>
+      ) : screen === 'settings' ? (
+        <div style={{ flex: 1, overflow: 'hidden' }}>
+          <SettingsScreen
+            profile={profile}
+            onUpdate={onUpdate}
+            onSignOut={onSignOut}
+            isDesktop
+          />
         </div>
       ) : (
       <div style={{ flex: 1, overflowY: 'auto', padding: '32px 28px' }}>
@@ -456,6 +471,7 @@ function StatRow({ label, value }: { label: string; value: string }) {
 
 // ── Inline Create overlay for desktop ────────────────────────
 import { CreateScreen } from './CreateScreen'
+import { SettingsScreen } from './SettingsScreen'
 
 function CreateOverlay({ userId, profile, onClose, onSuccess }: {
   userId: string; profile: Profile; onClose: () => void; onSuccess: () => void

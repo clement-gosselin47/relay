@@ -15,7 +15,7 @@ export function Toggle({ on, onChange, size = 'sm', darkTrack }: ToggleProps) {
     : `rgba(var(--ink-rgb),0.15)`
   const dotBg = on
     ? (darkTrack ? '#F6F5AE' : '#181713')
-    : 'var(--paper)'
+    : 'var(--ink)'
 
   return (
     <button

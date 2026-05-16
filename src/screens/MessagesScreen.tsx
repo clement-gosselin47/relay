@@ -27,16 +27,16 @@ export function MessagesScreen({ userId, isDesktop }: MessagesScreenProps) {
           display: 'flex', flexDirection: 'column', overflowY: 'auto',
         }}>
           <div style={{
-            padding: '20px 20px 14px',
+            padding: '22px 20px 12px',
             borderBottom: '1px solid rgba(var(--ink-rgb),0.06)',
           }}>
             <div style={{
               fontFamily: "'Montserrat Alternates', sans-serif",
-              fontWeight: 700, fontSize: 17, color: 'var(--ink)', letterSpacing: -0.4,
+              fontWeight: 700, fontSize: 22, color: 'var(--ink)', letterSpacing: -0.4,
             }}>
               Messages
             </div>
-            <div style={{ fontSize: 12, color: 'rgba(var(--ink-rgb),0.4)', marginTop: 2 }}>
+            <div style={{ fontSize: 12, color: 'rgba(var(--ink-rgb),0.4)', marginTop: 3 }}>
               {conversations.length} conversation{conversations.length !== 1 ? 's' : ''}
             </div>
           </div>
@@ -202,7 +202,7 @@ function MobileConvCard({ conv, userId, onSelect }: {
         width: '100%', textAlign: 'left',
         background: hasUnread ? 'var(--paper)' : 'var(--paper)',
         border: hasUnread
-          ? '1.5px solid #181713'
+          ? '1.5px solid rgba(var(--ink-rgb),0.4)'
           : '1px solid rgba(var(--ink-rgb),0.10)',
         borderRadius: 16,
         padding: '10px 12px',
@@ -218,7 +218,7 @@ function MobileConvCard({ conv, userId, onSelect }: {
           <div style={{
             position: 'absolute', top: 1, right: 1,
             width: 11, height: 11, borderRadius: '50%',
-            background: '#181713', border: '2px solid var(--paper)',
+            background: 'var(--ink)', border: '2px solid var(--paper)',
           }} />
         )}
       </div>
@@ -266,7 +266,7 @@ function MobileConvCard({ conv, userId, onSelect }: {
       {hasUnread && (
         <div style={{
           width: 18, height: 18, borderRadius: '50%',
-          background: '#181713', color: '#F6F5AE',
+          background: 'var(--ink)', color: 'var(--bone)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           fontFamily: "'Montserrat Alternates', sans-serif",
           fontWeight: 700, fontSize: 9, flexShrink: 0,
@@ -292,7 +292,7 @@ function DesktopConvRow({ conv, userId, isSelected, onSelect }: {
       style={{
         width: '100%', textAlign: 'left', border: 'none',
         borderBottom: '1px solid rgba(var(--ink-rgb),0.06)',
-        borderLeft: `3px solid ${isSelected ? '#181713' : 'transparent'}`,
+        borderLeft: `3px solid ${isSelected ? 'var(--ink)' : 'transparent'}`,
         background: isSelected ? 'rgba(246,245,174,0.45)' : 'transparent',
         padding: '12px 16px',
         display: 'flex', alignItems: 'center', gap: 10,
@@ -305,7 +305,7 @@ function DesktopConvRow({ conv, userId, isSelected, onSelect }: {
           <div style={{
             position: 'absolute', top: 0, right: 0,
             width: 9, height: 9, borderRadius: '50%',
-            background: '#181713', border: '2px solid var(--paper)',
+            background: 'var(--ink)', border: '2px solid var(--paper)',
           }} />
         )}
       </div>

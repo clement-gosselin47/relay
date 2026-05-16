@@ -1,6 +1,6 @@
-import { Home, User, MessageSquare } from 'lucide-react'
+import { Home, User, MessageSquare, Settings } from 'lucide-react'
 
-type Screen = 'home' | 'messages' | 'profile'
+type Screen = 'home' | 'messages' | 'profile' | 'settings'
 
 interface BottomBarProps {
   active: Screen
@@ -73,8 +73,13 @@ export function BottomBar({ active, onNavigate, onCreate }: BottomBarProps) {
           icon={<User size={22} strokeWidth={active === 'profile' ? 2.2 : 1.7} />}
         />
 
-        {/* Slot vide pour équilibrer */}
-        <div />
+        {/* Settings */}
+        <NavItem
+          onClick={() => onNavigate('settings')}
+          active={active === 'settings'}
+          label="Réglages"
+          icon={<Settings size={22} strokeWidth={active === 'settings' ? 2.2 : 1.7} />}
+        />
       </div>
     </div>
   )
@@ -94,7 +99,7 @@ function NavItem({
       style={{
         display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3,
         background: 'none', border: 'none', cursor: 'pointer',
-        color: active ? 'var(--ink)' : '#B0ADA8',
+        color: active ? 'var(--ink)' : '#6E6C68',
         fontFamily: "'Montserrat Alternates', sans-serif",
         fontWeight: 600, fontSize: 10, letterSpacing: 0.2,
         padding: '4px 16px',
