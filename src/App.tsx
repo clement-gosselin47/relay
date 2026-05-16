@@ -11,8 +11,9 @@ import { CreateScreen } from './screens/CreateScreen'
 import { ProfileScreen } from './screens/ProfileScreen'
 import { MessagesScreen } from './screens/MessagesScreen'
 import { DesktopScreen } from './screens/DesktopScreen'
+import { SettingsScreen } from './screens/SettingsScreen'
 
-type MobileScreen = 'home' | 'messages' | 'profile'
+type MobileScreen = 'home' | 'messages' | 'profile' | 'settings'
 
 export default function App() {
   const { user, profile, loading, signIn, signOut, updateProfile } = useAuth()
@@ -66,6 +67,13 @@ export default function App() {
         )}
         {mobileScreen === 'profile' && (
           <ProfileScreen
+            profile={profile}
+            onUpdate={updateProfile}
+            onSignOut={signOut}
+          />
+        )}
+        {mobileScreen === 'settings' && (
+          <SettingsScreen
             profile={profile}
             onUpdate={updateProfile}
             onSignOut={signOut}

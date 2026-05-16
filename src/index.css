@@ -69,6 +69,13 @@ body, input, textarea, button, span, div, p, a, li, label {
   font-weight: 300;
 }
 
+/* ── Placeholders — uniform light style ── */
+::placeholder {
+  font-family: var(--font-body);
+  font-weight: 300;
+  color: rgba(var(--ink-rgb), 0.38);
+}
+
 /* ── Animations ── */
 @keyframes pulse {
   0%, 100% { opacity: 1; }
