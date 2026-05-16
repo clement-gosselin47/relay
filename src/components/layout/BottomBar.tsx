@@ -20,9 +20,10 @@ export function BottomBar({ active, onNavigate, onCreate }: BottomBarProps) {
       zIndex: 100,
     }}>
       <div style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'space-around',
-        padding: '8px 16px 4px',
-        position: 'relative',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(5, 1fr)',
+        alignItems: 'center',
+        padding: '8px 8px 4px',
       }}>
         {/* Home */}
         <NavItem
@@ -40,27 +41,29 @@ export function BottomBar({ active, onNavigate, onCreate }: BottomBarProps) {
           icon={<MessageSquare size={22} strokeWidth={active === 'messages' ? 2.2 : 1.7} />}
         />
 
-        {/* FAB — Create */}
-        <button
-          onClick={onCreate}
-          style={{
-            width: 58, height: 58,
-            borderRadius: '50%',
-            background: '#F6F5AE',
-            border: '1.5px solid #181713',
-            cursor: 'pointer',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: 'none',
-            transform: 'translateY(-12px)',
-            transition: 'transform .15s, box-shadow .15s',
-            flexShrink: 0,
-          }}
-          onMouseDown={e => (e.currentTarget.style.transform = 'translateY(-10px) scale(0.95)')}
-          onMouseUp={e => (e.currentTarget.style.transform = 'translateY(-12px) scale(1)')}
-          onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(-12px) scale(1)')}
-        >
-          <img src="/logo-t-black.png" alt="" style={{ height: 28, width: 'auto' }} />
-        </button>
+        {/* FAB — Create (col 3 = center) */}
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <button
+            onClick={onCreate}
+            style={{
+              width: 58, height: 58,
+              borderRadius: '50%',
+              background: '#F6F5AE',
+              border: '1.5px solid #181713',
+              cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: 'none',
+              transform: 'translateY(-12px)',
+              transition: 'transform .15s, box-shadow .15s',
+              flexShrink: 0,
+            }}
+            onMouseDown={e => (e.currentTarget.style.transform = 'translateY(-10px) scale(0.95)')}
+            onMouseUp={e => (e.currentTarget.style.transform = 'translateY(-12px) scale(1)')}
+            onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(-12px) scale(1)')}
+          >
+            <img src="/logo-t-black.png" alt="" style={{ height: 28, width: 'auto' }} />
+          </button>
+        </div>
 
         {/* Profile */}
         <NavItem
@@ -69,6 +72,9 @@ export function BottomBar({ active, onNavigate, onCreate }: BottomBarProps) {
           label="Profil"
           icon={<User size={22} strokeWidth={active === 'profile' ? 2.2 : 1.7} />}
         />
+
+        {/* Slot vide pour équilibrer */}
+        <div />
       </div>
     </div>
   )
@@ -88,7 +94,7 @@ function NavItem({
       style={{
         display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3,
         background: 'none', border: 'none', cursor: 'pointer',
-        color: active ? 'var(--ink)' : `rgba(var(--ink-rgb),0.4)`,
+        color: active ? 'var(--ink)' : '#B0ADA8',
         fontFamily: "'Montserrat Alternates', sans-serif",
         fontWeight: 600, fontSize: 10, letterSpacing: 0.2,
         padding: '4px 16px',
